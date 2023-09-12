@@ -1,2 +1,2 @@
-# Unity-Bullet-Rush
-Senior Project: Bullet Rush style game made in Unity
+# Bullet Rush
+Senior Project: Bullet Hell x Boss Rush x Roguelike scaling-difficulty game made in Unity.
