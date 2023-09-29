@@ -18,26 +18,31 @@ public class e3Comb : MonoBehaviour
     }
     private void Update()
     {
-        
-        
-        if (Time.time > nextActionTime ) {
-            nextActionTime += period;
-            if (Random.value > 0.5f)
+        var distVal = 50.0f;
+        var dis = Vector3.Distance(transform.position, target.transform.position);
+        if (dis <= distVal)
+        {
+            if (Time.time > nextActionTime)
             {
-                straight = true;
+                nextActionTime += period;
+                if (Random.value > 0.5f)
+                {
+                    straight = true;
+                }
+                else
+                {
+                    straight = false;
+                }
+            }
+            if (straight)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed);
             }
             else
             {
-                straight = false;
+                transform.position = Vector3.Slerp(transform.position, target.transform.position, speed) * arc;
             }
         }
-        if (straight)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed);
-        }
-        else
-{
-            transform.position = Vector3.Slerp(transform.position, target.transform.position, speed) * arc;
-        }
+        
     }
 }

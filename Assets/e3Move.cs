@@ -13,14 +13,20 @@ public class e3Move : MonoBehaviour
     }
     private void Update()
     {
-        if (straight)
+        var distVal = 50.0f;
+        var dis = Vector3.Distance(transform.position, target.transform.position);
+        if (dis <= distVal)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed);
+            if (straight)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed);
+            }
+            else
+            {
+                transform.position = Vector3.Slerp(transform.position, target.transform.position, speed);
+            }
         }
-        else
-        {
-            transform.position = Vector3.Slerp(transform.position, target.transform.position, speed);
-        }
+        
     }
 
 }
