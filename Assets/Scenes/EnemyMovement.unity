@@ -1113,8 +1113,18 @@ MonoBehaviour:
   x2: -50
   y1: -50
   y2: 50
+  x21: 0
+  x22: 0
+  y21: 0
+  y22: 0
+  x31: 0
+  x32: 0
+  y31: 0
+  y32: 0
   _tileprefab: {fileID: 411772499}
   _tileprefab2: {fileID: 229870396}
+  _tileprefab3: {fileID: 0}
+  _tileprefab4: {fileID: 0}
   _cam: {fileID: 0}
 --- !u!4 &850162591
 Transform:
@@ -1996,7 +2006,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e58ef25f3684d646aa488436066ff64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  YouGameObject: {fileID: 0}
 --- !u!1 &1870449045
 GameObject:
   m_ObjectHideFlags: 0
@@ -2319,7 +2328,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e58ef25f3684d646aa488436066ff64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  YouGameObject: {fileID: 1334380758}
 --- !u!1 &2111006504
 GameObject:
   m_ObjectHideFlags: 3
