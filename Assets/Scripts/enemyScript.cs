@@ -16,12 +16,12 @@ public class enemyScript : MonoBehaviour
         if (health <= 0)
             die();
 
-
         gameObject.transform.GetComponentInChildren<healthBar>().takeDamage();
     }
 
     void die()
     {
         Destroy(gameObject);
+        GameManager.instance.AddScore(1);
     }
 }
