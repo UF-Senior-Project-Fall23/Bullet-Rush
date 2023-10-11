@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 78439514ba2fc7f44967e4c987fd7bd2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - cordelia: {fileID: 5072025336551946716, guid: 861b03cd2a28b774aa825eeb08babe81, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

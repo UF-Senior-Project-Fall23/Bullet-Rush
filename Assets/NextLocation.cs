@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NextLocation : MonoBehaviour
 {
+    
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Entered collision with " + collision.gameObject.name);
@@ -21,10 +23,16 @@ public class NextLocation : MonoBehaviour
             // need to add something to not show the camera moving to the new location
             // need to flag the boss fought, so it will not appear again
             var boss1 = Random.Range(1, 3);
+            
+            
+            boss1 = 1; // Manual override for testing.
+            
+            
             Debug.Log("Rolled " + boss1);
             if (boss1 == 1)
             {
                 transform.position = new Vector3(100, 0, 0);//(where you want to teleport)
+                BossController.LoadBoss("Cordelia");
             }
             else if(boss1 == 2)
             {
