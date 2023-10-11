@@ -125,11 +125,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8594331032011757144}
   - component: {fileID: 8594331032011757151}
-  - component: {fileID: 8594331032011757149}
   - component: {fileID: 8594331032011757150}
   - component: {fileID: 8120755106421650783}
   m_Layer: 6
-  m_Name: Weapon
+  m_Name: Base Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,8 +142,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8594331032011757145}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.332, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -74, y: 15.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -167,18 +166,6 @@ MonoBehaviour:
   player: {fileID: 0}
   radius: 1
   damage: 1
---- !u!114 &8594331032011757149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8594331032011757145}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e03e7d6074df8854ba0f50e4b5486a49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   bulletPreFab: {fileID: 6992979119922663773, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
   bulletForce: 20
 --- !u!50 &8594331032011757150

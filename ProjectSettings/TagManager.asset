@@ -37,7 +37,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - UI
   m_SortingLayers:
   - name: Background
     uniqueID: 2675431917
@@ -50,4 +50,7 @@ TagManager:
     locked: 0
   - name: LeftStairs
     uniqueID: 2047069201
+    locked: 0
+  - name: HUD
+    uniqueID: 1183204077
     locked: 0

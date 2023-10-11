@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class weaponScript : MonoBehaviour
     public int damage;
     public GameObject bulletPreFab;
     Transform shootPoint;
+    bool isFlipped;
 
     public float bulletForce = 20f;
 
@@ -20,6 +22,7 @@ public class weaponScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         shootPoint = transform.Find("ShootPoint");
+        isFlipped = false;
     }
 
     void Update()
@@ -41,7 +44,19 @@ public class weaponScript : MonoBehaviour
                 1
             );
 
-            rb.rotation = mouseAngle * Mathf.Rad2Deg - 90f;
+            
+            rb.rotation = mouseAngle * Mathf.Rad2Deg + 180;
+            Debug.Log(isFlipped + " " + mouseAngle);
+            if(isFlipped && (mouseAngle < -1 * math.PI/2 || mouseAngle > math.PI / 2))
+            {
+                transform.Rotate(new Vector3(180, 0, 0));
+                isFlipped = false;
+            }
+            else if(!isFlipped && mouseAngle > -1 * math.PI / 2 && mouseAngle < math.PI / 2)
+            {
+                transform.Rotate(new Vector3(180, 0, 0));
+                isFlipped = true;
+            }
         }
 
     }
@@ -57,7 +72,7 @@ public class weaponScript : MonoBehaviour
 
     void Shoot()
     {
-        GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation);
+        GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
         bullet.GetComponent<bulletScript>().damage = damage;
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
