@@ -34,4 +34,14 @@ public class PlayerController : MonoBehaviour
 
         body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            GameManager.instance.DecreaseHealth(1);
+        }
+            
+    }
+    
 }
