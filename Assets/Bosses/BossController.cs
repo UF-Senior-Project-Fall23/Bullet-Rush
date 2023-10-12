@@ -5,17 +5,28 @@ using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
-
+    public static BossController instance;
     //public const Boss CORDELIA = new Cordelia();
-    
+
     private Boss currentBoss = null;
 
     public GameObject cordeliaPrefab;
     
     public GameObject bulletPrefab;
     public Transform firepoint;
-    
-    
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,9 +55,10 @@ public class BossController : MonoBehaviour
 
     public void LoadBoss(string name)
     {
+        Debug.Log("Loading Boss: " + name);
         if (name == "Cordelia")
         {
-            SummonBoss(Instantiate(cordeliaPrefab,  transform));
+            Instantiate(cordeliaPrefab,  transform);
         }
     }
 }

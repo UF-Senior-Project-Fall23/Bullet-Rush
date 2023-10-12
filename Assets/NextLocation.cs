@@ -26,13 +26,12 @@ public class NextLocation : MonoBehaviour
             
             
             boss1 = 1; // Manual override for testing.
-            
-            
-            Debug.Log("Rolled " + boss1);
+
             if (boss1 == 1)
             {
-                transform.position = new Vector3(100, 0, 0);//(where you want to teleport)
-                BossController.LoadBoss("Cordelia");
+                //transform.position = new Vector3(100, 0, 0);//(where you want to teleport)
+                
+                BossController.instance.LoadBoss("Cordelia");
             }
             else if(boss1 == 2)
             {
