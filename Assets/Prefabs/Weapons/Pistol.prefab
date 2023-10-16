@@ -48,6 +48,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.171
       objectReference: {fileID: 0}
+    - target: {fileID: 8594331030154612792, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8594331030154612792, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
     - target: {fileID: 8594331032011757144, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -92,7 +100,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pistol
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8594331032011757151, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
+      propertyPath: bulletDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8594331032011757151, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
+      propertyPath: bulletPreFab
+      value: 
+      objectReference: {fileID: 319021616187502277, guid: 22f4395033b4c47438ff3b7b300d740e, type: 3}
+    m_RemovedComponents:
+    - {fileID: 8594331032011757150, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
