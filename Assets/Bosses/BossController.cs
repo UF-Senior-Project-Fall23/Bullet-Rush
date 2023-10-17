@@ -11,14 +11,12 @@ public class BossController : MonoBehaviour
     private Boss currentBoss = null;
 
     public GameObject cordeliaPrefab;
-    
-    public GameObject bulletPrefab;
-    public Transform firepoint;
 
     private void Awake()
     {
         if (instance == null)
         {
+            Debug.Log("Generated new instance.");
             instance = this;
         }
         else
