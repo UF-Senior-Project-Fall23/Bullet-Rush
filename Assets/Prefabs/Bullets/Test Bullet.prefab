@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6992979119922663775, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6992979120432544722, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
       propertyPath: m_Name
       value: Sprite
