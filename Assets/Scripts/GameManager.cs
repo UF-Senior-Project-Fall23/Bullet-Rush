@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI healthText;
+    public TextMeshProUGUI weaponText;
 
     private float gameTime = 0f;
     private int score = 0;
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        weaponText.text = "Weapon: None";
     }
 
     void Update()

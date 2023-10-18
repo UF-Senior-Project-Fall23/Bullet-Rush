@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
             m_weaponScript.player = gameObject;
             m_weaponScript.enabled = true;
             weapon.GetComponent<Collider2D>().enabled = false;
+            GameManager.instance.weaponText.text = "Weapon: " + weapon.name;
         }
     }
 
@@ -91,6 +92,7 @@ public class PlayerController : MonoBehaviour
         weapon.GetComponent<Collider2D>().enabled = true;
         weapon = null;
         m_weaponScript = null;
+        GameManager.instance.weaponText.text = "Weapon: None";
     }
 
 }
