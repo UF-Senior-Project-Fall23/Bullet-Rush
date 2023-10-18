@@ -436,8 +436,8 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 2
-  m_YDamping: 2
+  m_XDamping: 1
+  m_YDamping: 1
   m_ZDamping: 1
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
@@ -4173,10 +4173,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201100bca5369a94d9c010dacda9c6ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 889391102}
-  timeText: {fileID: 1966209949}
-  healthText: {fileID: 181243710}
-  weaponText: {fileID: 1053726504}
 --- !u!4 &988185471
 Transform:
   m_ObjectHideFlags: 0
@@ -33701,8 +33697,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d66e5798593cbb42b586dcb7a9572d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSmoothing: 0.05
-  moveLimiter: 0.7
   runSpeed: 10
 --- !u!50 &1992031061
 Rigidbody2D:
