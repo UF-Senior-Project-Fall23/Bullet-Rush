@@ -4173,6 +4173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201100bca5369a94d9c010dacda9c6ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreText: {fileID: 889391102}
+  timeText: {fileID: 1966209949}
+  healthText: {fileID: 181243710}
+  weaponText: {fileID: 1053726504}
 --- !u!4 &988185471
 Transform:
   m_ObjectHideFlags: 0
@@ -33374,16 +33378,8 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3831235396009743903, guid: 11d39aba686d35f46b0bf44f3153e104, type: 3}
-      propertyPath: damage
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3831235396009743903, guid: 11d39aba686d35f46b0bf44f3153e104, type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3831235396009743903, guid: 11d39aba686d35f46b0bf44f3153e104, type: 3}
-      propertyPath: bulletDelay
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3831235396264956024, guid: 11d39aba686d35f46b0bf44f3153e104, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -33697,6 +33693,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d66e5798593cbb42b586dcb7a9572d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSmoothing: 0.05
+  moveLimiter: 0.7
   runSpeed: 10
 --- !u!50 &1992031061
 Rigidbody2D:
