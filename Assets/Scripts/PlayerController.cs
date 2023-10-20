@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance;
     Rigidbody2D body;
 
     float horizontal;
     float vertical;
     float moveLimiter = 0.7f;
-
+    bool alive = true;
     public float runSpeed = 20.0f;
 
     void Start()
@@ -20,8 +21,17 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
+        if (alive)
+        {
+            horizontal = Input.GetAxisRaw("Horizontal");
+            vertical = Input.GetAxisRaw("Vertical");
+        }
+        else
+        {
+            horizontal = 0f;
+            vertical = 0f;
+        }
+        
     }
 
     void FixedUpdate()
@@ -39,9 +49,22 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            GameManager.instance.DecreaseHealth(1);
+            if(GameManager.instance.checkHealth() == 10)
+            {
+                alive = false;
+            }
+            else
+            {
+                GameManager.instance.DecreaseHealth(1);
+            }
+            
         }
             
+    }
+
+    public bool checkLife()
+    {
+        return alive;
     }
     
 }

@@ -24,9 +24,13 @@ public class weaponScript : MonoBehaviour
 
     void Update()
     {
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if (Input.GetButtonDown("Fire1") && gameObject.GetComponent<weaponScript>().player != null)
-            Shoot();
+        //if (PlayerController.instance.checkLife())
+        {
+            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (Input.GetButtonDown("Fire1") && gameObject.GetComponent<weaponScript>().player != null)
+                Shoot();
+        }
+        
     }
 
     void FixedUpdate()
@@ -62,5 +66,6 @@ public class weaponScript : MonoBehaviour
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
         rb.AddForce(shootPoint.transform.up * bulletForce, ForceMode2D.Impulse);
+        Debug.Log("shooty " + shootPoint.transform.up);
     }
 }

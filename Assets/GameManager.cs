@@ -65,4 +65,8 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+    public int checkHealth()
+    {
+        return health;
+    }
 }

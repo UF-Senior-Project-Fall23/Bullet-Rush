@@ -9,7 +9,8 @@ public class BossController : MonoBehaviour
 
     private Boss currentBossLogic = null;
     private GameObject currentBoss = null;
-
+    private GameObject cb = null;
+    public GameObject player;
     public GameObject cordeliaPrefab;
     
     
@@ -38,7 +39,7 @@ public class BossController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentBossLogic?.BossLogic(Time.deltaTime);
+        currentBossLogic?.BossLogic(Time.deltaTime, cb, player.transform.position);
     }
 
     // Calls a function for the given boss with the name provided.
@@ -55,7 +56,7 @@ public class BossController : MonoBehaviour
         Debug.Log("Is this running?");
 
         currentBoss.transform.position = pos;
-        Instantiate(currentBoss,  currentBoss.transform);
+        cb = Instantiate(currentBoss,  currentBoss.transform);
     }
 
     public void LoadBoss(string bossName)
