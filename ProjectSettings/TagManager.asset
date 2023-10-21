@@ -8,6 +8,7 @@ TagManager:
   - Weapon
   - CurrentWeapon
   - Boss
+  - Bullet
   layers:
   - Default
   - TransparentFX

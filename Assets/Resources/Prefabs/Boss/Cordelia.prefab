@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -3894961986207175519}
   - component: {fileID: 6934543170746109914}
   m_Layer: 0
-  m_Name: CordeliaPrefab
+  m_Name: Cordelia
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

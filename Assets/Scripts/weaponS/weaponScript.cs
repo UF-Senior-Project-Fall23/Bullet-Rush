@@ -73,7 +73,7 @@ public class weaponScript : MonoBehaviour
         while (Input.GetButton("Fire1"))
         {
             GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
-            bullet.GetComponent<bulletScript>().damage = damage;
+            bullet.GetComponent<Bullet>().damage = damage;
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
             //Fire the bullet

@@ -17,8 +17,6 @@ public class Cordelia : MonoBehaviour, Boss
     {
         "SpinDance", "KickDance", "StringDance", "SummonPuppets", "DetonatePuppets", "Rush", "Spotlight", "BladeFlourish", "PuppeteersGrasp"
     };
-    
-
 
     // Sets the dance to Spin.
     void SpinDance()
@@ -73,9 +71,9 @@ public class Cordelia : MonoBehaviour, Boss
         attackSpeedModifier = 1.5;
     }
 
-    void Boss.BossLogic(float deltaTime, GameObject cb, Vector3 playerPos)
+    void Boss.BossLogic(GameObject cb, Vector3 playerPos)
     {
-        globalTime += deltaTime;
+        globalTime += Time.deltaTime;
 
         float second = MathF.Floor(globalTime) % 4;
         

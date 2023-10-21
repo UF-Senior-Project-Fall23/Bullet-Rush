@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BossController : MonoBehaviour
@@ -8,10 +9,12 @@ public class BossController : MonoBehaviour
     public static BossController instance;
 
     private Boss currentBossLogic = null;
-    private GameObject currentBoss = null;
-    private GameObject cb = null;
-    public GameObject player;
-    public GameObject cordeliaPrefab;
+    private GameObject currentBossPrefab = null;
+    private GameObject player;
+
+    public GameObject currentBoss = null;
+    public Dictionary<string, GameObject> bossPrefabs;
+    public String BossName;
     
     
 
@@ -32,17 +35,22 @@ public class BossController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Calling LoadBoss");
-        LoadBoss("Cordelia");
+        bossPrefabs = Resources.LoadAll<GameObject>("Prefabs/Boss").ToDictionary(x => x.name, x => x);
 
         if (player == null)
             player = PlayerController.instance.gameObject;
+
+        if (BossName == null)
+            BossName = "Cordelia";
+
+        Debug.Log("Calling LoadBoss");
+        LoadBoss(BossName);
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentBossLogic?.BossLogic(Time.deltaTime, cb, player.transform.position);
+        currentBossLogic?.BossLogic(currentBoss, player.transform.position);
     }
 
     // Calls a function for the given boss with the name provided.
@@ -58,8 +66,7 @@ public class BossController : MonoBehaviour
     {
         Debug.Log("Is this running?");
 
-        currentBoss.transform.position = pos;
-        cb = Instantiate(currentBoss, currentBoss.transform.position, currentBoss.transform.localRotation);
+        currentBoss = Instantiate(currentBossPrefab, pos, Quaternion.identity);
     }
 
     public void LoadBoss(string bossName)
@@ -68,19 +75,16 @@ public class BossController : MonoBehaviour
 
         Vector3 bossPos = new Vector3(-75, 10, 0);
         
-        if (bossName == "Cordelia")
-        {
-            currentBoss = cordeliaPrefab;
-            currentBossLogic = cordeliaPrefab.GetComponent<Cordelia>();
-        }
+        currentBossPrefab = bossPrefabs[bossName];
+        currentBossLogic = currentBossPrefab.GetComponent<Boss>();
         
-        if (currentBoss != null) SummonBoss(bossPos);
+        if (currentBossPrefab != null) SummonBoss(bossPos);
     }
     
     public void BossDie()
     {
         currentBossLogic = null;
+        currentBossPrefab = null;
         currentBoss = null;
-        cb = null;
     }
 }

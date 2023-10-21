@@ -105,6 +105,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8594331032011757151, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8594331032011757151, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
       propertyPath: bulletDelay
       value: 1
       objectReference: {fileID: 0}

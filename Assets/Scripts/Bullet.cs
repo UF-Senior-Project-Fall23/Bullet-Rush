@@ -2,16 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class Bullet : MonoBehaviour
 {
-    public float timeToLiveBullets = 2f;
+    public int damage;
+    bool alive = true;
 
-    void Start()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        Destroy(gameObject, timeToLiveBullets);
+        Debug.Log("Bullet hit " + collision.gameObject.name);
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            collision.gameObject.GetComponent<enemyScript>().takeDamage(damage);
+        }
+        
+        if (!collision.gameObject.CompareTag("CurrentWeapon") && !collision.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(gameObject);
+            alive = false;
+        }
+        
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Destroy(gameObject);
-    }
+
 }
