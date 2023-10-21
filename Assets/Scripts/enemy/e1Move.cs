@@ -15,12 +15,16 @@ public class e1Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var distVal = 50.0f;
-        var dis = Vector3.Distance(startPosition, target.transform.position);
-        if (dis <= distVal)
+        //if (PlayerController.instance.checkLife())
         {
-            transform.position = startPosition + transform.right * Mathf.Sin(Time.time * 2f + 0f) * 2f;
+            var distVal = 50.0f;
+            var dis = Vector3.Distance(startPosition, target.transform.position);
+            if (dis <= distVal)
+            {
+                transform.position = startPosition + transform.right * Mathf.Sin(Time.time * 2f + 0f) * 2f;
+            }
         }
+        
         
     }
 }

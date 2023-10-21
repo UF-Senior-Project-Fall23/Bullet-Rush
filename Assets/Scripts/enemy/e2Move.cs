@@ -16,10 +16,14 @@ public class e2Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        startPosition = target.transform.position;
-        float x = Mathf.Cos(Time.time * _frequency) * _amplitude;
-        float y = Mathf.Sin(Time.time * _frequency) * _amplitude;
-        transform.position = new Vector3(x, y);
-        transform.position = transform.position + startPosition;
+        //if (PlayerController.instance.checkLife())
+        {
+            startPosition = target.transform.position;
+            float x = Mathf.Cos(Time.time * _frequency) * _amplitude;
+            float y = Mathf.Sin(Time.time * _frequency) * _amplitude;
+            transform.position = new Vector3(x, y);
+            transform.position = transform.position + startPosition;
+        }
+        
     }
 }
