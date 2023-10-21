@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     float m_horizontal;
     float m_vertical;
     Vector3 m_zero = Vector3.zero;
+    bool m_alive = true;
 
     GameObject weapon;
     weaponScript m_weaponScript;
@@ -25,9 +26,16 @@ public class PlayerController : MonoBehaviour
     //How fast the player moves
     public float runSpeed = 20.0f;
 
+    //Player maximum health
+    public int maxHealth = 10;
+
+    //Player current health
+    public int currHealth { get; private set; }
+
     private void Awake()
     {
         m_body = GetComponent<Rigidbody2D>();
+        currHealth = maxHealth;
         if (instance == null)
         {
             instance = this;
@@ -45,9 +53,17 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Gets raw movement input
-        m_horizontal = Input.GetAxisRaw("Horizontal");
-        m_vertical = Input.GetAxisRaw("Vertical");
+        if (m_alive)
+        {
+            //Gets raw movement input
+            m_horizontal = Input.GetAxisRaw("Horizontal");
+            m_vertical = Input.GetAxisRaw("Vertical");
+        }
+        else
+        {
+            m_horizontal = 0f;
+            m_vertical = 0f;
+        }
 
         //Limit movement if moving diagonal
         if (m_horizontal != 0 && m_vertical != 0)
@@ -69,7 +85,7 @@ public class PlayerController : MonoBehaviour
         //If player collides with and enemy remove hp
         if (collision.gameObject.tag == "Enemy")
         {
-            GameManager.instance.DecreaseHealth(1);
+            decreaseHealth(1);
         }
         //Pick up weapon only if player doesnt have a weapon
         else if (collision.gameObject.tag == "Weapon" && weapon == null)
@@ -93,6 +109,17 @@ public class PlayerController : MonoBehaviour
         weapon = null;
         m_weaponScript = null;
         GameManager.instance.weaponText.text = "Weapon: None";
+    }
+
+    public void decreaseHealth(int damage)
+    {
+        currHealth -= damage;
+
+        if (currHealth <= 0)
+        {
+            currHealth = 0;
+            m_alive = false;
+        }
     }
 
 }

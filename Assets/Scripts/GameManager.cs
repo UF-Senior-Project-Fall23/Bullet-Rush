@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
 
     private float gameTime = 0f;
     private int score = 0;
-    private int health = 100;
 
     private void Awake()
     {
@@ -32,7 +31,7 @@ public class GameManager : MonoBehaviour
         gameTime += Time.deltaTime;
         timeText.text = "Time Elapsed: " + Mathf.Floor(gameTime).ToString();
         scoreText.text = "Score: " + score.ToString();
-        healthText.text = "Health: " + health.ToString();
+        healthText.text = "Health: " + PlayerController.instance.currHealth.ToString();
     }
 
     public void AddScore(int type)
@@ -43,32 +42,5 @@ public class GameManager : MonoBehaviour
                 score += 10;
                 break;
         }
-    }
-
-    public void DecreaseHealth(int type)
-    {
-        switch (type)
-        {
-            case 1:
-                if(health == 0)
-                {
-                    //reset
-                    health = 100;
-                }
-                else
-                {
-                    health -= 10;
-                }
-                
-                break;
-            case 2:
-                //reset
-                health = 100;
-                break;
-        }
-    }
-    public int checkHealth()
-    {
-        return health;
     }
 }
