@@ -34,6 +34,9 @@ public class BossController : MonoBehaviour
     {
         Debug.Log("Calling LoadBoss");
         LoadBoss("Cordelia");
+
+        if (player == null)
+            player = PlayerController.instance.gameObject;
     }
 
     // Update is called once per frame
@@ -56,7 +59,7 @@ public class BossController : MonoBehaviour
         Debug.Log("Is this running?");
 
         currentBoss.transform.position = pos;
-        cb = Instantiate(currentBoss,  currentBoss.transform);
+        cb = Instantiate(currentBoss, currentBoss.transform.position, currentBoss.transform.localRotation);
     }
 
     public void LoadBoss(string bossName)
@@ -72,5 +75,12 @@ public class BossController : MonoBehaviour
         }
         
         if (currentBoss != null) SummonBoss(bossPos);
+    }
+    
+    public void BossDie()
+    {
+        currentBossLogic = null;
+        currentBoss = null;
+        cb = null;
     }
 }

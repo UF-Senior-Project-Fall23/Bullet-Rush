@@ -147,4 +147,10 @@ public class Cordelia : MonoBehaviour, Boss
         }
     }
 
+    //Run this so the boss controller wont call bosslogic anymore
+    private void OnDestroy()
+    {
+        BossController.instance.BossDie();
+    }
+
 }

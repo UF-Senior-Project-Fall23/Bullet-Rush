@@ -11,12 +11,12 @@ public class enemyScript : MonoBehaviour
     public void takeDamage(int damage)
     {
         health -= damage;
-        Debug.Log("Enemy health = " + health);
+        Debug.Log(gameObject.name + " health = " + health);
 
         if (health <= 0)
             die();
-
-        gameObject.transform.GetComponentInChildren<healthBar>().takeDamage();
+        
+        gameObject.transform.GetComponentInChildren<healthBar>()?.takeDamage();
     }
 
     void die()

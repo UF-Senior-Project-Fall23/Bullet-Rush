@@ -387,6 +387,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 946907776}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &367473879
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 367473881}
+  - component: {fileID: 367473882}
+  m_Layer: 0
+  m_Name: BossController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &367473881
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367473879}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -65.4262, y: 13.395131, z: -0.04058838}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &367473882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367473879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f113e083f61a4f84b8e241db20695f7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  cordeliaPrefab: {fileID: 945224095935049409, guid: 1ebef69312002304281496e4fed01e56, type: 3}
 --- !u!1 &466500064
 GameObject:
   m_ObjectHideFlags: 3
@@ -36502,6 +36548,7 @@ MonoBehaviour:
   moveSmoothing: 0.05
   moveLimiter: 0.7
   runSpeed: 10
+  maxHealth: 10
 --- !u!50 &1992031061
 Rigidbody2D:
   serializedVersion: 4
@@ -37165,3 +37212,4 @@ SceneRoots:
   - {fileID: 57249345}
   - {fileID: 1716612699}
   - {fileID: 1873825756}
+  - {fileID: 367473881}
