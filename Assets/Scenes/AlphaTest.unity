@@ -431,7 +431,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f113e083f61a4f84b8e241db20695f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BossName: Cordelia
+  currentBoss: {fileID: 0}
+  BossName: Evil Cube
 --- !u!1 &466500064
 GameObject:
   m_ObjectHideFlags: 3

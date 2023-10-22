@@ -8,7 +8,6 @@ public class BossController : MonoBehaviour
 {
     public static BossController instance;
 
-    private Boss currentBossLogic = null;
     private GameObject currentBossPrefab = null;
     private GameObject player;
 
@@ -50,16 +49,7 @@ public class BossController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentBossLogic?.BossLogic(currentBoss, player.transform.position);
-    }
-
-    // Calls a function for the given boss with the name provided.
-    // Useful for storing attacks in a list and properly naming the attack functions something other than "Attack1, Attack2", etc.
-    public void CallAttack(Boss boss, string attack)
-    {
-        var bossType = boss.GetType();
-        var attackFunction = bossType.GetMethod(attack);
-        attackFunction?.Invoke(boss, null);
+        
     }
 
     public void SummonBoss(Vector3 pos)
@@ -67,6 +57,7 @@ public class BossController : MonoBehaviour
         Debug.Log("Is this running?");
 
         currentBoss = Instantiate(currentBossPrefab, pos, Quaternion.identity);
+        StartCoroutine(currentBoss.GetComponent<Boss>().StartPhase());
     }
 
     public void LoadBoss(string bossName)
@@ -76,14 +67,12 @@ public class BossController : MonoBehaviour
         Vector3 bossPos = new Vector3(-75, 10, 0);
         
         currentBossPrefab = bossPrefabs[bossName];
-        currentBossLogic = currentBossPrefab.GetComponent<Boss>();
         
         if (currentBossPrefab != null) SummonBoss(bossPos);
     }
     
     public void BossDie()
     {
-        currentBossLogic = null;
         currentBossPrefab = null;
         currentBoss = null;
     }

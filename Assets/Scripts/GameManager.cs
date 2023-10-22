@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         gameTime += Time.deltaTime;
         timeText.text = "Time Elapsed: " + Mathf.Floor(gameTime).ToString();
         scoreText.text = "Score: " + score.ToString();
-        healthText.text = "Health: " + PlayerController.instance.currHealth.ToString();
+        healthText.text = "Health: " + PlayerController.instance.CurrentHealth.ToString();
     }
 
     public void AddScore(int type)
