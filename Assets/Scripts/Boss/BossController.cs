@@ -15,8 +15,6 @@ public class BossController : MonoBehaviour
     public Dictionary<string, GameObject> bossPrefabs;
     public String BossName;
     
-    
-
     private void Awake()
     {
         Debug.Log("Awakened");
@@ -39,17 +37,8 @@ public class BossController : MonoBehaviour
         if (player == null)
             player = PlayerController.instance.gameObject;
 
-        if (BossName == null)
-            BossName = "Cordelia";
-
         Debug.Log("Calling LoadBoss");
         LoadBoss(BossName);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void SummonBoss(Vector3 pos, float health)

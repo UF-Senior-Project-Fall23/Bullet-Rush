@@ -22,7 +22,7 @@ public class EvilCube : MonoBehaviour, Boss, IHealth
 
     public string[] Attacks { get; } =
     {
-        "Attack", "Invulnerable", "Vulnerable"
+        "Shoot", "Rage", "TransitionToRage", "RageShoot", "Death"
     };
 
     void Start()
@@ -58,7 +58,7 @@ public class EvilCube : MonoBehaviour, Boss, IHealth
     {
         Invulnerable = true;
         Color c = GetComponent<SpriteRenderer>().color;
-        for (float red = 0; red <= 1; red += 0.01f)
+        for (float red = 0; red <= 1; red += 0.005f)
         {
             c.r = red;
             c.b = 1 - red;
