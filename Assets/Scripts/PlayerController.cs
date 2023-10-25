@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour, IHealth
     float m_horizontal;
     float m_vertical;
     Vector3 m_zero = Vector3.zero;
+    bool m_invulnerable = false;
     bool m_alive = true;
 
     GameObject weapon;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour, IHealth
 
     public float MaxHealth { get => maxHealth; set => maxHealth = value; }
     public float CurrentHealth { get => m_currHealth; set => m_currHealth = value; }
+    public bool Invulnerable { get => m_invulnerable; set => m_invulnerable = value; }
 
     private void Awake()
     {

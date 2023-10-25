@@ -6,15 +6,20 @@ public interface IHealth
 {
     public float MaxHealth { get; set; }
     public float CurrentHealth { get; set; }
+    public bool Invulnerable { get; set; }
+
     GameObject gameObject { get; }
     public void takeDamage(int damage)
     {
-        CurrentHealth -= damage;
+        if (!Invulnerable)
+        {
+            CurrentHealth -= damage;
 
-        if (CurrentHealth <= 0)
-            Die();
+            if (CurrentHealth <= 0)
+                Die();
 
-        gameObject.transform.GetComponentInChildren<healthBar>()?.takeDamage();
+            gameObject.transform.GetComponentInChildren<healthBar>()?.takeDamage();
+        }
     }
 
     void Die();

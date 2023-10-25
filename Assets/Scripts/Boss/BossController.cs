@@ -52,11 +52,12 @@ public class BossController : MonoBehaviour
         
     }
 
-    public void SummonBoss(Vector3 pos)
+    public void SummonBoss(Vector3 pos, float health)
     {
         Debug.Log("Is this running?");
 
         currentBoss = Instantiate(currentBossPrefab, pos, Quaternion.identity);
+        currentBoss.GetComponent<IHealth>().MaxHealth = health;
         StartCoroutine(currentBoss.GetComponent<Boss>().StartPhase());
     }
 
@@ -68,7 +69,7 @@ public class BossController : MonoBehaviour
         
         currentBossPrefab = bossPrefabs[bossName];
         
-        if (currentBossPrefab != null) SummonBoss(bossPos);
+        if (currentBossPrefab != null) SummonBoss(bossPos, 20f);
     }
     
     public void BossDie()
