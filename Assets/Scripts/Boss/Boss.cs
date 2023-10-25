@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public interface Boss
@@ -6,6 +7,6 @@ public interface Boss
 
     void PhaseChange();
 
-    void BossLogic(GameObject b, Vector3 playerPos);
+    IEnumerator StartPhase();
 
 }

@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IHealth
 {
     public static PlayerController instance;
 
@@ -12,11 +12,12 @@ public class PlayerController : MonoBehaviour
     float m_horizontal;
     float m_vertical;
     Vector3 m_zero = Vector3.zero;
+    bool m_invulnerable = false;
     bool m_alive = true;
     [SerializeField] private TrailRenderer trail;
 
     GameObject weapon;
-    weaponScript m_weaponScript;
+    Weapon m_weaponScript;
     
     //How strong the movement smoothing is
     public float moveSmoothing = .05f;
@@ -28,10 +29,14 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 20.0f;
 
     //Player maximum health
-    public int maxHealth = 10;
+    public float maxHealth = 10f;
 
     //Player current health
-    public int currHealth { get; private set; }
+    float m_currHealth;
+
+    public float MaxHealth { get => maxHealth; set => maxHealth = value; }
+    public float CurrentHealth { get => m_currHealth; set => m_currHealth = value; }
+    public bool Invulnerable { get => m_invulnerable; set => m_invulnerable = value; }
 
     //iFrames Duration
     [Header("iFrames")]
@@ -51,8 +56,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         m_body = GetComponent<Rigidbody2D>();
+        m_currHealth = maxHealth;
         spriteOpacity = GetComponent<SpriteRenderer>();
-        currHealth = maxHealth;
         if (instance == null)
         {
             instance = this;
@@ -112,7 +117,7 @@ public class PlayerController : MonoBehaviour
         //If player collides with and enemy remove hp
         if (collision.gameObject.tag == "Enemy")
         {
-            decreaseHealth(1);
+            m_currHealth
             StartCoroutine(Invulnerability());
         }
         //Pick up weapon only if player doesnt have a weapon
@@ -120,7 +125,7 @@ public class PlayerController : MonoBehaviour
         {
             weapon = collision.gameObject;
             weapon.tag = "CurrentWeapon";
-            m_weaponScript = weapon.GetComponent<weaponScript>();
+            m_weaponScript = weapon.GetComponent<Weapon>();
             m_weaponScript.player = gameObject;
             m_weaponScript.enabled = true;
             weapon.GetComponent<Collider2D>().enabled = false;
@@ -128,7 +133,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void dropWeapon()
+    public void DropWeapon()
     {
         weapon.tag = "Weapon";
         m_weaponScript.player = null;
@@ -139,17 +144,13 @@ public class PlayerController : MonoBehaviour
         GameManager.instance.weaponText.text = "Weapon: None";
     }
 
-    public void decreaseHealth(int damage)
+    public void Die()
     {
-        currHealth -= damage;
-
-        if (currHealth <= 0)
-        {
-            currHealth = 0;
-            m_alive = false;
-        }
+        DropWeapon();
+        Destroy(gameObject);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
+    
     private IEnumerator Invulnerability() {
         Physics2D.IgnoreLayerCollision(7, 8, true);
         //invulnerability duration
@@ -185,5 +186,4 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
-
 }

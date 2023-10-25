@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class healthBar : MonoBehaviour
 {
-    enemyScript entity;
+    IHealth entity;
     public GameObject greenBar;
 
     private Transform parentTransform;
@@ -12,7 +12,7 @@ public class healthBar : MonoBehaviour
     public float healthBarRelativeY;
     void Start()
     {
-        entity = gameObject.GetComponentInParent<enemyScript>();
+        entity = gameObject.GetComponentInParent<IHealth>();
         if (entity == null)
         {
             gameObject.SetActive(false);
@@ -26,7 +26,7 @@ public class healthBar : MonoBehaviour
 
     public void takeDamage()
     {
-        float healthRatio = entity.health / entity.maxHealth;
+        float healthRatio = entity.CurrentHealth / entity.MaxHealth;
         Debug.Log("healthRatio = " + healthRatio);
         greenBar.transform.localScale = new Vector3(healthRatio, greenBar.transform.localScale.y, greenBar.transform.localScale.z);
         greenBar.transform.localPosition = new Vector3(((1 - healthRatio) / 2) * -1, greenBar.transform.localPosition.y, greenBar.transform.localPosition.z);

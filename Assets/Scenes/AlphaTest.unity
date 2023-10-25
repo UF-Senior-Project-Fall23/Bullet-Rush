@@ -432,7 +432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentBoss: {fileID: 0}
-  BossName: Cordelia
+  BossName: Evil Cube
 --- !u!1 &466500064
 GameObject:
   m_ObjectHideFlags: 3
