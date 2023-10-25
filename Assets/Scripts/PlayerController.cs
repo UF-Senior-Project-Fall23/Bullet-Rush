@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour, IHealth
     private bool isDashing;
     private float dashingPower = 24f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 0.2f;
+    private float dashingCooldown = 1f;
 
     private void Awake()
     {
@@ -74,14 +74,14 @@ public class PlayerController : MonoBehaviour, IHealth
         if(isDashing) {
             return;
         }
+
+        if(Input.GetKeyDown(KeyCode.Space) && canDash) {
+            StartCoroutine(Dash());
+        }
     }
 
     void FixedUpdate()
     {
-        if(isDashing) {
-            return;
-        }
-
         if (m_alive)
         {
             //Gets raw movement input
@@ -99,10 +99,6 @@ public class PlayerController : MonoBehaviour, IHealth
         {
             m_horizontal *= moveLimiter;
             m_vertical *= moveLimiter;
-        }
-
-        if(Input.GetKeyDown(KeyCode.Space) && canDash) {
-            StartCoroutine(Dash());
         }
 
         // This finds the target velocity of the player
@@ -155,7 +151,7 @@ public class PlayerController : MonoBehaviour, IHealth
         Physics2D.IgnoreLayerCollision(7, 8, true);
         //invulnerability duration
         for(int i = 0; i < numberOfFlashes; i++){
-            spriteOpacity.color = new Color(255, 0, 0, 20);
+            spriteOpacity.color = new Color(255, 255, 255, 0.5f);
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
             spriteOpacity.color = new Color(255, 255, 255, 255);
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
@@ -176,7 +172,6 @@ public class PlayerController : MonoBehaviour, IHealth
             m_horizontal *= moveLimiter;
             m_vertical *= moveLimiter;
         }
-        // Vector2(xVelocity, yVelocity) in this case yVelocity is 0, might have to adjust this for isometric character
         m_body.velocity = new Vector2(m_horizontal * dashingPower, m_vertical * dashingPower);
         trail.emitting = true;
         yield return new WaitForSeconds(dashingTime);
