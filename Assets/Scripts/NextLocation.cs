@@ -4,10 +4,43 @@ using UnityEngine;
 
 public class NextLocation : MonoBehaviour
 {
-    public GameObject teleportLocation;
+    private bool inLootRoom = false;
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Player")
-            collision.transform.position = teleportLocation.transform.position;
+        GameManager gameManager = FindObjectOfType<GameManager>();
+
+        if (collision.gameObject.tag == "Player" && !gameManager.inLootRoom)
+        {
+            if (gameManager != null)
+            {
+
+                Debug.Log("Teleport To Loot Room");
+                // set teleport to LootRoomLocation
+                collision.transform.position = gameManager.getLootRoomLocation();
+                gameManager.inLootRoom = true;
+
+            }
+            else
+            {
+                Debug.LogError("GameManager not found.");
+            }
+        }
+        else if (collision.gameObject.tag == "Player" && gameManager.inLootRoom)
+        {
+            if (gameManager != null)
+            {
+                //based on current level, call retrieves the next level's teleport location
+                Debug.Log("Teleport To Next Level");
+                collision.transform.position = gameManager.getNextLevelLocation();
+                //increment the currentLevel
+                gameManager.incrementLevel();
+                gameManager.inLootRoom = false;
+
+            }
+            else
+            {
+                Debug.LogError("GameManager not found.");
+            }
+        }
     }
 }
