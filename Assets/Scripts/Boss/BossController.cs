@@ -8,7 +8,6 @@ public class BossController : MonoBehaviour
 {
     public static BossController instance;
 
-    private Boss currentBossLogic = null;
     private GameObject currentBossPrefab = null;
     private GameObject player;
 
@@ -16,8 +15,6 @@ public class BossController : MonoBehaviour
     public Dictionary<string, GameObject> bossPrefabs;
     public String BossName;
     
-    
-
     private void Awake()
     {
         Debug.Log("Awakened");
@@ -40,33 +37,17 @@ public class BossController : MonoBehaviour
         if (player == null)
             player = PlayerController.instance.gameObject;
 
-        if (BossName == null)
-            BossName = "Cordelia";
-
         Debug.Log("Calling LoadBoss");
         LoadBoss(BossName);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        currentBossLogic?.BossLogic(currentBoss, player.transform.position);
-    }
-
-    // Calls a function for the given boss with the name provided.
-    // Useful for storing attacks in a list and properly naming the attack functions something other than "Attack1, Attack2", etc.
-    public void CallAttack(Boss boss, string attack)
-    {
-        var bossType = boss.GetType();
-        var attackFunction = bossType.GetMethod(attack);
-        attackFunction?.Invoke(boss, null);
-    }
-
-    public void SummonBoss(Vector3 pos)
+    public void SummonBoss(Vector3 pos, float health)
     {
         Debug.Log("Is this running?");
 
         currentBoss = Instantiate(currentBossPrefab, pos, Quaternion.identity);
+        currentBoss.GetComponent<IHealth>().MaxHealth = health;
+        StartCoroutine(currentBoss.GetComponent<Boss>().StartPhase());
     }
 
     public void LoadBoss(string bossName)
@@ -76,14 +57,12 @@ public class BossController : MonoBehaviour
         Vector3 bossPos = new Vector3(-75, 10, 0);
         
         currentBossPrefab = bossPrefabs[bossName];
-        currentBossLogic = currentBossPrefab.GetComponent<Boss>();
         
-        if (currentBossPrefab != null) SummonBoss(bossPos);
+        if (currentBossPrefab != null) SummonBoss(bossPos, 20f);
     }
     
     public void BossDie()
     {
-        currentBossLogic = null;
         currentBossPrefab = null;
         currentBoss = null;
     }

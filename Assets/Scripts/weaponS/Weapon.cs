@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class weaponScript : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
     //Player
     public GameObject player;
@@ -37,7 +37,7 @@ public class weaponScript : MonoBehaviour
         if (!isShooting && Input.GetButtonDown("Fire1"))
             StartCoroutine("Shoot");
         else if (Input.GetKeyDown(KeyCode.Q))
-            PlayerController.instance.dropWeapon();
+            PlayerController.instance.DropWeapon();
 
         //Gets the mouse position
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
