@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,14 +12,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI weaponText;
 
-    public GameObject lootRoomLocation;
-    public GameObject level1Location;
-    public GameObject level2Location;
-    public GameObject level3Location;
-    public GameObject level4Location;
-    public GameObject level5Location;
-
-    private GameObject[] levelCoordinates;
+    public List<GameObject> levelCoordinates;
 
     private float gameTime = 0f;
     private int score = 0;
@@ -33,23 +26,26 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            //levelCoordinates[0] is the lootRoom location
-            //levelCoordinates[1] is level 1 location
-            //... and so on
-            levelCoordinates = new GameObject[]
-            {
-                lootRoomLocation,
-                level1Location,
-                level2Location,
-                level3Location,
-                level4Location,
-                level5Location
-            };
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        //levelCoordinates[0] is the lootRoom location
+        //levelCoordinates[1] is level 1 location
+        //... and so on
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.CompareTag("Teleport"))
+            {
+                levelCoordinates.Add(child.gameObject);
+            }
+        }
+
         weaponText.text = "Weapon: None";
     }
 

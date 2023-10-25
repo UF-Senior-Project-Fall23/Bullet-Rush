@@ -14,6 +14,7 @@ public class BossController : MonoBehaviour
     public GameObject currentBoss = null;
     public Dictionary<string, GameObject> bossPrefabs;
     public String BossName;
+    public GameObject portalPrefab;
     
     private void Awake()
     {
@@ -63,6 +64,7 @@ public class BossController : MonoBehaviour
     
     public void BossDie()
     {
+        Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
         currentBossPrefab = null;
         currentBoss = null;
     }

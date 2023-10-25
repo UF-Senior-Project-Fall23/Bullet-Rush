@@ -9,6 +9,7 @@ TagManager:
   - CurrentWeapon
   - Boss
   - Bullet
+  - Teleport
   layers:
   - Default
   - TransparentFX
