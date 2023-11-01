@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private float gameTime = 0f;
     private int score = 0;
 
-    private int currentLevel = 1;
+    private int currentLevel = 0;
 
     public bool inLootRoom = false;
 
@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
         //levelCoordinates[0] is the lootRoom location
         //levelCoordinates[1] is level 1 location
         //... and so on
+        //levelCoordinates[6] is the start room
         foreach (Transform child in transform)
         {
             if (child.gameObject.CompareTag("Teleport"))
@@ -71,7 +72,6 @@ public class GameManager : MonoBehaviour
 
     public void incrementLevel()
     {
-        Debug.Log("level incremented from: " + currentLevel + " to " + currentLevel + 1);
         currentLevel += 1;
     }
     public int getCurrentLevel()
