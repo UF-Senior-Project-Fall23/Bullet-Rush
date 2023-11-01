@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI weaponText;
 
+    public TextMeshProUGUI levelText;
     public List<GameObject> levelCoordinates;
 
     private float gameTime = 0f;
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour
         timeText.text = "Time Elapsed: " + Mathf.Floor(gameTime).ToString();
         scoreText.text = "Score: " + score.ToString();
         healthText.text = "Health: " + PlayerController.instance.CurrentHealth.ToString();
+        levelText.text = "Level: " + currentLevel.ToString();
     }
 
     public void AddScore(int type)
