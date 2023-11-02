@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class NextLocation : MonoBehaviour
 {
-    private bool inLootRoom = false;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         GameManager gameManager = FindObjectOfType<GameManager>();

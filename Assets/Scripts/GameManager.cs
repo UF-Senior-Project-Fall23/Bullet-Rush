@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     private int currentLevel = 0;
 
-    public bool inLootRoom = false;
+    public bool inLootRoom = true;
 
     private void Awake()
     {
@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        inLootRoom = true;
         //levelCoordinates[0] is the lootRoom location
         //levelCoordinates[1] is level 1 location
         //... and so on
