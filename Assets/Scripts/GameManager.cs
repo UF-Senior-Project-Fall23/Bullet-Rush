@@ -13,10 +13,13 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI weaponText;
 
     public TextMeshProUGUI levelText;
+    public TextMeshProUGUI difficultyText;
     public List<GameObject> levelCoordinates;
 
     private float gameTime = 0f;
     private int score = 0;
+
+    private int difficulty = 0; //0 = easy, 1 = medium, 2 = hard
 
     private int currentLevel = 0;
 
@@ -51,13 +54,25 @@ public class GameManager : MonoBehaviour
         weaponText.text = "Weapon: None";
     }
 
-    void Update()
+    void FixedUpdate()
     {
         gameTime += Time.deltaTime;
         timeText.text = "Time Elapsed: " + Mathf.Floor(gameTime).ToString();
         scoreText.text = "Score: " + score.ToString();
         healthText.text = "Health: " + PlayerController.instance.CurrentHealth.ToString();
         levelText.text = "Level: " + currentLevel.ToString();
+        if (difficulty == 0)
+        {
+            difficultyText.text = "Difficulty: Easy";
+        }
+        else if (difficulty == 1)
+        {
+            difficultyText.text = "Difficulty: Medium";
+        }
+        else
+        {
+            difficultyText.text = "Difficulty: Hard";
+        }
     }
 
     public void AddScore(int type)
@@ -87,5 +102,13 @@ public class GameManager : MonoBehaviour
     {
         Vector3 lootRoomVector = levelCoordinates[0].transform.position;
         return lootRoomVector;
+    }
+    public void setDifficulty(int newDifficulty)
+    {
+        difficulty = newDifficulty;
+    }
+    public int getCurrentDifficulty()
+    {
+        return difficulty;
     }
 }
