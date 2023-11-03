@@ -148,6 +148,7 @@ MonoBehaviour:
   bulletDelay: 0.2
   damage: 1
   bulletPreFab: {fileID: 319021616187502277, guid: 22f4395033b4c47438ff3b7b300d740e, type: 3}
+  overheating: 0
 --- !u!61 &196782112260326543
 BoxCollider2D:
   m_ObjectHideFlags: 0

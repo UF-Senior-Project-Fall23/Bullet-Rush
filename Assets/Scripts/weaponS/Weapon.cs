@@ -25,6 +25,11 @@ public class Weapon : MonoBehaviour
     protected Transform shootPoint;
     protected bool isFlipped;
     protected bool isShooting;
+    protected bool isOverheated = false;
+    private float currentHeat = 0.0f;
+    private float heatPerShot = 5.0f;
+    private float maxHeat = 100.0f;
+    private float cooldownRate = 20.0f;
 
     private void Awake()
     {
@@ -34,10 +39,23 @@ public class Weapon : MonoBehaviour
 
     void Update()
     {
-        if (!isShooting && Input.GetButtonDown("Fire1"))
+        //Overheating cooldown and the check
+        if(isOverheated) {
+            currentHeat -= cooldownRate * Time.deltaTime;
+            currentHeat = Mathf.Max(currentHeat, 0.0f);
+            if (currentHeat < maxHeat * 0.2f){
+                currentHeat = 0.0f;
+                isOverheated = false;
+            } 
+        }
+
+        if (!isShooting && Input.GetButtonDown("Fire1")) {
             StartCoroutine("Shoot");
-        else if (Input.GetKeyDown(KeyCode.Q))
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Q)) {
             PlayerController.instance.DropWeapon();
+        }
 
         //Gets the mouse position
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -70,17 +88,47 @@ public class Weapon : MonoBehaviour
     public virtual IEnumerator Shoot()
     {
         isShooting = true;
-        while (Input.GetButton("Fire1"))
-        {
-            GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
-            bullet.GetComponent<Bullet>().damage = damage;
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
-            //Fire the bullet
-            rb.AddForce(shootPoint.transform.up * bulletForce, ForceMode2D.Impulse);
-            yield return new WaitForSeconds(bulletDelay);
+        if(!isOverheated){
+
+            while (Input.GetButton("Fire1") && !isOverheated) {
+                GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
+                bullet.GetComponent<Bullet>().damage = damage;
+                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+                //Fire the bullet
+                rb.AddForce(shootPoint.transform.up * bulletForce, ForceMode2D.Impulse);
+                yield return new WaitForSeconds(bulletDelay);
+
+                currentHeat += heatPerShot;
+
+                //Once it passes the threshold, player can't shoot
+                if(currentHeat >= maxHeat) {
+                    isOverheated = true;
+                    isShooting = false;
+                    yield break;
+                }
+            }
         }
+
         isShooting = false;
         yield return null;
+
+        // while (Input.GetButton("Fire1"))
+        // {
+        //     GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
+        //     bullet.GetComponent<Bullet>().damage = damage;
+        //     Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+        //     //Fire the bullet
+        //     // if(!isOverheated){
+        //     //     rb.AddForce(shootPoint.transform.up * bulletForce, ForceMode2D.Impulse);
+        //     //     yield return new WaitForSeconds(bulletDelay);
+        //     // }
+        //     rb.AddForce(shootPoint.transform.up * bulletForce, ForceMode2D.Impulse);
+        //     yield return new WaitForSeconds(bulletDelay);
+        // }
+        // isShooting = false;
+        // yield return null;
     }
 }
