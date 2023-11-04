@@ -432,8 +432,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentBoss: {fileID: 0}
-  BossName: Evil Cube
+  BossName: Blagthoroth
   portalPrefab: {fileID: 2980754544053814403, guid: fc59c9488a341f34db05136e8fb87a6a, type: 3}
+  indicatorPrefab: {fileID: 2522868610081033057, guid: c9e1d0cf244049f4c899c2690aa70a2d, type: 3}
 --- !u!1 &466500064
 GameObject:
   m_ObjectHideFlags: 3
@@ -35951,7 +35952,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -36462,7 +36463,7 @@ MonoBehaviour:
   m_Follow: {fileID: 837121748}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 8
+    OrthographicSize: 12
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0

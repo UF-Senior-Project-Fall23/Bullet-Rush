@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8594331030066999093}
   - component: {fileID: 8594331030066999083}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8594331030154612792}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 8594331032011757144}
   - component: {fileID: 8594331032011757151}
   - component: {fileID: 8120755106421650783}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: Base Weapon
   m_TagString: Weapon
   m_Icon: {fileID: 0}
@@ -162,8 +162,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23928f0d71586b54a8ee588ce5c41958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   radius: 1
   bulletForce: 20
+  bulletDelay: 1
   damage: 1
   bulletPreFab: {fileID: 6992979119922663773, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
 --- !u!58 &8120755106421650783

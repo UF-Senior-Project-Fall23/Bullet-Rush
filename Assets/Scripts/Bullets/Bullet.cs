@@ -12,13 +12,10 @@ public class Bullet : MonoBehaviour
         Debug.Log("Bullet hit " + collision.gameObject.name);
 
         collision.GetComponent<IHealth>()?.takeDamage(damage);
+        collision.GetComponentInParent<IHealth>()?.takeDamage(damage);
         
-        if (!collision.gameObject.CompareTag("CurrentWeapon") && !collision.gameObject.CompareTag("Bullet"))
-        {
-            Destroy(gameObject);
-            m_alive = false;
-        }
-        
+        Destroy(gameObject);
+        m_alive = false;
     }
 
 }

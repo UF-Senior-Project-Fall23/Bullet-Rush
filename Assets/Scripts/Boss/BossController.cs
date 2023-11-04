@@ -15,6 +15,7 @@ public class BossController : MonoBehaviour
     public Dictionary<string, GameObject> bossPrefabs;
     public String BossName;
     public GameObject portalPrefab;
+    public GameObject indicatorPrefab;
     
     private void Awake()
     {
