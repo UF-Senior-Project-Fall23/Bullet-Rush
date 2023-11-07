@@ -252,7 +252,7 @@ public class Cordelia : MonoBehaviour, Boss
         if (second != 0)
         {
             //"SpinDance", "KickDance", "StringDance", "SummonPuppets", "DetonatePuppets", "Rush", "Spotlight", "BladeFlourish", "PuppeteersGrasp"
-            attackNum = 6;
+            //attackNum = 6;
 
             switch (attackNum)
             {

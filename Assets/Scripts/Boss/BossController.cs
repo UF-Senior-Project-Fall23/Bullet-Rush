@@ -78,6 +78,16 @@ public class BossController : MonoBehaviour
         currentBoss = null;
     }
 
+    public void BossDie()
+    {
+        Debug.Log("Boss Died");
+ 
+        Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
+
+        currentBossPrefab = null;
+        currentBoss = null;
+    }
+
     public void MinionDie()
     {
         Debug.Log("Minion Died");

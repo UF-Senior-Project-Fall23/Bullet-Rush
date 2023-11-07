@@ -122,7 +122,7 @@ public class EvilCube : MonoBehaviour, Boss, IHealth
             GetComponent<SpriteRenderer>().color = c;
             yield return null;
         }
-        BossController.instance.BossDie(transform.position, transform.rotation);
+        BossController.instance.BossDie();
         Destroy(gameObject);
     }
 
