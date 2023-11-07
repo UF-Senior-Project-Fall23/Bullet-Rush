@@ -10,6 +10,7 @@ TagManager:
   - Boss
   - Bullet
   - Teleport
+  - Wall
   layers:
   - Default
   - TransparentFX
