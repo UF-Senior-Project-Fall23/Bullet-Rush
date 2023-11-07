@@ -21,6 +21,14 @@ PrefabInstance:
       value: Test Bullet
       objectReference: {fileID: 0}
     - target: {fileID: 6992979119922663774, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6992979119922663774, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6992979119922663774, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}

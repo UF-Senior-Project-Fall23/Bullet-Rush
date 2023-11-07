@@ -16,7 +16,8 @@ public class BossController : MonoBehaviour
     public String BossName;
     public GameObject portalPrefab;
     public GameObject indicatorPrefab;
-    
+    public GameObject inidcatorSmallPrefab;
+
     private void Awake()
     {
         Debug.Log("Awakened");
@@ -57,12 +58,12 @@ public class BossController : MonoBehaviour
         Debug.Log("Loading Boss: " + bossName);
 
         Vector3 bossPos = new Vector3(-75, 10, 0);
-        
+
         currentBossPrefab = bossPrefabs[bossName];
-        
+
         if (currentBossPrefab != null) SummonBoss(bossPos, 20f);
     }
-    
+
     public void BossDie()
     {
         Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
