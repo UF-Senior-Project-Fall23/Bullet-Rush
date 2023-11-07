@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour, IHealth
         //If player collides with and enemy remove hp
         if (collision.gameObject.tag == "Enemy")
         {
-            m_currHealth--;
+            ((IHealth)this).takeDamage(1);
             StartCoroutine(Invulnerability());
         }
         //Pick up weapon only if player doesnt have a weapon
