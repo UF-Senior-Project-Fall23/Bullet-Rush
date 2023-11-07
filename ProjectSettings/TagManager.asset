@@ -10,6 +10,8 @@ TagManager:
   - Boss
   - Bullet
   - Teleport
+  - TutorialSquare
+  - DifficultyButton
   layers:
   - Default
   - TransparentFX

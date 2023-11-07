@@ -13,15 +13,19 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI weaponText;
 
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI difficultyText;
     public List<GameObject> levelCoordinates;
     public Dictionary<string, GameObject> bulletPrefabs;
 
     private float gameTime = 0f;
     private int score = 0;
 
-    private int currentLevel = 1;
+    private int difficulty = 0; //0 = easy, 1 = medium, 2 = hard
 
-    public bool inLootRoom = false;
+    private int currentLevel = 0;
+
+    public bool inLootRoom = true;
 
     private void Awake()
     {
@@ -37,9 +41,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        inLootRoom = true;
         //levelCoordinates[0] is the lootRoom location
         //levelCoordinates[1] is level 1 location
         //... and so on
+        //levelCoordinates[6] is the start room
         foreach (Transform child in transform)
         {
             if (child.gameObject.CompareTag("Teleport"))
@@ -53,12 +59,25 @@ public class GameManager : MonoBehaviour
         bulletPrefabs = Resources.LoadAll<GameObject>("Prefabs/Bullets").ToDictionary(x => x.name, x => x);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         gameTime += Time.deltaTime;
         timeText.text = "Time Elapsed: " + Mathf.Floor(gameTime).ToString();
         scoreText.text = "Score: " + score.ToString();
         healthText.text = "Health: " + PlayerController.instance.CurrentHealth.ToString();
+        levelText.text = "Level: " + currentLevel.ToString();
+        if (difficulty == 0)
+        {
+            difficultyText.text = "Difficulty: Easy";
+        }
+        else if (difficulty == 1)
+        {
+            difficultyText.text = "Difficulty: Medium";
+        }
+        else
+        {
+            difficultyText.text = "Difficulty: Hard";
+        }
     }
 
     public void AddScore(int type)
@@ -73,7 +92,6 @@ public class GameManager : MonoBehaviour
 
     public void incrementLevel()
     {
-        Debug.Log("level incremented from: " + currentLevel + " to " + currentLevel + 1);
         currentLevel += 1;
     }
     public int getCurrentLevel()
@@ -94,5 +112,13 @@ public class GameManager : MonoBehaviour
     public GameObject getBulletPrefab(string name)
     {
         return bulletPrefabs[name];
+    }
+    public void setDifficulty(int newDifficulty)
+    {
+        difficulty = newDifficulty;
+    }
+    public int getCurrentDifficulty()
+    {
+        return difficulty;
     }
 }
