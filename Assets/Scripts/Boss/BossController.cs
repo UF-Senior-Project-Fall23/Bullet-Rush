@@ -40,9 +40,6 @@ public class BossController : MonoBehaviour
 
         if (player == null)
             player = PlayerController.instance.gameObject;
-
-        Debug.Log("Calling LoadBoss");
-        LoadBoss(BossName);
     }
 
     public void SummonBoss(Vector3 pos, float health)
@@ -57,8 +54,6 @@ public class BossController : MonoBehaviour
         Debug.Log("Loading Boss: " + bossName);
         
         currentBossPrefab = bossPrefabs[bossName];
-        
-        if (currentBossPrefab != null) SummonBoss(transform.position, 20f);
     }
     
     public void BossDie(Vector3 deathPos, Quaternion deathAng)

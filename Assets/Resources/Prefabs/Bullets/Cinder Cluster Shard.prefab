@@ -150,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6992979119922663775, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
-      value: 1792
+      value: 3840
       objectReference: {fileID: 0}
     - target: {fileID: 6992979120432544749, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
       propertyPath: m_LocalScale.x
@@ -193,7 +193,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

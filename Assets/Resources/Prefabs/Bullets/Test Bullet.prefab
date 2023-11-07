@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_Offset.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6992979119922663772, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     - target: {fileID: 6992979119922663773, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
       propertyPath: m_Name
       value: Test Bullet

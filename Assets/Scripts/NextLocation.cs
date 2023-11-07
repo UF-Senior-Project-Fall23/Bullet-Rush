@@ -34,7 +34,8 @@ public class NextLocation : MonoBehaviour
                 //increment the currentLevel
                 gameManager.incrementLevel();
                 gameManager.inLootRoom = false;
-
+                BossController.instance.LoadBoss(BossController.instance.BossName);
+                BossController.instance.SummonBoss(new Vector3(-75, 25), 40);
             }
             else
             {
