@@ -11,8 +11,8 @@ public class blade : Weapon {
         isShooting = true;
 
         while (Input.GetButton("Fire1") && !isOverheated) {
-            //Swing the Blade
 
+            //Swing the Blade
             anim.SetTrigger("Attack");
 
             GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
