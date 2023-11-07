@@ -11,6 +11,8 @@ TagManager:
   - Bullet
   - Teleport
   - Wall
+  - TutorialSquare
+  - DifficultyButton
   layers:
   - Default
   - TransparentFX
