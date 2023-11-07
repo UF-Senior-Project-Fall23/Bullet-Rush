@@ -413,7 +413,7 @@ Transform:
   m_GameObject: {fileID: 367473879}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -65.4262, y: 13.395131, z: -0.04058838}
+  m_LocalPosition: {x: -75.57, y: 26.8, z: -0.04058838}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -435,6 +435,7 @@ MonoBehaviour:
   BossName: Blagthoroth
   portalPrefab: {fileID: 2980754544053814403, guid: fc59c9488a341f34db05136e8fb87a6a, type: 3}
   indicatorPrefab: {fileID: 2522868610081033057, guid: c9e1d0cf244049f4c899c2690aa70a2d, type: 3}
+  CircleIndicatorPrefab: {fileID: 2522868610081033057, guid: 26a7295f4b4c90340bec1784b68f9396, type: 3}
 --- !u!1 &466500064
 GameObject:
   m_ObjectHideFlags: 3

@@ -11,8 +11,10 @@ public class Bullet : MonoBehaviour
     {
         Debug.Log("Bullet hit " + collision.gameObject.name);
 
-        collision.GetComponent<IHealth>()?.takeDamage(damage);
-        collision.GetComponentInParent<IHealth>()?.takeDamage(damage);
+        if(collision.GetComponent<IHealth>() != null)
+            collision.GetComponent<IHealth>().takeDamage(damage);
+        else
+            collision.GetComponentInParent<IHealth>()?.takeDamage(damage);
         
         Destroy(gameObject);
         m_alive = false;
