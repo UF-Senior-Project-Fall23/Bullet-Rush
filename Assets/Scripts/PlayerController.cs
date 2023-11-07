@@ -49,7 +49,9 @@ public class PlayerController : MonoBehaviour, IHealth
 
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 30f;
+    // private float dashingPower = 30f;
+    private float dashingPower = 50f;
+
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
 

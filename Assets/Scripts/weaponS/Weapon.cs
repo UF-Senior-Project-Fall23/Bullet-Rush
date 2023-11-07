@@ -26,9 +26,9 @@ public class Weapon : MonoBehaviour
     protected bool isFlipped;
     protected bool isShooting;
     protected bool isOverheated = false;
-    private float currentHeat = 0.0f;
-    private float heatPerShot = 5.0f;
-    private float maxHeat = 100.0f;
+    public float currentHeat = 0.0f;
+    public float heatPerShot = 5.0f;
+    public float maxHeat = 100.0f;
     private float cooldownRate = 20.0f;
 
     private void Awake()
