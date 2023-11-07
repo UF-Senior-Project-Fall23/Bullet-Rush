@@ -22,8 +22,8 @@ TagManager:
   - Entities
   - Player
   - Enemies
-  - 
-  - 
+  - Bullet
+  - Weapon
   - 
   - 
   - 

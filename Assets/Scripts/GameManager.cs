@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI difficultyText;
     public List<GameObject> levelCoordinates;
+    public Dictionary<string, GameObject> bulletPrefabs;
 
     private float gameTime = 0f;
     private int score = 0;
@@ -53,6 +55,8 @@ public class GameManager : MonoBehaviour
         }
 
         weaponText.text = "Weapon: None";
+
+        bulletPrefabs = Resources.LoadAll<GameObject>("Prefabs/Bullets").ToDictionary(x => x.name, x => x);
     }
 
     void FixedUpdate()
@@ -103,6 +107,11 @@ public class GameManager : MonoBehaviour
     {
         Vector3 lootRoomVector = levelCoordinates[0].transform.position;
         return lootRoomVector;
+    }
+
+    public GameObject getBulletPrefab(string name)
+    {
+        return bulletPrefabs[name];
     }
     public void setDifficulty(int newDifficulty)
     {
