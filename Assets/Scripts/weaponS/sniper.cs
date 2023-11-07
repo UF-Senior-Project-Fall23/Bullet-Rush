@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class sniper : Weapon {
 
-    public virtual IEnumerator Shoot() {
+    public override IEnumerator Shoot() {
         //variables
         isShooting = true;
 
@@ -32,7 +32,7 @@ public class sniper : Weapon {
         yield return null;
     }
 
-    public virtual void UpdateWeaponPos() {
+    public override void UpdateWeaponPos() {
         //Gets the mouse position
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 

@@ -130,7 +130,7 @@ PrefabInstance:
       addedObject: {fileID: 196782112260326543}
     - targetCorrespondingSourceObject: {fileID: 8594331032011757145, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1571710959896673151}
+      addedObject: {fileID: 2944814925848372412}
   m_SourcePrefab: {fileID: 100100000, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}
 --- !u!1 &9021529055171853590 stripped
 GameObject:
@@ -158,7 +158,6 @@ MonoBehaviour:
   currentHeat: 0
   heatPerShot: 5
   maxHeat: 100
-  anim: {fileID: 1571710959896673151}
 --- !u!61 &196782112260326543
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -204,7 +203,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.29201698, y: 1.1612713}
   m_EdgeRadius: 0
---- !u!95 &1571710959896673151
+--- !u!95 &2944814925848372412
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -214,7 +213,7 @@ Animator:
   m_GameObject: {fileID: 9021529055171853590}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5bd3d69aa2104fe4a84d1fb73c39dc88, type: 2}
+  m_Controller: {fileID: 9100000, guid: 53643e7326efa7442b6f436eecb1deda, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -5,15 +5,10 @@ using UnityEngine;
 
 public class blade : Weapon {
 
-    [SerializeField] private Animator anim; //change var name
-
     public override IEnumerator Shoot(){
         isShooting = true;
 
         while (Input.GetButton("Fire1") && !isOverheated) {
-
-            //Swing the Blade
-            anim.SetTrigger("Attack");
 
             GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
             bullet.GetComponent<Bullet>().damage = damage;
@@ -37,7 +32,7 @@ public class blade : Weapon {
         yield return null;
     }
 
-    public virtual void UpdateWeaponPos() {
+    public override void UpdateWeaponPos() {
         //Gets the mouse position
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 

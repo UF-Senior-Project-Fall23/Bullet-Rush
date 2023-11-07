@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class tommyGun : Weapon
 {
-    public virtual IEnumerator Shoot()
+    public override IEnumerator Shoot()
     {
         isShooting = true;
 
