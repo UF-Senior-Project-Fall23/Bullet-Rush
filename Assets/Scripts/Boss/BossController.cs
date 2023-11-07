@@ -61,9 +61,35 @@ public class BossController : MonoBehaviour
         if (currentBossPrefab != null) SummonBoss(transform.position, 20f);
     }
     
+    public void BossDie(Vector3 deathPos, Quaternion deathAng)
+    {
+        Debug.Log("Boss Died");
+        if (currentBoss == null)
+        {
+            Instantiate(portalPrefab, deathPos, deathAng);
+        }
+        else
+        {
+            Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
+        }
+        
+        currentBossPrefab = null;
+        currentBoss = null;
+    }
+
     public void BossDie()
     {
+        Debug.Log("Boss Died");
+ 
         Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
+
+        currentBossPrefab = null;
+        currentBoss = null;
+    }
+
+    public void MinionDie()
+    {
+        Debug.Log("Minion Died");
         currentBossPrefab = null;
         currentBoss = null;
 
