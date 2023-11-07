@@ -4955,6 +4955,7 @@ MonoBehaviour:
   weaponText: {fileID: 1053726504}
   levelText: {fileID: 2107216192}
   difficultyText: {fileID: 1076527007}
+  heatText: {fileID: 1772393508}
   levelCoordinates: []
   inLootRoom: 0
 --- !u!4 &988185471
@@ -47594,5 +47595,7 @@ SceneRoots:
   - {fileID: 2056583316}
   - {fileID: 57249345}
   - {fileID: 1873825756}
+  - {fileID: 714893713}
+  - {fileID: 1479624380}
   - {fileID: 367473881}
   - {fileID: 641839920}

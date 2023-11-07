@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI weaponText;
+    public TextMeshProUGUI heatText;
 
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI difficultyText;
