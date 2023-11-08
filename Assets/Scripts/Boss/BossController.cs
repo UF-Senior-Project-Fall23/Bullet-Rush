@@ -19,6 +19,8 @@ public class BossController : MonoBehaviour
     public GameObject indicatorPrefab;
     public GameObject CircleIndicatorPrefab;
     
+    public GameObject inidcatorSmallPrefab;
+
     private void Awake()
     {
         Debug.Log("Awakened Boss Controller");
