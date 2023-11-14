@@ -1,16 +1,17 @@
 using System;
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine.Audio;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MusicManager : MonoBehaviour
 {
     public Sound[] sounds;
     public static MusicManager instance;
-    
-    [HideInInspector]
-    public Sound currentTrack;
-    
+
+    [HideInInspector] public Sound currentTrack;
+
     void Awake()
     {
         if (instance == null)
@@ -21,9 +22,10 @@ public class MusicManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         DontDestroyOnLoad(gameObject);
-        
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
         foreach (Sound sound in sounds)
         {
             sound.source = gameObject.AddComponent<AudioSource>();
@@ -34,7 +36,7 @@ public class MusicManager : MonoBehaviour
             sound.source.pitch = 1;
         }
     }
-    
+
     void Start()
     {
         currentTrack = FindSound("Title Theme");
@@ -45,7 +47,7 @@ public class MusicManager : MonoBehaviour
     {
         return Array.Find(sounds, s => s.name == name);
     }
-    
+
     void Play(string name)
     {
         Debug.Log("Trying to play via name " + name);
@@ -55,7 +57,7 @@ public class MusicManager : MonoBehaviour
             Debug.LogWarning("Error! Unknown Sound. (" + name + ")");
             return;
         }
-        
+
         s.source.Play();
     }
 
@@ -66,52 +68,126 @@ public class MusicManager : MonoBehaviour
         {
             Debug.LogWarning("Error! Null Sound.");
         }
+
         sound?.source.Play();
     }
 
-    IEnumerator FadeOut_Then_In_Internal(Sound oldSound, Sound newSound, float fadeDuration)
+    // INTERNAL: Smoothly fades out the given sound then smoothly fades in the new sound.
+    private IEnumerator FadeOutThenIn_Internal([CanBeNull] Sound oldSound, Sound newSound, float fadeDuration)
     {
-        AudioSource oldMusic = oldSound.source;
-        AudioSource newMusic = newSound.source;
-        
+        if (oldSound != null)
+        {
+            yield return StartCoroutine(FadeOut_Internal(oldSound, fadeDuration));
+        }
+
         currentTrack = newSound;
         
-        float startTime = Time.time;
-        float normalizedTime = 0f;
-        float elapsedTime = 0f;
+        yield return StartCoroutine(FadeIn_Internal(newSound, fadeDuration));
+    }
 
+    // INTERNAL: Smoothly fades out the given sound
+    private IEnumerator FadeOut_Internal(Sound sound, float fadeDuration)
+    {
+        AudioSource src = sound.source;
+        var startTime = Time.time;
+        var normalizedTime = 0f;
+        
         while (normalizedTime < 1f)
         {
-            elapsedTime = Time.time - startTime;
+            var elapsedTime = Time.time - startTime;
             normalizedTime = Mathf.Clamp01(elapsedTime / fadeDuration);
-            oldMusic.volume = 1.0f - normalizedTime;
+            src.volume = (1.0f - normalizedTime) * PlayerPrefs.GetFloat("MusicVolume", 0.8f);
             yield return null;
         }
 
-        oldMusic.Stop();
-        newMusic.Play();
-        startTime = Time.time;
-        normalizedTime = 0;
+        src.Stop();
+    }
 
+    // INTERNAL: Smoothly fades in the given sound
+    private IEnumerator FadeIn_Internal(Sound sound, float fadeDuration)
+    {
+        AudioSource src = sound.source;
+        var startTime = Time.time;
+        var normalizedTime = 0f;
+
+        src.volume = 0f;
+        src.Play();
 
         while (normalizedTime < 1f)
         {
-            elapsedTime = Time.time - startTime;
+            var elapsedTime = Time.time - startTime;
             normalizedTime = Mathf.Clamp01(elapsedTime / fadeDuration);
-            newMusic.volume = normalizedTime;
+            src.volume = normalizedTime * PlayerPrefs.GetFloat("MusicVolume", 0.8f);
             yield return null;
         }
-        newMusic.volume = 1.0f;
 
+        src.volume = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
     }
 
-    void Fade_Out_Then_In(string from, string to, float fadeDuration)
+    private IEnumerator FadeOutThenPlay_Internal(Sound oldSound, Sound newSound, float fadeDuration)
     {
-        StartCoroutine(FadeOut_Then_In_Internal(FindSound(from), FindSound(to), fadeDuration));
+        yield return StartCoroutine(FadeOut_Internal(oldSound, fadeDuration));
+        
+        newSound.source.volume = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
+        currentTrack = newSound;
+        Play(newSound);
+    }
+    // Smoothly fades out the current sound then instantly starts the given sound.
+    private void FadeOutThenPlay(string to, float fadeDuration)
+    {
+        StartCoroutine(FadeOutThenPlay_Internal(currentTrack, FindSound(to), fadeDuration));
     }
 
-    public void FadeTo(string to, float fadeDuration)
+    // Smoothly fades out the current sound then fades into the given sound.
+    public void FadeCurrentInto(string to, float fadeDuration)
     {
-        StartCoroutine(FadeOut_Then_In_Internal(currentTrack, FindSound(to), fadeDuration));
+        StartCoroutine(FadeOutThenIn_Internal(currentTrack, FindSound(to), fadeDuration));
     }
+
+    public void FadeOut(float fadeDuration)
+    {
+        Debug.LogWarning("This is actually being called lol");
+        StartCoroutine(FadeOut_Internal(currentTrack, fadeDuration));
+    }
+    
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log($"Loaded scene {scene.name} with mode {mode}");
+        if (scene.name == "AlphaTest")
+        {
+            FadeCurrentInto("Start Area Theme", 0.5f);
+        }
+        
+    }
+
+    public void LoadBossMusic(string bossName)
+    {
+        string toPlay;
+        
+        switch (bossName)
+        {
+            case "Cordelia":
+                toPlay = "Cordelia Theme";
+                break;
+            case "Blagthoroth":
+                toPlay = "Blagthoroth Theme";
+                break;
+            case "Onyx":
+                toPlay = "Onyx Theme";
+                break;
+            default:
+                toPlay = null;
+                break;
+        }
+
+        if (toPlay != null)
+        {
+            FadeOutThenPlay(toPlay, 0.5f);
+        }
+        else
+        {
+            Debug.LogWarning($"No music found for boss {bossName}");
+        }
+    }
+
 }
