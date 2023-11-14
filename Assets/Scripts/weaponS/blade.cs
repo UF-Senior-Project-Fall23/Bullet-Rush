@@ -5,28 +5,32 @@ using UnityEngine;
 
 public class blade : Weapon {
 
+    [SerializeField] private Animator anim; //change var name
+
     public override IEnumerator Shoot(){
         isShooting = true;
 
         while (Input.GetButton("Fire1") && !isOverheated) {
 
+            anim.SetTrigger("Attack");
+
             GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
             bullet.GetComponent<Bullet>().damage = damage;
+            Destroy(bullet, .35f);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
+            //Fire the slash
             rb.AddForce(shootPoint.transform.up * bulletForce, ForceMode2D.Impulse);
-            yield return new WaitForSeconds(bulletDelay);
-
             currentHeat += heatPerShot;
-
             //Once it passes the threshold, player can't shoot
             if(currentHeat >= maxHeat) {
+                currentHeat = maxHeat;
                 isOverheated = true;
                 isShooting = false;
                 yield break;
             }
+            yield return new WaitForSeconds(bulletDelay);
         }
-        
 
         isShooting = false;
         yield return null;
