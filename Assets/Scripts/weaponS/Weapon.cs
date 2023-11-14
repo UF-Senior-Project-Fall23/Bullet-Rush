@@ -58,8 +58,7 @@ public class Weapon : MonoBehaviour
         if (!isShooting && Input.GetButtonDown("Fire1")) {
             StartCoroutine(Shoot());
         }
-        
-        if (Input.GetKeyDown(KeyCode.Q)) {
+        else if (Input.GetKeyDown(KeyCode.Q)) {
             PlayerController.instance.DropWeapon();
         }
 

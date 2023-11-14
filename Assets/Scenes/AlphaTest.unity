@@ -231,8 +231,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 7289589327774120849, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
+      propertyPath: radius
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7289589327774120849, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
+      propertyPath: maxHeat
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7289589327774120849, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7289589327774120849, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
+      propertyPath: heatPerShot
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 9021529055171853590, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
       propertyPath: m_Name
@@ -4760,13 +4772,25 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6179957292861329900, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 763009741}
+    - target: {fileID: 6179957292861329900, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
+      propertyPath: damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6179957292861329900, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
       propertyPath: radius
-      value: 0.5
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 6179957292861329900, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6179957292861329900, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
+      propertyPath: bulletPreFab
+      value: 
+      objectReference: {fileID: 319021616187502277, guid: cf2b35f0efc248243a362918b92d7052, type: 3}
     - target: {fileID: 9021529055171853590, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
       propertyPath: m_Name
       value: Blade
@@ -4824,6 +4848,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
+--- !u!95 &763009741 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2944814925848372412, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
+  m_PrefabInstance: {fileID: 760742975}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &837121746
 GameObject:
   m_ObjectHideFlags: 0
@@ -46661,6 +46690,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1992031057}
+    - target: {fileID: 1465813612982410655, guid: bf27f620e4f96f24ba41de42d4f97693, type: 3}
+      propertyPath: bulletForce
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 9021529055171853590, guid: bf27f620e4f96f24ba41de42d4f97693, type: 3}
       propertyPath: m_Name
       value: Tommy Gun
@@ -47261,7 +47294,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_Time: 0.5
   m_PreviewTimeScale: 1
   m_Parameters:
@@ -47960,3 +47993,4 @@ SceneRoots:
   - {fileID: 760742975}
   - {fileID: 102399465}
   - {fileID: 1873825756}
+  - {fileID: 352568342}
