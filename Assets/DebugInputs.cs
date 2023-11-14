@@ -12,7 +12,7 @@ public class DebugInputs : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M) && canChangeMusic)
         {
             canChangeMusic = false;
-            FindObjectOfType<MusicManager>().FadeTo("Onyx Theme", 0.6f);
+            FindObjectOfType<MusicManager>().FadeCurrentInto("Onyx Theme", 0.5f);
         }
     }
 }

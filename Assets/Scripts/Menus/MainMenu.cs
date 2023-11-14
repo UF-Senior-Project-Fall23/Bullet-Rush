@@ -7,7 +7,8 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayButton()
     {
-        // Load the game whenever Play is pressed. Change the ID later, atm just loads SampleScene.
+        GameObject.FindWithTag("MusicManager").GetComponent<MusicManager>().FadeOut(0.5f);
+
         SceneManager.LoadScene(0);
     }
 
