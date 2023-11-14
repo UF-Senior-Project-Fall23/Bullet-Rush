@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -3894961986207175519}
   - component: {fileID: 6934543170746109914}
   - component: {fileID: 2461266552785924667}
+  - component: {fileID: 3219754668129656164}
   m_Layer: 0
   m_Name: Cordelia
   m_TagString: Enemy
@@ -105,6 +106,7 @@ MonoBehaviour:
   dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
   puppetCount: 4
   isPuppet: 0
+  attackNum: 4
 --- !u!70 &-3894961986207175519
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -181,3 +183,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3219754668129656164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945224095935049409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9365ddac0c9b264439c96cf49901f91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+  MaxHP: 30
+  a: 7

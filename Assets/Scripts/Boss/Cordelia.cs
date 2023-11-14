@@ -12,21 +12,27 @@ public class Cordelia : MonoBehaviour, Boss
     GameObject dim;
     public int puppetCount = 4;
     public bool isPuppet = false;
+    public int attackNum = 4;
 
     double attackSpeedModifier = 1;
     float globalTime = 0;
+    int interval = 6;
 
     bool phaseShifted = false;
     bool attackReady = false;
     bool lights = false;
     bool rushMode = false;
     bool spotlightActive = false;
-    
+    bool timeIndicator = true;
+    bool spinSet = true;
     GameObject cb;
     
     Vector3 playerPos;
 
-    int attackNum = 4;
+    
+    int followPattern = 1;
+    int rotationSpeed = 3;
+    int rotationSize = 8;
 
     private float bulletTime = 0f;
     private float bulletWait = .2f;
@@ -36,6 +42,7 @@ public class Cordelia : MonoBehaviour, Boss
 
     void Start()
     {
+        StartCoroutine(SummonPuppets());
         cb = BossController.instance.currentBoss;
         playerPos = PlayerController.instance.gameObject.transform.position;
 
@@ -67,22 +74,50 @@ public class Cordelia : MonoBehaviour, Boss
     {
         float speed = 2f;
         var step = speed * Time.deltaTime;
+        bool follow = false;
+        
+
         // runs on the global timer, so every 3 seconds Cordelia will rush the player while spining.
+
         if (MathF.Floor(globalTime) % 3 == 0)
         {
             // rush once halfway in the rotation.
             transform.position = Vector3.MoveTowards(transform.position, playerPos, step * 15f);
+            follow = true;
         }
         //could add a delay in the update so Cordelia is not exactly circuling the player and has a chance to touch them.
         else
         {
-            playerPos = PlayerController.instance.gameObject.transform.position;
-            int rotationSpeed = 3;
-            int rotationSize = 7;
-            float x = Mathf.Cos(Time.time * rotationSpeed) * rotationSize;
-            float y = Mathf.Sin(Time.time * rotationSpeed) * rotationSize;
-            transform.position = new Vector3(x, y);
-            transform.position = transform.position + playerPos;
+            if (isPuppet)
+            {
+                if (spinSet)
+                {
+                    rotationSpeed = UnityEngine.Random.Range(1, 5);
+                    rotationSize = UnityEngine.Random.Range(6, 13);
+                    spinSet = false;
+                }
+                playerPos = PlayerController.instance.gameObject.transform.position;
+
+                float x = Mathf.Cos(Time.time * rotationSpeed) * rotationSize;
+                float y = Mathf.Sin(Time.time * rotationSpeed) * rotationSize;
+                transform.position = new Vector3(x, y);
+                transform.position = transform.position + playerPos;
+                follow = false;
+            }
+            else
+            {
+                rotationSpeed = 3;
+                rotationSize = 8;
+                playerPos = PlayerController.instance.gameObject.transform.position;
+                    
+                float x = Mathf.Cos(Time.time * rotationSpeed) * rotationSize;
+                float y = Mathf.Sin(Time.time * rotationSpeed) * rotationSize;
+                transform.position = new Vector3(x, y);
+                transform.position = transform.position + playerPos;
+                follow = false;
+            }
+                
+            
         }
         
 
@@ -108,7 +143,8 @@ public class Cordelia : MonoBehaviour, Boss
         {
             // change to be in specific locations or circuling Cordelia
             Vector3 bossPos = new Vector3(-75, 10, 0);
-            float health = 20f;
+            float health = 7f;
+            float radius = 5f;
             for (int i = 0; i < puppetCount; i++)
             {
                 GameObject puppet = Instantiate(puppetPreFab, bossPos, Quaternion.identity);
@@ -116,6 +152,7 @@ public class Cordelia : MonoBehaviour, Boss
                 puppet.GetComponent<IHealth>().MaxHealth = health;
                 StartCoroutine(puppet.GetComponent<Boss>().StartPhase());
                 bossPos = new Vector3(-74 + i, 11 + i, 0);
+                puppet.GetComponent<puppetAttack>().attack = attackNum;
             }
         }
         yield return null;
@@ -136,10 +173,11 @@ public class Cordelia : MonoBehaviour, Boss
                 }
             }
 
-            BossController.instance.BossDie(transform.position, transform.rotation);
+            BossController.instance.MinionDie();
         }
         else
         {
+            // or just put on a timer like spotlight
             //cordelia uses other attack or stands back.
         }
         yield return null;
@@ -156,22 +194,59 @@ public class Cordelia : MonoBehaviour, Boss
 
     IEnumerator Spotlight()
     {
-        Debug.Log("about to spotlight");
         if (!isPuppet && !spotlightActive)
         {
             dim = Instantiate(dimPreFab, transform);
             spotlightActive = true;
             DimLights.instance.Appear();
         }
+        else if(!isPuppet && spotlightActive)
+        {
+            spotlightActive = false;
+            DimLights.instance.TurnOff();
+        }
         yield return null;
     }
-
+    
     IEnumerator BladeFlourish()
     {
         playerPos = PlayerController.instance.transform.position - transform.position;
         //Get the angle from the position
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-        //Fire a bullet at the player based on its position
+        if (MathF.Floor(globalTime) % 2 == 0)
+        {
+            followPattern = UnityEngine.Random.Range(1, 4);
+        }
+        if (!isPuppet)
+        {
+            float speed = 2f;
+            var step = speed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 2f);
+
+        }
+
+        else
+        {
+            
+            if(followPattern == 1)
+            {
+                float speed = UnityEngine.Random.Range(0.0f, 3.0f);
+                var step = speed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 2f);
+            }
+            else if(followPattern == 2)
+            {
+                float speed = UnityEngine.Random.Range(0.0f, 5.0f);
+                var step = speed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 3f);
+            }
+            else if(followPattern == 3)
+            {
+                float speed = UnityEngine.Random.Range(0.0f, 3.0f);
+                var step = speed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * -2f);
+            }
+        }
         if (bulletTime <= Time.time && MathF.Floor(globalTime) % 2 == 0)
         {
 
@@ -209,7 +284,9 @@ public class Cordelia : MonoBehaviour, Boss
 
     IEnumerator Boss.StartPhase()
     {
-        StartCoroutine(BladeFlourish());
+        //Debug.Log(this.attackNum);
+        //StartCoroutine(BladeFlourish());
+        //StartCoroutine(Rush());
         yield return null;
     }
 
@@ -218,18 +295,20 @@ public class Cordelia : MonoBehaviour, Boss
         
         globalTime += Time.deltaTime;
 
-        //can move outside of update and adjust per attack.
-        int interval = 6;
-
-        // six second timer
         float second = MathF.Floor(globalTime) % interval;
 
         // sets Cordelia's attack if the time has counted down from 6
         // lasts a second
+        Debug.Log(second);
+        Debug.Log(attackNum);
         if (second == 0 && !isPuppet)
         {
-            // put an action/idle here for the 1 second break
-            attackNum = UnityEngine.Random.Range(1, 10);
+            if (!isPuppet)
+            {
+                // put an action/idle here for the 1 second break
+                attackNum = UnityEngine.Random.Range(1, 5);
+            }
+            spinSet = true;
         }
 
         // sets the puppets attack
@@ -238,10 +317,16 @@ public class Cordelia : MonoBehaviour, Boss
             for (int i = 0; i < puppets.Count; i++)
             {
                 // set up the method for interface- create new minionBoss interface?
-                //puppets[i].GetComponent<Boss>().setPuppetAttack(attackNum);
+                if (puppets[i] != null)
+                {
+                    puppets[i].GetComponent<puppetAttack>().attack = attackNum;
+                }
             }
         }
-
+        if (isPuppet)
+        {
+            attackNum = GetComponent<puppetAttack>().attack;
+        }
         if (spotlightActive)
         {
             dim.transform.position = transform.position;
@@ -252,35 +337,40 @@ public class Cordelia : MonoBehaviour, Boss
         if (second != 0)
         {
             //"SpinDance", "KickDance", "StringDance", "SummonPuppets", "DetonatePuppets", "Rush", "Spotlight", "BladeFlourish", "PuppeteersGrasp"
-            //attackNum = 6;
+            //attackNum = 3;
 
             switch (attackNum)
             {
                 case 1:
+                    interval = 12;
                     StartCoroutine(SpinDance());
                     break;
-                case 2:
-                    StartCoroutine(KickDance()); 
+                case 9:
+                    interval = 6;
+                    StartCoroutine(Rush());
                     break;
                 case 3:
-                    StartCoroutine(StringDance()); 
+                    interval = 18;
+                    StartCoroutine(BladeFlourish());
                     break;
                 case 4:
+                    interval = 6;
                     StartCoroutine(SummonPuppets()); 
                     break;
                 case 5:
+                    interval = 3;
                     StartCoroutine(DetonatePuppets()); 
                     break;
                 case 6:
-                    StartCoroutine(Rush()); 
+                    interval = 3;
+                    StartCoroutine(KickDance());
                     break;
                 case 7:
-                    StartCoroutine(Spotlight()); 
+                    interval = 3;
+                    StartCoroutine(StringDance());
                     break;
                 case 8:
-                    StartCoroutine(BladeFlourish()); 
-                    break;
-                case 9:
+                    interval = 3;
                     StartCoroutine(PuppeteersGrasp()); 
                     break;
                 default:
@@ -288,9 +378,16 @@ public class Cordelia : MonoBehaviour, Boss
                     break;
             }
         }
-
-        
-    }
+        if (MathF.Floor(globalTime) % 15 == 0 && timeIndicator)
+        {
+            StartCoroutine(Spotlight());
+            timeIndicator = false;
+        }
+        else if(MathF.Floor(globalTime) % 15 != 0)
+        {
+            timeIndicator = true;
+        }
+        }
 
     //Run this so the boss controller wont call bosslogic anymore
     private void OnDestroy()
