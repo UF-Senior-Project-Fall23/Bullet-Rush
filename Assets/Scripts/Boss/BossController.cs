@@ -56,6 +56,8 @@ public class BossController : MonoBehaviour
         Debug.Log("Loading Boss: " + bossName);
         
         currentBossPrefab = bossPrefabs[bossName];
+        
+        FindObjectOfType<MusicManager>().LoadBossMusic(bossName);
     }
     
     public void BossDie(Vector3 deathPos, Quaternion deathAng)

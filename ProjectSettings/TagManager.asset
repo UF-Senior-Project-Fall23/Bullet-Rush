@@ -13,6 +13,7 @@ TagManager:
   - Wall
   - TutorialSquare
   - DifficultyButton
+  - MusicManager
   layers:
   - Default
   - TransparentFX
