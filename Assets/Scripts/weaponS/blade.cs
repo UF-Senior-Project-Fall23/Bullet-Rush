@@ -5,35 +5,39 @@ using UnityEngine;
 
 public class blade : Weapon {
 
-    [SerializeField] private Animator anim; //change var name
+    private Animator anim; //change var name
+
+    private void Awake()
+    {
+        shootPoint = transform.Find("Animation Point").Find("ShootPoint");
+        isFlipped = false;
+        anim = GetComponent<Animator>();
+    }
 
     public override IEnumerator Shoot(){
         isShooting = true;
-
-        while (Input.GetButton("Fire1") && !isOverheated) {
-
-            anim.SetTrigger("Attack");
-
-            GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
-            bullet.GetComponent<Bullet>().damage = damage;
-            Destroy(bullet, .35f);
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-
-            //Fire the slash
-            rb.AddForce(shootPoint.transform.up * bulletForce, ForceMode2D.Impulse);
-            currentHeat += heatPerShot;
-            //Once it passes the threshold, player can't shoot
-            if(currentHeat >= maxHeat) {
-                currentHeat = maxHeat;
-                isOverheated = true;
-                isShooting = false;
-                yield break;
-            }
-            yield return new WaitForSeconds(bulletDelay);
-        }
-
-        isShooting = false;
+        anim.Play("Slash");
         yield return null;
+        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+        anim.Play("Idle");
+        isShooting = false;
+    }
+
+    public void Slash()
+    {
+        GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, 180));
+        bullet.GetComponent<Bullet>().damage = damage;
+        Destroy(bullet, .35f);
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+        //Fire the slash
+        rb.AddForce(shootPoint.transform.right * bulletForce, ForceMode2D.Impulse);
+        currentHeat += heatPerShot;
+        if(currentHeat >= maxHeat)
+        {
+            currentHeat = maxHeat;
+            isOverheated = true;
+        }
     }
 
     public override void UpdateWeaponPos() {

@@ -37,29 +37,31 @@ public class Weapon : MonoBehaviour
         isFlipped = false;
     }
 
-    void Update()
+    public void Update()
     {
         GameManager.instance.heatText.text = "Heat: " + currentHeat.ToString();
+
+        //Overheating cooldown and the check
+        if (isOverheated)
+        {
+            if (currentHeat <= 0)
+            {
+                currentHeat = 0.0f;
+                isOverheated = false;
+            }
+        }
+
+        if (!isShooting && Input.GetButton("Fire1") && !isOverheated) {
+            StartCoroutine(Shoot());
+        }
+        else if (Input.GetKeyDown(KeyCode.Q)) {
+            PlayerController.instance.DropWeapon();
+        }
 
         if (!isShooting)
         {
             currentHeat -= cooldownRate * Time.deltaTime;
             currentHeat = Mathf.Max(currentHeat, 0.0f);
-        }
-        
-        //Overheating cooldown and the check
-        if (isOverheated) {
-            if (currentHeat <= 0){
-                currentHeat = 0.0f;
-                isOverheated = false;
-            } 
-        }
-
-        if (!isShooting && Input.GetButtonDown("Fire1")) {
-            StartCoroutine(Shoot());
-        }
-        else if (Input.GetKeyDown(KeyCode.Q)) {
-            PlayerController.instance.DropWeapon();
         }
 
         if (player != null)
