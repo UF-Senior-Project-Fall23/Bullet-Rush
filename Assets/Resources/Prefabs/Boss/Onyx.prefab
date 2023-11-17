@@ -833,6 +833,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHP: 5
+  speed: 5
 --- !u!95 &5798770299977442102
 Animator:
   serializedVersion: 5
@@ -1011,7 +1012,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 55
-  m_Sprite: {fileID: 21300000, guid: 59b238d5453f88a4aadc2e7e27ff53a9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6a6c5242080d8a140850794c60e5c4d3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

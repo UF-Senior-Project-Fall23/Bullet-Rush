@@ -10,9 +10,11 @@ public class Onyx : MonoBehaviour, Boss, IHealth
     float m_MaxBulletVelocity;
 
     public float MaxHP = 5.0f;
+    public float speed = 5.0f;
     private float m_CurrHP;
 
     private Animator m_Animator;
+    private bool m_Run = false;
 
     bool m_invulnerable = false;
 
@@ -175,6 +177,9 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
     IEnumerator Dual_Danger()
     {
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        int yOffsetIndicator = 1;
+        int xOffsetIndicator = 1;
         Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
         // if btwn -45 and 45, to the right
@@ -182,39 +187,44 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         {
             Debug.Log("Dual RIGHT");
             m_Animator.SetTrigger("Dual Danger");
-
+            yOffsetIndicator = 1;
+            xOffsetIndicator = 1;
         }
         else if (playerAngle > (Mathf.PI / 4) && playerAngle < (3 * Mathf.PI / 4))
         {
             Debug.Log("d Up");
             m_Animator.SetTrigger("Dual Up");
-
+            yOffsetIndicator = 2;
+            xOffsetIndicator = -1;
         }
         //135, 225 degrees (on sides) to the left
         else if (playerAngle > (3 * Mathf.PI / 4) || playerAngle < (-3 * Mathf.PI / 4))
         {
             Debug.Log("d LEFT");
             m_Animator.SetTrigger("Dual Danger");
-
+            yOffsetIndicator = 1;
+            xOffsetIndicator = -1;
         }
         else
         {
             Debug.Log("d Down");
             m_Animator.SetTrigger("Dual Down");
-
+            yOffsetIndicator = 0;
+            xOffsetIndicator = 1;
         }
         //Short Range Shotgun
         List<GameObject> indicators = new(4);
+        yield return new WaitForSeconds(1f);
         foreach (var _ in Enumerable.Range(0, 3))
         {
             //Get the player postition relative to the boss
             playerPos = PlayerController.instance.transform.position - transform.position;
             //Get the angle from the position
-            playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-
+            playerAngle = Mathf.Atan2(playerPos.y - yOffsetIndicator, playerPos.x - xOffsetIndicator);
+            //create indicator
             GameObject indicator = Instantiate(
                 BossController.instance.inidcatorSmallPrefab,
-                new Vector3(transform.position.x, transform.position.y, 1) + (playerPos / 2),
+                new Vector3(transform.position.x + xOffsetIndicator, transform.position.y + yOffsetIndicator, 1) + (3 * playerPos / 5),
                 Quaternion.Euler(0, 0, playerAngle * Mathf.Rad2Deg + 90)
             );
 
@@ -222,19 +232,18 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             indicators.Add(indicator);
             yield return new WaitForSeconds(.1f);
         }
-
         foreach (var indicator in indicators)
         {
             //Fire 10 bullet at the player based on its position
-            foreach (var _ in Enumerable.Range(0, 9))
+            foreach (var _ in Enumerable.Range(0, 4))
             {
                 Vector3 randomOffset = Random.insideUnitSphere * 2.0f;
                 GameObject bullet = Instantiate(
                     GameManager.instance.getBulletPrefab("Test Bullet"),
-                    transform.position - ((transform.position - indicator.transform.position).normalized * 5f) + randomOffset,
+                    new Vector3(transform.position.x + xOffsetIndicator, transform.position.y + yOffsetIndicator, 1) + (2 * playerPos / 5) + randomOffset,
                     indicator.transform.rotation
                 );
-                bullet.transform.Rotate(0, 0, 270);
+                bullet.transform.Rotate(0, 0, 270 + Random.Range(-20f, 20f));
                 Destroy(indicator);
 
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
@@ -242,9 +251,32 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             }
         }
 
-        yield return new WaitForSeconds(1f);
         m_Animator.SetTrigger("Idle");
         PhaseChange();
+    }
+
+    public IEnumerator Run()
+    {
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+
+        float timer = 0f;
+        float duration = 5f; // 5 seconds duration
+        // Keep moving towards the player for the specified duration
+        m_Animator.SetTrigger("Run");
+        while (timer < duration)
+        {
+            Vector3 directionToPlayer = PlayerController.instance.transform.position - transform.position;
+            Vector3 moveDirection = directionToPlayer.normalized;
+            float distanceToMove = speed * Time.deltaTime;
+
+            transform.Translate(moveDirection * distanceToMove, Space.World);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        m_Animator.SetTrigger("Idle");
+        PhaseChange();
+
     }
 
     IEnumerator Death()
@@ -262,15 +294,23 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
     public void PhaseChange()
     {
-        int r = 1;
-        //int r = Random.Range(0, 2);
 
-        if (r == 0)
-            StartCoroutine(Pistol_Blast());
-        else if (r == 1)
-            StartCoroutine(Dual_Danger());
-        else if (r == 2)
-            StartCoroutine(Machine_Assault());
+        if (!m_Run)
+        {
+            int r = Random.Range(0, 3);
+            if (r == 0)
+                StartCoroutine(Pistol_Blast());
+            else if (r == 1)
+                StartCoroutine(Dual_Danger());
+            else if (r == 2)
+                StartCoroutine(Machine_Assault());
+            m_Run = true;
+        }
+        else
+        {
+            StartCoroutine(Run());
+            m_Run = false;
+        }
     }
 
     public IEnumerator StartPhase()
