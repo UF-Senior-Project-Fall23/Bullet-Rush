@@ -125,16 +125,92 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         m_Animator.SetTrigger("Idle");
         PhaseChange();
     }
+
+    IEnumerator Machine_Assault()
+    {
+        Debug.Log("MachineAssault");
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        //12 indicators (radial circle)
+
+        //after all 12 indicators, fire 12 bullets
+        List<GameObject> indicators = new(12);
+        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
+        m_Animator.SetTrigger("Machine Assault");
+
+        yield return new WaitForSeconds(1f);
+        foreach (var i in Enumerable.Range(0, 24))
+        {
+            float xIndicator = transform.position.x;
+            float yIndicator = transform.position.y;
+            GameObject indicator = BossController.instance.Indicate(
+                new Vector3(xIndicator, yIndicator, 1),
+                Quaternion.Euler(0, 0, ((360 / 24) * i))
+            );
+
+            indicator.transform.localScale = new Vector3(1, 20, 1);
+            indicators.Add(indicator);
+            yield return new WaitForSeconds(.05f);
+        }
+        foreach (var indicator in indicators)
+        {
+            //Fire a bullet at the player based on its position
+            GameObject bullet = Instantiate(
+                GameManager.instance.getBulletPrefab("Test Bullet"),
+                transform.position - ((transform.position - indicator.transform.position).normalized * 5f),
+                indicator.transform.rotation
+            );
+
+            bullet.transform.Rotate(0, 0, 270);
+            BossController.instance.RemoveIndicator(indicator);
+
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.AddForce(bullet.transform.right * 45f, ForceMode2D.Impulse);
+            yield return new WaitForSeconds(.05f);
+        }
+        yield return new WaitForSeconds(2f);
+        m_Animator.SetTrigger("Idle");
+        PhaseChange();
+    }
+
+
     IEnumerator Dual_Danger()
     {
+        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
+        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+        // if btwn -45 and 45, to the right
+        if (playerAngle < (Mathf.PI / 4) && playerAngle > (-1 * Mathf.PI / 4))
+        {
+            Debug.Log("Dual RIGHT");
+            m_Animator.SetTrigger("Dual Danger");
+
+        }
+        else if (playerAngle > (Mathf.PI / 4) && playerAngle < (3 * Mathf.PI / 4))
+        {
+            Debug.Log("d Up");
+            m_Animator.SetTrigger("Dual Up");
+
+        }
+        //135, 225 degrees (on sides) to the left
+        else if (playerAngle > (3 * Mathf.PI / 4) || playerAngle < (-3 * Mathf.PI / 4))
+        {
+            Debug.Log("d LEFT");
+            m_Animator.SetTrigger("Dual Danger");
+
+        }
+        else
+        {
+            Debug.Log("d Down");
+            m_Animator.SetTrigger("Dual Down");
+
+        }
         //Short Range Shotgun
         List<GameObject> indicators = new(4);
         foreach (var _ in Enumerable.Range(0, 3))
         {
             //Get the player postition relative to the boss
-            Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
+            playerPos = PlayerController.instance.transform.position - transform.position;
             //Get the angle from the position
-            float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+            playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
 
             GameObject indicator = Instantiate(
                 BossController.instance.inidcatorSmallPrefab,
@@ -167,6 +243,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         }
 
         yield return new WaitForSeconds(1f);
+        m_Animator.SetTrigger("Idle");
         PhaseChange();
     }
 
@@ -185,13 +262,15 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
     public void PhaseChange()
     {
-        int r = 0;
+        int r = 1;
         //int r = Random.Range(0, 2);
 
         if (r == 0)
             StartCoroutine(Pistol_Blast());
-        else
+        else if (r == 1)
             StartCoroutine(Dual_Danger());
+        else if (r == 2)
+            StartCoroutine(Machine_Assault());
     }
 
     public IEnumerator StartPhase()
