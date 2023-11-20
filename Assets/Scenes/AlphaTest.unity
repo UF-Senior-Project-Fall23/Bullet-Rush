@@ -525,7 +525,7 @@ MonoBehaviour:
   portalPrefab: {fileID: 2980754544053814403, guid: fc59c9488a341f34db05136e8fb87a6a, type: 3}
   indicatorPrefab: {fileID: 2522868610081033057, guid: c9e1d0cf244049f4c899c2690aa70a2d, type: 3}
   CircleIndicatorPrefab: {fileID: 2522868610081033057, guid: 26a7295f4b4c90340bec1784b68f9396, type: 3}
-  inidcatorSmallPrefab: {fileID: 0}
+  inidcatorSmallPrefab: {fileID: 2160357908860134591, guid: 156433a1eb0fe944eb04ed28a55a301e, type: 3}
 --- !u!1 &466500064
 GameObject:
   m_ObjectHideFlags: 3
