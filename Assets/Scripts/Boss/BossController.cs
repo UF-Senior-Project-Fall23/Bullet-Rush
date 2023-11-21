@@ -18,7 +18,7 @@ public class BossController : MonoBehaviour
     public GameObject portalPrefab;
     public GameObject indicatorPrefab;
     public GameObject CircleIndicatorPrefab;
-    
+
     public GameObject inidcatorSmallPrefab;
 
     private void Awake()
@@ -54,12 +54,12 @@ public class BossController : MonoBehaviour
     public void LoadBoss(string bossName)
     {
         Debug.Log("Loading Boss: " + bossName);
-        
+
         currentBossPrefab = bossPrefabs[bossName];
-        
-        FindObjectOfType<MusicManager>().LoadBossMusic(bossName);
+
+        //FindObjectOfType<MusicManager>().LoadBossMusic(bossName);
     }
-    
+
     public void BossDie(Vector3 deathPos, Quaternion deathAng)
     {
         Debug.Log("Boss Died");
@@ -71,7 +71,7 @@ public class BossController : MonoBehaviour
         {
             Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
         }
-        
+
         currentBossPrefab = null;
         currentBoss = null;
     }
@@ -79,7 +79,7 @@ public class BossController : MonoBehaviour
     public void BossDie()
     {
         Debug.Log("Boss Died");
- 
+
         Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
 
         currentBossPrefab = null;

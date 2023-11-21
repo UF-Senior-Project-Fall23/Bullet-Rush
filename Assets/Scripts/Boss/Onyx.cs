@@ -142,26 +142,33 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         yield return new WaitForSeconds(1f);
         foreach (var i in Enumerable.Range(0, 24))
         {
-            float xIndicator = transform.position.x;
-            float yIndicator = transform.position.y;
+            int half_indicator_len = 10;
+            int theta = ((360 / 24) * i);
+            Debug.Log("theta = " + theta);
+            float x_indicator = transform.position.x + Mathf.Sin(Mathf.Deg2Rad * theta) * half_indicator_len;
+            float y_indicator = transform.position.y - Mathf.Cos(Mathf.Deg2Rad * theta) * half_indicator_len;
+            //create the indicator at a position with a rotation
             GameObject indicator = BossController.instance.Indicate(
-                new Vector3(xIndicator, yIndicator, 1),
-                Quaternion.Euler(0, 0, ((360 / 24) * i))
+                new Vector3(x_indicator, y_indicator, 1),
+                Quaternion.Euler(0, 0, theta)
             );
-
-            indicator.transform.localScale = new Vector3(1, 20, 1);
+            //transform x scale by 20
+            indicator.transform.localScale = new Vector3(1, 2 * half_indicator_len, 1);
             indicators.Add(indicator);
             yield return new WaitForSeconds(.05f);
         }
         foreach (var indicator in indicators)
         {
             //Fire a bullet at the player based on its position
+            Debug.Log("Boss Position" + transform.position);
+            Debug.Log("Bullet Position: " + (indicator.transform.position.normalized * .5f));
+            Debug.Log("Bullet Rotation: " + indicator.transform.rotation);
             GameObject bullet = Instantiate(
                 GameManager.instance.getBulletPrefab("Test Bullet"),
                 transform.position - ((transform.position - indicator.transform.position).normalized * 5f),
                 indicator.transform.rotation
             );
-
+            //rotate by sprite rotation offset
             bullet.transform.Rotate(0, 0, 270);
             BossController.instance.RemoveIndicator(indicator);
 
@@ -255,6 +262,55 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         PhaseChange();
     }
 
+    public IEnumerator JetCharge()
+    {
+        //charge in the direction of player
+        //damage on contact with the player
+        // if btwn -45 and 45, to the right
+
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        //get direction towards player
+        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
+        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+        Vector3 moveDirection = playerPos.normalized;
+
+        float timer = 0f;
+        float duration = 2.5f; // 5 seconds duration
+        if (playerAngle < (Mathf.PI / 4) && playerAngle > (-1 * Mathf.PI / 4))
+        {
+            m_Animator.SetTrigger("JetRight");
+        }
+        else if (playerAngle > (Mathf.PI / 4) && playerAngle < (3 * Mathf.PI / 4))
+        {
+            m_Animator.SetTrigger("JetUp");
+        }
+        //135, 225 degrees (on sides) to the left
+        else if (playerAngle > (3 * Mathf.PI / 4) || playerAngle < (-3 * Mathf.PI / 4))
+        {
+            m_Animator.SetTrigger("JetLeft");
+        }
+        else
+        {
+            m_Animator.SetTrigger("JetDown");
+        }
+        while (timer < duration)
+        {
+            float distanceToMove = 15f * Time.deltaTime;
+            transform.Translate(moveDirection * distanceToMove, Space.World);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        m_Animator.SetTrigger("Idle");
+        PhaseChange();
+    }
+
+    public IEnumerator HighExplosive()
+    {
+        //throw grenades (similar to blag attack)
+        return null;
+    }
+
     public IEnumerator Run()
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
@@ -297,13 +353,16 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
         if (!m_Run)
         {
-            int r = Random.Range(0, 3);
+            //int r = Random.Range(0, 4);
+            int r = 3;
             if (r == 0)
                 StartCoroutine(Pistol_Blast());
             else if (r == 1)
                 StartCoroutine(Dual_Danger());
             else if (r == 2)
                 StartCoroutine(Machine_Assault());
+            else if (r == 3)
+                StartCoroutine(JetCharge());
             m_Run = true;
         }
         else
