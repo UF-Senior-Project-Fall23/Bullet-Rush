@@ -2,30 +2,36 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Events;
+using Unity.VisualScripting;
+
+public enum Difficulty
+{
+    Easy,
+    Medium,
+    Hard
+}
 
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
-
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI timeText;
-    public TextMeshProUGUI healthText;
-    public TextMeshProUGUI weaponText;
-    public TextMeshProUGUI heatText;
-
-    public TextMeshProUGUI levelText;
-    public TextMeshProUGUI difficultyText;
     public List<GameObject> levelCoordinates;
     public Dictionary<string, GameObject> bulletPrefabs;
 
-    private float gameTime = 0f;
-    private int score = 0;
+    public float gameTime = 0f;
 
-    private int difficulty = 0; //0 = easy, 1 = medium, 2 = hard
+    [HideInInspector]
+    public UnityEvent ScoreChanged;
+    public int score = 0;
 
-    private int currentLevel = 0;
+    [HideInInspector]
+    public UnityEvent DifficultyChanged;
+    public Difficulty difficulty = Difficulty.Easy;
 
+    [HideInInspector]
+    public UnityEvent LevelChanged;
+    public int currentLevel = 0;
     public bool inLootRoom = true;
 
     private void Awake()
@@ -55,30 +61,12 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        weaponText.text = "Weapon: None";
-
         bulletPrefabs = Resources.LoadAll<GameObject>("Prefabs/Bullets").ToDictionary(x => x.name, x => x);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         gameTime += Time.deltaTime;
-        timeText.text = "Time Elapsed: " + Mathf.Floor(gameTime).ToString();
-        scoreText.text = "Score: " + score.ToString();
-        healthText.text = "Health: " + PlayerController.instance.CurrentHealth.ToString();
-        levelText.text = "Level: " + currentLevel.ToString();
-        if (difficulty == 0)
-        {
-            difficultyText.text = "Difficulty: Easy";
-        }
-        else if (difficulty == 1)
-        {
-            difficultyText.text = "Difficulty: Medium";
-        }
-        else
-        {
-            difficultyText.text = "Difficulty: Hard";
-        }
     }
 
     public void AddScore(int type)
@@ -89,11 +77,13 @@ public class GameManager : MonoBehaviour
                 score += 10;
                 break;
         }
+        ScoreChanged.Invoke();
     }
 
     public void incrementLevel()
     {
         currentLevel += 1;
+        LevelChanged.Invoke();
     }
     public int getCurrentLevel()
     {
@@ -114,11 +104,12 @@ public class GameManager : MonoBehaviour
     {
         return bulletPrefabs[name];
     }
-    public void setDifficulty(int newDifficulty)
+    public void setDifficulty(Difficulty newDifficulty)
     {
         difficulty = newDifficulty;
+        DifficultyChanged.Invoke();
     }
-    public int getCurrentDifficulty()
+    public Difficulty getCurrentDifficulty()
     {
         return difficulty;
     }

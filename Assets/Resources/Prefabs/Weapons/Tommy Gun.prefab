@@ -144,11 +144,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   radius: 1.5
-  bulletForce: 20
+  bulletForce: 25
   bulletDelay: 0.2
+  bulletLifetime: 0.5
   damage: 1
   bulletPreFab: {fileID: 319021616187502277, guid: 22f4395033b4c47438ff3b7b300d740e, type: 3}
-  overheating: 0
+  currentHeat: 0
+  heatPerShot: 5
+  maxHeat: 100
 --- !u!61 &196782112260326543
 BoxCollider2D:
   m_ObjectHideFlags: 0

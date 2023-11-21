@@ -9,7 +9,7 @@ public interface IHealth
     public bool Invulnerable { get; set; }
 
     GameObject gameObject { get; }
-    public void takeDamage(int damage)
+    public void takeDamage(float damage)
     {
         if (!Invulnerable)
         {

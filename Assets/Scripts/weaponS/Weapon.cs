@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public Transform startingPosition;
+
     //Player
     public GameObject player;
 
@@ -19,7 +21,10 @@ public class Weapon : MonoBehaviour
     //How long between shots
     public float bulletDelay = 1.0f;
 
-    public int damage;
+    //How long bullet is alive
+    public float bulletLifetime = 1.0f;
+
+    public float damage;
     public GameObject bulletPreFab;
 
     protected Transform shootPoint;
@@ -39,7 +44,7 @@ public class Weapon : MonoBehaviour
 
     public void Update()
     {
-        GameManager.instance.heatText.text = "Heat: " + currentHeat.ToString();
+        HUDManager.instance.heatText.text = "Heat: " + currentHeat.ToString();
 
         //Overheating cooldown and the check
         if (isOverheated)
@@ -53,9 +58,6 @@ public class Weapon : MonoBehaviour
 
         if (!isShooting && Input.GetButton("Fire1") && !isOverheated) {
             StartCoroutine(Shoot());
-        }
-        else if (Input.GetKeyDown(KeyCode.Q)) {
-            PlayerController.instance.DropWeapon();
         }
 
         if (!isShooting)
@@ -104,7 +106,7 @@ public class Weapon : MonoBehaviour
         while (Input.GetButton("Fire1") && !isOverheated) {
             GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
             bullet.GetComponent<Bullet>().damage = damage;
-            Destroy(bullet, .5f);
+            Destroy(bullet, bulletLifetime);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
             //Fire the bullet

@@ -84,8 +84,9 @@ MonoBehaviour:
   radius: 0.75
   bulletForce: 20
   bulletDelay: 0.5
+  bulletLifetime: 1
   damage: 2
-  bulletPreFab: {fileID: 319021616187502277, guid: cf2b35f0efc248243a362918b92d7052, type: 3}
+  bulletPreFab: {fileID: 319021616187502277, guid: 0780f0103488e4c4faf926d01ff35f36, type: 3}
   currentHeat: 0
   heatPerShot: 5
   maxHeat: 100
