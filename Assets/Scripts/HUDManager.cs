@@ -15,6 +15,7 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI weaponText;
     public TextMeshProUGUI heatText;
+    public GameObject tooltip;
 
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI difficultyText;
@@ -71,4 +72,16 @@ public class HUDManager : MonoBehaviour
         levelText.text = "Level: " + GameManager.instance.currentLevel.ToString();
     }
 
+    public void ShowTooltip(string name, string description, Vector3 pos)
+    {
+        tooltip.transform.Find("Title").GetComponent<TextMeshProUGUI>().text = name;
+        tooltip.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = description;
+        tooltip.transform.position = pos;
+        tooltip.SetActive(true);
+    }
+
+    public void HideTooltip()
+    {
+        tooltip.SetActive(false);
+    }
 }

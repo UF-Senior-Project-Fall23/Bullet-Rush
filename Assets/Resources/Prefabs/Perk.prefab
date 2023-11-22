@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8178835909715662794}
   - component: {fileID: 6460037126246583321}
-  - component: {fileID: 6396467905675623614}
-  - component: {fileID: 8826348364231951808}
+  - component: {fileID: 7211610758992135927}
+  - component: {fileID: 7208216700189352641}
   m_Layer: 0
   m_Name: Perk
   m_TagString: Untagged
@@ -86,21 +86,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6396467905675623614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8219951279716651860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c86fd4c741f2dc4785591660c2fef2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  perk: {fileID: 11400000, guid: e8340d007318c514e87798fb2ec923ef, type: 2}
---- !u!60 &8826348364231951808
-PolygonCollider2D:
+--- !u!58 &7211610758992135927
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -128,25 +115,25 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8828125, y: 1}
-    newSize: {x: 0.8828125, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.43359375, y: 0.25}
-      - {x: -0.43359375, y: -0.25}
-      - {x: 0, y: -0.5}
-      - {x: 0.43359375, y: -0.25}
-      - {x: 0.43359375, y: 0.25}
-      - {x: 0, y: 0.5}
-  m_UseDelaunayMesh: 0
+  serializedVersion: 2
+  m_Radius: 1.5
+--- !u!114 &7208216700189352641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8219951279716651860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d37f581bb873d94fa526d174dbea291, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  perk: {fileID: 0}
+  title: 
+  description: 
+  offset: {x: 0, y: 0, z: 0}
