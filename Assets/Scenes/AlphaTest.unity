@@ -307,9 +307,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1978148912213477298, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9021529055171853590, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 284383043}
+    - targetCorrespondingSourceObject: {fileID: 9021529055171853590, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 284383042}
   m_SourcePrefab: {fileID: 100100000, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
 --- !u!1 &102484566
 GameObject:
@@ -522,6 +529,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 181243708}
   m_CullTransparentMesh: 1
+--- !u!1 &284383039 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9021529055171853590, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
+  m_PrefabInstance: {fileID: 102399465}
+  m_PrefabAsset: {fileID: 0}
+--- !u!70 &284383042
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284383039}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 3, y: 2}
+  m_Direction: 1
+--- !u!114 &284383043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284383039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc3ad2150b4c9c645a726860f5c5730d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Sniper
+  description: It shoots far
+  offset: {x: 0, y: 3, z: 0}
 --- !u!1 &314287614
 GameObject:
   m_ObjectHideFlags: 0
@@ -4826,9 +4888,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 713860619591414797, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9021529055171853590, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1415414535}
+    - targetCorrespondingSourceObject: {fileID: 9021529055171853590, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1415414534}
   m_SourcePrefab: {fileID: 100100000, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
 --- !u!1 &837121746
 GameObject:
@@ -46028,6 +46097,61 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!1 &1415414530 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9021529055171853590, guid: 1953140bfcbf5ce4c8d0d1f2b9efe150, type: 3}
+  m_PrefabInstance: {fileID: 760742975}
+  m_PrefabAsset: {fileID: 0}
+--- !u!70 &1415414534
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415414530}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.5}
+  m_Size: {x: 1.5, y: 3}
+  m_Direction: 0
+--- !u!114 &1415414535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415414530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc3ad2150b4c9c645a726860f5c5730d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Blade
+  description: It slices
+  offset: {x: 0, y: 5, z: 0}
 --- !u!1 &1468359377
 GameObject:
   m_ObjectHideFlags: 0
@@ -48604,6 +48728,10 @@ PrefabInstance:
       propertyPath: description
       value: It increases health
       objectReference: {fileID: 0}
+    - target: {fileID: 7211610758992135927, guid: e52be02e894e4c746aa52999ab4e77b9, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 8178835909715662794, guid: e52be02e894e4c746aa52999ab4e77b9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 44.63361
@@ -48647,6 +48775,10 @@ PrefabInstance:
     - target: {fileID: 8219951279716651860, guid: e52be02e894e4c746aa52999ab4e77b9, type: 3}
       propertyPath: m_Name
       value: Perk
+      objectReference: {fileID: 0}
+    - target: {fileID: 8219951279716651860, guid: e52be02e894e4c746aa52999ab4e77b9, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6396467905675623614, guid: e52be02e894e4c746aa52999ab4e77b9, type: 3}

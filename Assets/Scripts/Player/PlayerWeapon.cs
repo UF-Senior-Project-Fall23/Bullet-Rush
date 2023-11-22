@@ -16,7 +16,7 @@ public class PlayerWeapon : MonoBehaviour
             m_weaponScript.player = null;
             m_weaponScript.enabled = false;
             currWeapon.transform.SetPositionAndRotation(m_weaponScript.startingPosition.position, m_weaponScript.startingPosition.rotation);
-            currWeapon.transform.Find("Pickup").GetComponent<Collider2D>().enabled = true;
+            currWeapon.GetComponent<Collider2D>().enabled = true;
             currWeapon = null;
         }
 

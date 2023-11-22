@@ -46,6 +46,11 @@ public class Weapon : MonoBehaviour
     {
         HUDManager.instance.heatText.text = "Heat: " + currentHeat.ToString();
 
+        if (player != null)
+        {
+            UpdateWeaponPos();
+        }
+
         //Overheating cooldown and the check
         if (isOverheated)
         {
@@ -64,11 +69,6 @@ public class Weapon : MonoBehaviour
         {
             currentHeat -= cooldownRate * Time.deltaTime;
             currentHeat = Mathf.Max(currentHeat, 0.0f);
-        }
-
-        if (player != null)
-        {
-            UpdateWeaponPos();
         }
     }
 
@@ -103,7 +103,7 @@ public class Weapon : MonoBehaviour
     {
         isShooting = true;
 
-        while (Input.GetButton("Fire1") && !isOverheated) {
+        while (Input.GetButton("Fire1") && !isOverheated && this.enabled) {
             GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, -90));
             bullet.GetComponent<Bullet>().damage = damage;
             Destroy(bullet, bulletLifetime);
