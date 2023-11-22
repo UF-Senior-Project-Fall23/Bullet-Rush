@@ -82,17 +82,17 @@ public class StartRoom : MonoBehaviour
         //check for trigger on difficulty buttons
         if (IsPlayerOnButton(player.transform.position, difficultyButtons[0]))
         {
-            gameManager.setDifficulty(0);
+            gameManager.setDifficulty(Difficulty.Easy);
             updateDifficultyButtonColors();
         }
         else if (IsPlayerOnButton(player.transform.position, difficultyButtons[1]))
         {
-            gameManager.setDifficulty(1);
+            gameManager.setDifficulty(Difficulty.Medium);
             updateDifficultyButtonColors();
         }
         else if (IsPlayerOnButton(player.transform.position, difficultyButtons[2]))
         {
-            gameManager.setDifficulty(2);
+            gameManager.setDifficulty(Difficulty.Hard);
             updateDifficultyButtonColors();
         }
     }
@@ -188,13 +188,13 @@ public class StartRoom : MonoBehaviour
     void updateDifficultyButtonColors()
     {
 
-        if (gameManager.getCurrentDifficulty() == 0)
+        if (gameManager.getCurrentDifficulty() == Difficulty.Easy)
         { // COLORS FOR EASY
             difficultyButtons[0].GetComponent<SpriteRenderer>().color = new Color(10 / 255.0f, 150 / 255.0f, 0);
             difficultyButtons[1].GetComponent<SpriteRenderer>().color = new Color(255 / 255.0f, 158 / 255.0f, 0);
             difficultyButtons[2].GetComponent<SpriteRenderer>().color = new Color(255 / 255.0f, 5 / 255.0f, 50 / 255.0f);
         }
-        else if (gameManager.getCurrentDifficulty() == 1)
+        else if (gameManager.getCurrentDifficulty() == Difficulty.Medium)
         { // COLORS FOR MEDIUM
             difficultyButtons[0].GetComponent<SpriteRenderer>().color = new Color(19 / 255.0f, 255 / 255.0f, 0);
             difficultyButtons[1].GetComponent<SpriteRenderer>().color = new Color(200 / 255.0f, 100 / 255.0f, 0);

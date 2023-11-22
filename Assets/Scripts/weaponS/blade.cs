@@ -14,6 +14,7 @@ public class blade : Weapon {
         anim = GetComponent<Animator>();
     }
 
+    //TODO: If mouse1 is held down and weapon is swapped cancel animation
     public override IEnumerator Shoot(){
         isShooting = true;
         anim.Play("Slash");
