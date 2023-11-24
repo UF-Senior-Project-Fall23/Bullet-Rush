@@ -46,8 +46,8 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             if (gameManagerScript != null)
             {
                 // Now you can access the difficulty variable
-                difficulty = gameManagerScript.difficulty;
-                level = gameManagerScript.level;
+                difficulty = gameManagerScript.getCurrentDifficulty();
+                level = gameManagerScript.getCurrentLevel();
                 Debug.Log("Difficulty: " + difficulty);
             }
             else
