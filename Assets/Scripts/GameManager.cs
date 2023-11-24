@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     private float gameTime = 0f;
     private int score = 0;
 
-    private int difficulty = 0; //0 = easy, 1 = medium, 2 = hard
+    public int difficulty = 0; //0 = easy, 1 = medium, 2 = hard
 
     private int currentLevel = 0;
 
