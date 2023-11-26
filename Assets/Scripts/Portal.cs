@@ -19,8 +19,6 @@ public class Portal : MonoBehaviour
         
         var bossManager = BossController.instance;
         if (bossManager is null) return;
-
-        Debug.LogWarning("Running destination code");
         
         
         switch (destination)
@@ -78,10 +76,5 @@ public class Portal : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void OnDestroy()
-    {
-        Debug.LogError("why the fuck was this destroyed");
     }
 }
