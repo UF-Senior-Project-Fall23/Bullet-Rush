@@ -239,6 +239,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7289589327774120849, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1992031057}
+    - target: {fileID: 7289589327774120849, guid: 681b1ad417fc8b74ca04b976e4f9115a, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
@@ -665,6 +669,7 @@ MonoBehaviour:
   indicatorPrefab: {fileID: 2522868610081033057, guid: c9e1d0cf244049f4c899c2690aa70a2d, type: 3}
   CircleIndicatorPrefab: {fileID: 2522868610081033057, guid: 26a7295f4b4c90340bec1784b68f9396, type: 3}
   inidcatorSmallPrefab: {fileID: 0}
+  runBosses: []
 --- !u!1 &466500064
 GameObject:
   m_ObjectHideFlags: 3
@@ -11087,7 +11092,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   currentLevel: 0
-  inLootRoom: 0
+  roomType: 0
 --- !u!4 &988185471
 Transform:
   m_ObjectHideFlags: 0
@@ -62449,6 +62454,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e58ef25f3684d646aa488436066ff64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: Initialize
+  deleteOnUse: 0
 --- !u!4 &1299414662976053414
 Transform:
   m_ObjectHideFlags: 0

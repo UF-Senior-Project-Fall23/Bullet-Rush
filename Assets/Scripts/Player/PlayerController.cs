@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            health = GetComponent<PlayerHealth>();
+            stats = GetComponent<PlayerStats>();
+            movement = GetComponent<PlayerMovement>();
+            weapon = GetComponent<PlayerWeapon>();
         }
         else
         {
