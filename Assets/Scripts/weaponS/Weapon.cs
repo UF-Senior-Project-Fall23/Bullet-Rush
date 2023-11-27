@@ -34,7 +34,7 @@ public class Weapon : MonoBehaviour
     public float currentHeat = 0.0f;
     public float heatPerShot = 5.0f;
     public float maxHeat = 100.0f;
-    private float cooldownRate = 20.0f;
+    public float cooldownRate = 20.0f;
 
     private void Awake()
     {

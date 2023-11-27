@@ -9,6 +9,11 @@ public class PerkPickup : MonoBehaviour
     public string description;
     public Vector3 offset;
 
+    public void Start()
+    {
+
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -28,6 +33,13 @@ public class PerkPickup : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         HUDManager.instance.HideTooltip();
+    }
+
+    public void SetPerk(Perk perk)
+    {
+        this.perk = perk;
+        GetComponent<SpriteRenderer>().sprite = perk.sprite;
+        title = perk.name;
     }
 
 }

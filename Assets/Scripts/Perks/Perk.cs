@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum PerkType
 {
@@ -14,43 +16,71 @@ public enum PerkType
 [CreateAssetMenu(fileName = "New Perk", menuName = "Perk")]
 public class Perk : ScriptableObject
 {
+    public Sprite sprite;
+
     [Tooltip("What does this perk modify")]
     public PerkType type;
 
-    public int selected;
+    public int modificationSelected;
+    public int typeSelected;
+
+    [Tooltip("How many stats this perk modifies")]
+    public int amount = 1;
 
     [Tooltip("What stat this perk modifies")]
-    public string modifying;
+    public List<string> modifying = new(1);
 
-    [Tooltip("How much of the stat it modifies")]
-    public float modifier;
+    [Tooltip("Percentage modifier")]
+    public List<float> modifier = new(1);
 }
 
 [CustomEditor(typeof(Perk))]
 public class PerkEditor : Editor
 {
-    private SerializedProperty type;
-    private SerializedProperty modifying;
-    private SerializedProperty modifier;
-    private SerializedProperty selected;
-    private string[] options;
+    SerializedProperty sprite;
+    SerializedProperty type;
+    SerializedProperty amount;
+    SerializedProperty modifying;
+    SerializedProperty modifier;
+    SerializedProperty typeSelected;
+    SerializedProperty modificationSelected;
+    string[] options;
+    string[] mOptions;
 
     private void OnEnable()
     {
         modifying = serializedObject.FindProperty("modifying");
         modifier = serializedObject.FindProperty("modifier");
+        amount = serializedObject.FindProperty("amount");
         type = serializedObject.FindProperty("type");
-        selected = serializedObject.FindProperty("selected");
+        sprite = serializedObject.FindProperty("sprite");
+        typeSelected = serializedObject.FindProperty("typeSelected");
+        modificationSelected = serializedObject.FindProperty("modificationSelected");
+        UpdateLists();
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
 
+        EditorGUILayout.PropertyField(sprite);
+
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(type);
         if (EditorGUI.EndChangeCheck())
-            selected.intValue = 0;
+        {
+            typeSelected.intValue = 0;
+            if (type.enumValueIndex == 0)
+            {
+                for (int i = 0; i < modifying.arraySize; i++)
+                    modifying.GetArrayElementAtIndex(i).stringValue = typeof(Weapon).GetFields().Where(i => i.FieldType == typeof(float)).Select(i => i.Name).ToArray()[0];
+            }
+            else
+            {
+                for (int i = 0; i < modifying.arraySize; i++)
+                    modifying.GetArrayElementAtIndex(i).stringValue = FindAnyObjectByType<PlayerController>().stats.GetStatNames()[0];
+            }
+        }
 
         if (type.enumValueIndex == 0)
         {
@@ -59,13 +89,56 @@ public class PerkEditor : Editor
         else
         {
             //dont worry about it
-            options = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects().Where(i => i.name == "Player").FirstOrDefault().GetComponent<PlayerController>().stats.GetStatNames();
+            options = FindAnyObjectByType<PlayerController>().stats.GetStatNames();
         }
 
-        selected.intValue = EditorGUILayout.Popup("Modifying", selected.intValue, options);
-        modifying.stringValue = options[selected.intValue];
+        EditorGUI.BeginChangeCheck();
+        EditorGUILayout.PropertyField(amount);
+        if (EditorGUI.EndChangeCheck())
+        {
+            UpdateLists();
+            modificationSelected.intValue = 0;
+        }
+
+        EditorGUI.BeginChangeCheck();
+        modificationSelected.intValue = EditorGUILayout.Popup("Modification", modificationSelected.intValue, mOptions);
+        if (EditorGUI.EndChangeCheck())
+        {
+            for(int i = 0; i < options.Length; i++)
+            {
+                if (options[i] == modifying.GetArrayElementAtIndex(modificationSelected.intValue).stringValue)
+                {
+                    typeSelected.intValue = i;
+                    break;
+                }  
+            }
+        }
+
+
+        typeSelected.intValue = EditorGUILayout.Popup("Modifying", typeSelected.intValue, options);
+        modifying.GetArrayElementAtIndex(modificationSelected.intValue).stringValue = options[typeSelected.intValue];
+        EditorGUILayout.PropertyField(modifier.GetArrayElementAtIndex(modificationSelected.intValue), label: new GUIContent("Modifier"));
+
+        EditorGUILayout.PropertyField(modifying);
         EditorGUILayout.PropertyField(modifier);
 
+        UpdateLists();
         serializedObject.ApplyModifiedProperties();
+    }
+
+    void UpdateLists()
+    {
+        if (modifying.arraySize != amount.intValue)
+            ((Perk)target).modifying.Resize(amount.intValue, "");
+
+        if (modifier.arraySize != amount.intValue)
+            ((Perk)target).modifier.Resize(amount.intValue, 0);
+
+        if (mOptions?.Length != amount.intValue)
+        {
+            mOptions = new string[amount.intValue];
+            for (int i = 0; i < amount.intValue; i++)
+                mOptions[i] = (i + 1).ToString();
+        }
     }
 }

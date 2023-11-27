@@ -41,18 +41,4 @@ public class PlayerHealth : MonoBehaviour, IHealth
         PlayerHealthChanged.Invoke();
     }
 
-    public void takeDamage(int damage)
-    {
-        if (!Invulnerable)
-        {
-            CurrentHealth -= damage;
-
-            if (CurrentHealth <= 0)
-                Die();
-
-            gameObject.transform.GetComponentInChildren<healthBar>()?.takeDamage();
-        }
-        PlayerHealthChanged.Invoke();
-    }
-
 }

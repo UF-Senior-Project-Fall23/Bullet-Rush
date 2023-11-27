@@ -9,7 +9,7 @@ public interface IHealth
     public bool Invulnerable { get; set; }
 
     GameObject gameObject { get; }
-    public void takeDamage(float damage)
+    public virtual void takeDamage(float damage)
     {
         if (!Invulnerable)
         {
@@ -20,6 +20,8 @@ public interface IHealth
 
             gameObject.transform.GetComponentInChildren<healthBar>()?.takeDamage();
         }
+
+        gameObject.GetComponent<PlayerHealth>()?.PlayerHealthChanged.Invoke();
     }
 
     void Die();
