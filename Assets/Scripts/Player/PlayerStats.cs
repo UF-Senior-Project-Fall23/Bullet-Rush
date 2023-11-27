@@ -29,6 +29,6 @@ public class PlayerStats : MonoBehaviour
 
     public void IncreaseStat(string stat, float value)
     {
-        stats.Where(i => i.name == stat).FirstOrDefault().value += value;
+        stats.Where(i => i.name == stat).FirstOrDefault().value *= (1+(value/100));
     }
 }

@@ -10,9 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7059f1e614207874e9a7a5607ab6d4d4, type: 3}
-  m_Name: Health Buff
+  m_Name: Heat Sinks
   m_EditorClassIdentifier: 
-  type: 1
-  selected: 0
-  modifying: Health
-  modifier: 5
+  sprite: {fileID: 1771556332, guid: ddfba12351dc7b648abf905be78966d5, type: 3}
+  type: 0
+  modificationSelected: 0
+  typeSelected: 7
+  amount: 1
+  modifying:
+  - maxHeat
+  modifier:
+  - 25
