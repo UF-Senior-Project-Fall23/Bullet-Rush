@@ -2049,7 +2049,7 @@ MonoBehaviour:
   sounds:
   - name: Title Theme
     clip: {fileID: 8300000, guid: db0178679673e6d4788466cb1ddbad13, type: 3}
-    volume: 1
+    volume: 0.8
     loop: 1
     source: {fileID: 0}
   - name: Start Area Theme
@@ -2069,6 +2069,11 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Onyx Theme
     clip: {fileID: 8300000, guid: c229d81dbe95bba4381e901b2a360369, type: 3}
+    volume: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Loot Room
+    clip: {fileID: 8300000, guid: 73846809315fdd1458a92e5db50535e1, type: 3}
     volume: 1
     loop: 1
     source: {fileID: 0}
