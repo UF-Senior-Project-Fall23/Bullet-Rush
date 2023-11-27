@@ -63,26 +63,21 @@ public class Onyx : MonoBehaviour, Boss, IHealth
     }
     IEnumerator Pistol_Blast()
     {
-        Debug.Log("Pistol_Blast");
         int yOffsetIndicator = 1;
         int xOffsetIndicator = 1;
         //Get the player postition relative to the boss
         Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
         //Get the angle from the position
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-        Debug.Log("PLAYER ANGLE" + playerAngle * Mathf.Rad2Deg);
-
         // if btwn -45 and 45, to the right
         if (playerAngle < (Mathf.PI / 4) && playerAngle > (-1 * Mathf.PI / 4))
         {
-            Debug.Log("PISTOL RIGHT");
             m_Animator.SetTrigger("Pistol Blast");
             yOffsetIndicator = 1;
             xOffsetIndicator = 1;
         }
         else if (playerAngle > (Mathf.PI / 4) && playerAngle < (3 * Mathf.PI / 4))
         {
-            Debug.Log("Pistol Up");
             m_Animator.SetTrigger("Pistol Up");
             yOffsetIndicator = 2;
             xOffsetIndicator = -1;
@@ -90,14 +85,12 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         //135, 225 degrees (on sides) to the left
         else if (playerAngle > (3 * Mathf.PI / 4) || playerAngle < (-3 * Mathf.PI / 4))
         {
-            Debug.Log("PISTOL LEFT");
             m_Animator.SetTrigger("Pistol Blast");
             yOffsetIndicator = 1;
             xOffsetIndicator = -1;
         }
         else
         {
-            Debug.Log("Pistol Down");
             m_Animator.SetTrigger("Pistol Down");
             yOffsetIndicator = -2;
             xOffsetIndicator = 1;
@@ -109,9 +102,9 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         bool indicate = true;
         foreach (var _ in Enumerable.Range(0, 10))
         {
-            //Get the player postition relative to the boss
             if (indicate)
             {
+                //Get the player postition relative to the boss
                 playerPos = PlayerController.instance.transform.position - transform.position;
                 //Get the angle from the position
                 //y and x offset to so indicator does not come from belly button
@@ -142,6 +135,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
                 indicators.RemoveAt(0);
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                 float bulletSpeed = 45f;
+                //depending on difficulty, set bulletSpeed
                 if (difficulty == 0)
                 {
                     bulletSpeed = 35f;
@@ -159,7 +153,120 @@ public class Onyx : MonoBehaviour, Boss, IHealth
                 yield return new WaitForSeconds(.1f);
             }
         }
-        m_Animator.SetTrigger("Idle");
+        m_Animator.SetTrigger("Run");
+        PhaseChange();
+    }
+
+    IEnumerator Dual_Danger()
+    {
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        int yOffsetIndicator = 1;
+        int xOffsetIndicator = 1;
+        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
+        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+        // if btwn -45 and 45, to the right
+        if (playerAngle >= (-1 * Mathf.PI / 8) && playerAngle < (Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Dual Danger");
+            yOffsetIndicator = 1;
+            xOffsetIndicator = 3;
+        }
+        else if (playerAngle >= (Mathf.PI / 8) && playerAngle < (3 * Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Dual NE");
+            yOffsetIndicator = 2;
+            xOffsetIndicator = 1;
+        }
+        else if (playerAngle >= (3 * Mathf.PI / 8) && playerAngle < (5 * Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Dual Up");
+            yOffsetIndicator = 2;
+            xOffsetIndicator = -1;
+        }
+        else if (playerAngle >= (5 * Mathf.PI / 8) && playerAngle < (7 * Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Dual NW");
+            yOffsetIndicator = 2;
+            xOffsetIndicator = -2;
+        }
+        else if (playerAngle >= (7 * Mathf.PI / 8) || playerAngle < (-7 * Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Dual Danger");
+            yOffsetIndicator = 0;
+            xOffsetIndicator = -2;
+        }
+        else if (playerAngle >= (-7 * Mathf.PI / 8) && playerAngle < (-5 * Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Dual SW");
+            yOffsetIndicator = -2;
+            xOffsetIndicator = -1;
+        }
+        else if (playerAngle >= (-5 * Mathf.PI / 8) && playerAngle < (-3 * Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Dual Down");
+            yOffsetIndicator = -2;
+            xOffsetIndicator = 1;
+        }
+        else
+        {
+            m_Animator.SetTrigger("Dual SE");
+            yOffsetIndicator = -1;
+            xOffsetIndicator = 2;
+        }
+        //pause to let animation catch up to firing
+        yield return new WaitForSeconds(.9f);
+
+        List<GameObject> indicators = new(4);
+        foreach (var _ in Enumerable.Range(0, 3))
+        {
+            //Get the player postition relative to the boss
+            playerPos = PlayerController.instance.transform.position - transform.position;
+            //Get the angle from the position
+            playerAngle = Mathf.Atan2(playerPos.y - yOffsetIndicator, playerPos.x - xOffsetIndicator);
+            //create indicator
+            GameObject indicator = Instantiate(
+                BossController.instance.inidcatorSmallPrefab,
+                new Vector3(transform.position.x + xOffsetIndicator, transform.position.y + yOffsetIndicator, 1) + (3 * playerPos / 5),
+                Quaternion.Euler(0, 0, playerAngle * Mathf.Rad2Deg + 90)
+            );
+
+            indicator.transform.localScale = new Vector3(1, playerPos.magnitude, 1);
+            indicators.Add(indicator);
+            yield return new WaitForSeconds(.05f);
+        }
+        foreach (var indicator in indicators)
+        {
+            //Fire 10 bullet at the player based on its position
+            foreach (var _ in Enumerable.Range(0, 4))
+            {
+                Vector3 randomOffset = Random.insideUnitSphere * 2.0f;
+                GameObject bullet = Instantiate(
+                    GameManager.instance.getBulletPrefab("Test Bullet"),
+                    new Vector3(transform.position.x + xOffsetIndicator, transform.position.y + yOffsetIndicator, 1) + (1 * playerPos / 5) + randomOffset,
+                    indicator.transform.rotation
+                );
+                bullet.transform.Rotate(0, 0, 270 + Random.Range(-20f, 20f));
+                Destroy(indicator);
+
+                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+                float bulletSpeed = 10f;
+                if (difficulty == 0)
+                {
+                    bulletSpeed = 10f;
+                }
+                else if (difficulty == 1)
+                {
+                    bulletSpeed = 13f;
+                }
+                else if (difficulty == 2)
+                {
+                    bulletSpeed = 20f;
+                }
+                rb.AddForce(bullet.transform.right * bulletSpeed, ForceMode2D.Impulse);
+            }
+        }
+        m_Animator.SetTrigger("Run");
         PhaseChange();
     }
 
@@ -225,103 +332,10 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             rb.AddForce(bullet.transform.right * bulletSpeed, ForceMode2D.Impulse);
             yield return new WaitForSeconds(.05f);
         }
-        m_Animator.SetTrigger("Idle");
+        m_Animator.SetTrigger("Run");
         PhaseChange();
     }
 
-
-    IEnumerator Dual_Danger()
-    {
-        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
-        Debug.Log("Dual Danger");
-        int yOffsetIndicator = 1;
-        int xOffsetIndicator = 1;
-        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
-        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-        // if btwn -45 and 45, to the right
-        if (playerAngle < (Mathf.PI / 4) && playerAngle > (-1 * Mathf.PI / 4))
-        {
-            Debug.Log("Dual RIGHT");
-            m_Animator.SetTrigger("Dual Danger");
-            yOffsetIndicator = 1;
-            xOffsetIndicator = 1;
-        }
-        else if (playerAngle > (Mathf.PI / 4) && playerAngle < (3 * Mathf.PI / 4))
-        {
-            Debug.Log("d Up");
-            m_Animator.SetTrigger("Dual Up");
-            yOffsetIndicator = 2;
-            xOffsetIndicator = -1;
-        }
-        //135, 225 degrees (on sides) to the left
-        else if (playerAngle > (3 * Mathf.PI / 4) || playerAngle < (-3 * Mathf.PI / 4))
-        {
-            Debug.Log("d LEFT");
-            m_Animator.SetTrigger("Dual Danger");
-            yOffsetIndicator = 1;
-            xOffsetIndicator = -1;
-        }
-        else
-        {
-            Debug.Log("d Down");
-            m_Animator.SetTrigger("Dual Down");
-            yOffsetIndicator = 0;
-            xOffsetIndicator = 1;
-        }
-
-        List<GameObject> indicators = new(4);
-        foreach (var _ in Enumerable.Range(0, 3))
-        {
-            //Get the player postition relative to the boss
-            playerPos = PlayerController.instance.transform.position - transform.position;
-            //Get the angle from the position
-            playerAngle = Mathf.Atan2(playerPos.y - yOffsetIndicator, playerPos.x - xOffsetIndicator);
-            //create indicator
-            GameObject indicator = Instantiate(
-                BossController.instance.inidcatorSmallPrefab,
-                new Vector3(transform.position.x + xOffsetIndicator, transform.position.y + yOffsetIndicator, 1) + (3 * playerPos / 5),
-                Quaternion.Euler(0, 0, playerAngle * Mathf.Rad2Deg + 90)
-            );
-
-            indicator.transform.localScale = new Vector3(1, playerPos.magnitude, 1);
-            indicators.Add(indicator);
-            yield return new WaitForSeconds(.1f);
-        }
-        foreach (var indicator in indicators)
-        {
-            //Fire 10 bullet at the player based on its position
-            foreach (var _ in Enumerable.Range(0, 4))
-            {
-                Vector3 randomOffset = Random.insideUnitSphere * 2.0f;
-                GameObject bullet = Instantiate(
-                    GameManager.instance.getBulletPrefab("Test Bullet"),
-                    new Vector3(transform.position.x + xOffsetIndicator, transform.position.y + yOffsetIndicator, 1) + (2 * playerPos / 5) + randomOffset,
-                    indicator.transform.rotation
-                );
-                bullet.transform.Rotate(0, 0, 270 + Random.Range(-20f, 20f));
-                Destroy(indicator);
-
-                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-
-                float bulletSpeed = 10f;
-                if (difficulty == 0)
-                {
-                    bulletSpeed = 10f;
-                }
-                else if (difficulty == 1)
-                {
-                    bulletSpeed = 13f;
-                }
-                else if (difficulty == 2)
-                {
-                    bulletSpeed = 20f;
-                }
-                rb.AddForce(bullet.transform.right * bulletSpeed, ForceMode2D.Impulse);
-            }
-        }
-        m_Animator.SetTrigger("Idle");
-        PhaseChange();
-    }
 
     public IEnumerator JetCharge()
     {
@@ -366,7 +380,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             timer += Time.deltaTime;
             yield return null;
         }
-        m_Animator.SetTrigger("Idle");
+        m_Animator.SetTrigger("Run");
         PhaseChange();
     }
 
@@ -421,7 +435,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
         m_Animator.SetTrigger("Run");
         float timer = 0f;
-        float duration = 3f; // 3 seconds duration
+        float duration = 1f; // 1 second duration
         // Keep moving towards the player for the specified duration
         while (timer < duration)
         {
@@ -440,7 +454,6 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             timer += Time.deltaTime;
             yield return null;
         }
-        m_Animator.SetTrigger("Idle");
         PhaseChange();
 
     }
@@ -465,7 +478,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         {
             //int r = Random.Range(0, level + 2);
             //int r = Random.Range(0, 5);
-            int r = 0;
+            int r = 1;
             if (r == 0)
                 StartCoroutine(Pistol_Blast());
             else if (r == 1)
