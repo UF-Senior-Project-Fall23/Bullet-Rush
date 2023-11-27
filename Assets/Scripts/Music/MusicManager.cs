@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using JetBrains.Annotations;
-using UnityEngine.Audio;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MusicManager : MonoBehaviour
 {
@@ -24,7 +22,6 @@ public class MusicManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-        SceneManager.sceneLoaded += OnSceneLoaded;
 
         foreach (Sound sound in sounds)
         {
@@ -133,7 +130,7 @@ public class MusicManager : MonoBehaviour
         Play(newSound);
     }
     // Smoothly fades out the current sound then instantly starts the given sound.
-    private void FadeOutThenPlay(string to, float fadeDuration)
+    public void FadeOutThenPlay(string to, float fadeDuration)
     {
         StartCoroutine(FadeOutThenPlay_Internal(currentTrack, FindSound(to), fadeDuration));
     }
@@ -148,16 +145,6 @@ public class MusicManager : MonoBehaviour
     {
         Debug.LogWarning("This is actually being called lol");
         StartCoroutine(FadeOut_Internal(currentTrack, fadeDuration));
-    }
-    
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        Debug.Log($"Loaded scene {scene.name} with mode {mode}");
-        if (scene.name == "AlphaTest")
-        {
-            FadeCurrentInto("Start Area Theme", 0.5f);
-        }
-        
     }
 
     public void LoadBossMusic(string bossName)
