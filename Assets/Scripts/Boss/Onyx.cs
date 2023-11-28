@@ -14,18 +14,25 @@ public class Onyx : MonoBehaviour, Boss, IHealth
     private float m_CurrHP;
 
     private Animator m_Animator;
+    public ParticleSystem fireParticlesR;
+    public ParticleSystem fireParticlesL;
     private bool m_Run = false;
 
     bool m_invulnerable = false;
 
+    //coroutine variables. needed so they can be stopped on collision
+    Coroutine jetChargeCoroutine;
+    Coroutine runCoroutine;
+
     private int difficulty = 0; //0 = easy, 1 = medium, 2 = hard
+    private float difficultyMultiplier = 1f;
     private int level = 0;
 
     //IHealth Stuff
     public float MaxHealth { get => MaxHP; set => MaxHP = value; }
     public float CurrentHealth { get => m_CurrHP; set => m_CurrHP = value; }
     public bool Invulnerable { get => m_invulnerable; set => m_invulnerable = value; }
-
+    private Rigidbody2D OnyxRB;
     public string[] Attacks { get; } =
     {
         "Pistol_Blast", "Dual_Danger", "Summon", "Machine_Assault", "High_Explosive", "Smoke_Screen", "Tetra_Takedown", "Jet_Charge", "Radial_Fire"
@@ -37,6 +44,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         m_MaxBulletVelocity = 40f;
         m_Animator = GetComponent<Animator>();
         GameObject gameManagerObject = GameObject.Find("GameManager");
+        OnyxRB = GetComponent<Rigidbody2D>();
 
         if (gameManagerObject != null)
         {
@@ -49,6 +57,21 @@ public class Onyx : MonoBehaviour, Boss, IHealth
                 difficulty = gameManagerScript.getCurrentDifficulty();
                 level = gameManagerScript.getCurrentLevel();
                 Debug.Log("Difficulty: " + difficulty);
+                switch (difficulty)
+                {
+                    case 0:
+                        difficultyMultiplier = 1f;
+                        break;
+                    case 1:
+                        difficultyMultiplier = 1.5f;
+                        break;
+                    case 2:
+                        difficultyMultiplier = 2f;
+                        break;
+                    default:
+                        break;
+                }
+
             }
             else
             {
@@ -60,6 +83,16 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             Debug.LogError("GameManager GameObject not found in the scene.");
         }
 
+    }
+    void PlayFireParticles()
+    {
+        fireParticlesL.Play();
+        fireParticlesR.Play();
+    }
+    void StopFireParticles()
+    {
+        fireParticlesL.Stop();
+        fireParticlesR.Stop();
     }
     IEnumerator Pistol_Blast()
     {
@@ -134,20 +167,8 @@ public class Onyx : MonoBehaviour, Boss, IHealth
                 Destroy(indicator);
                 indicators.RemoveAt(0);
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                float bulletSpeed = 45f;
                 //depending on difficulty, set bulletSpeed
-                if (difficulty == 0)
-                {
-                    bulletSpeed = 35f;
-                }
-                else if (difficulty == 1)
-                {
-                    bulletSpeed = 45f;
-                }
-                else if (difficulty == 2)
-                {
-                    bulletSpeed = 55f;
-                }
+                float bulletSpeed = 30 * difficultyMultiplier;
                 rb.AddForce(bullet.transform.right * bulletSpeed, ForceMode2D.Impulse);
                 indicate = true;
                 yield return new WaitForSeconds(.1f);
@@ -250,19 +271,8 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
-                float bulletSpeed = 10f;
-                if (difficulty == 0)
-                {
-                    bulletSpeed = 10f;
-                }
-                else if (difficulty == 1)
-                {
-                    bulletSpeed = 13f;
-                }
-                else if (difficulty == 2)
-                {
-                    bulletSpeed = 20f;
-                }
+                //depending on difficulty, set bulletSpeed
+                float bulletSpeed = 10 * difficultyMultiplier;
                 rb.AddForce(bullet.transform.right * bulletSpeed, ForceMode2D.Impulse);
             }
         }
@@ -298,7 +308,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             //transform x scale by 20
             indicator.transform.localScale = new Vector3(1, 2 * half_indicator_len, 1);
             indicators.Add(indicator);
-            yield return new WaitForSeconds(.05f);
+            yield return new WaitForSeconds(.05f / difficultyMultiplier);
         }
         foreach (var indicator in indicators)
         {
@@ -316,21 +326,10 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             BossController.instance.RemoveIndicator(indicator);
 
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            float bulletSpeed = 45f;
-            if (difficulty == 0)
-            {
-                bulletSpeed = 35f;
-            }
-            else if (difficulty == 1)
-            {
-                bulletSpeed = 45f;
-            }
-            else if (difficulty == 2)
-            {
-                bulletSpeed = 55f;
-            }
+            //depending on difficulty, set bulletSpeed
+            float bulletSpeed = 30 * difficultyMultiplier;
             rb.AddForce(bullet.transform.right * bulletSpeed, ForceMode2D.Impulse);
-            yield return new WaitForSeconds(.05f);
+            yield return new WaitForSeconds(.05f / difficultyMultiplier);
         }
         m_Animator.SetTrigger("Run");
         PhaseChange();
@@ -341,19 +340,18 @@ public class Onyx : MonoBehaviour, Boss, IHealth
     {
         //charge in the direction of player
         //damage on contact with the player
-        // if btwn -45 and 45, to the right
-
+        // if between -45 and 45 degrees, move to the right
+        m_invulnerable = true;
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         Debug.Log("Jet Charge");
 
-
-        //get direction towards player
+        // Get direction towards player
         Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
         Vector3 moveDirection = playerPos.normalized;
 
-        float timer = 0f;
-        float duration = 2f; // 5 seconds duration
+        float duration = 2f; // 2 seconds duration
+
         if (playerAngle < (Mathf.PI / 4) && playerAngle > (-1 * Mathf.PI / 4))
         {
             m_Animator.SetTrigger("JetRight");
@@ -362,7 +360,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         {
             m_Animator.SetTrigger("JetUp");
         }
-        //135, 225 degrees (on sides) to the left
+        // 135, 225 degrees (on sides) to the left
         else if (playerAngle > (3 * Mathf.PI / 4) || playerAngle < (-3 * Mathf.PI / 4))
         {
             m_Animator.SetTrigger("JetLeft");
@@ -371,15 +369,23 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         {
             m_Animator.SetTrigger("JetDown");
         }
-        //wait for animation before moving
+        //after setting animation, wait for change then start moving
+        yield return new WaitForSeconds(.8f);
+        //depending on difficulty, set bulletSpeed
+        float jetSpeed = 12 * difficultyMultiplier;
+        float timer = 0f;
         while (timer < duration)
         {
-            float distanceToMove = 15f * Time.deltaTime;
+            float distanceToMove = jetSpeed * Time.deltaTime;
+
             transform.Translate(moveDirection * distanceToMove, Space.World);
 
             timer += Time.deltaTime;
             yield return null;
         }
+
+
+        m_invulnerable = false;
         m_Animator.SetTrigger("Run");
         PhaseChange();
     }
@@ -388,6 +394,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
 
+        m_Animator.SetTrigger("High Explosive");
         //throw grenades (similar to blag attack)
         GameObject bulletPreFab = GameManager.instance.getBulletPrefab("Cinder Cluster");
 
@@ -397,6 +404,8 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
 
         List<GameObject> indicators = new(3);
+        //wait for animation to start throwing cinder clusters
+        yield return new WaitForSeconds(1f);
         for (int i = 0; i < 3; i++)
         {
             GameObject indicator = BossController.instance.Indicate(
@@ -419,13 +428,13 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             bullet.transform.Rotate(0, 0, 180);
 
             BossController.instance.RemoveIndicator(indicator);
-
+            float bulletSpeed = 15 * difficultyMultiplier;
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
+            rb.AddForce(bullet.transform.up * bulletSpeed, ForceMode2D.Impulse);
 
             yield return new WaitForSeconds(.3f);
         }
-
+        m_Animator.SetTrigger("Run");
         PhaseChange();
     }
 
@@ -435,7 +444,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
         m_Animator.SetTrigger("Run");
         float timer = 0f;
-        float duration = 1f; // 1 second duration
+        float duration = 2 / difficultyMultiplier; // duration gets shorter the harder the difficulty
         // Keep moving towards the player for the specified duration
         while (timer < duration)
         {
@@ -477,8 +486,8 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         if (!m_Run)
         {
             //int r = Random.Range(0, level + 2);
-            //int r = Random.Range(0, 5);
-            int r = 1;
+            int r = Random.Range(0, 5);
+            //int r = 4;
             if (r == 0)
                 StartCoroutine(Pistol_Blast());
             else if (r == 1)
@@ -486,7 +495,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
             else if (r == 2)
                 StartCoroutine(Machine_Assault());
             else if (r == 3)
-                StartCoroutine(JetCharge());
+                jetChargeCoroutine = StartCoroutine(JetCharge());
             else if (r == 4)
                 StartCoroutine(HighExplosive());
 
@@ -494,7 +503,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         }
         else
         {
-            StartCoroutine(Run());
+            runCoroutine = StartCoroutine(Run());
             m_Run = false;
         }
     }
@@ -513,6 +522,29 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         Invulnerable = true;
         StopAllCoroutines();
         StartCoroutine(Death());
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Player")
+        {
+            Debug.Log("onyx collision with wall or player");
+            // Stop both coroutines on collision
+            if (jetChargeCoroutine != null)
+            {
+                StopCoroutine(jetChargeCoroutine);
+                m_Animator.SetTrigger("Run");
+                PhaseChange();
+            }
+
+            if (runCoroutine != null)
+            {
+                StopCoroutine(runCoroutine);
+                m_Animator.SetTrigger("Run");
+                PhaseChange();
+            }
+        }
+
     }
 }
 
