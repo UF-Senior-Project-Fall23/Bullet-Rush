@@ -444,43 +444,36 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
         m_Animator.SetTrigger("High Explosive");
 
-        //Get the player postition relative to the boss
-        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
-        //Get the angle from the position
-        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-
+        List<GameObject> indicators = new(5);
+        for (int i = 0; i < 5; i++)
         {
-            foreach (var _ in Enumerable.Range(0, 1))
+            GameObject indicator = BossController.instance.IndicateCircle(
+                PlayerController.instance.transform.position,
+                Quaternion.identity
+            );
+            indicators.Add(indicator);
+            indicator.transform.localScale = new Vector3(4, 4, 1);
+            float startSize = indicator.transform.localScale.x;
+            for (float size = startSize; size >= 0; size -= startSize / 50)
             {
-                yield return new WaitForSeconds(.5f);
-                for (float i = Mathf.PI / 2; i <= 3 * Mathf.PI / 2; i += Mathf.PI / 12)
-                {
-                    GameObject bullet = Instantiate(
-                        GameManager.instance.getBulletPrefab("Radial Blast"),
-                        transform.position,
-                        Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
-                    );
-
-                    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                    rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
-                }
-                yield return new WaitForSeconds(.5f);
-                for (float i = 13 * Mathf.PI / 24; i <= 37 * Mathf.PI / 24; i += Mathf.PI / 12)
-                {
-                    GameObject bullet = Instantiate(
-                        GameManager.instance.getBulletPrefab("Radial Blast"),
-                        transform.position,
-                        Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
-                    );
-
-                    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                    rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
-                }
-                yield return new WaitForSeconds(.5f);
+                indicator.transform.localScale = new Vector3(size, size, 1);
+                yield return new WaitForSeconds(.01f);
             }
-            PhaseChange();
         }
+        foreach (var indicator in indicators)
+        {
+            Instantiate(
+                GameManager.instance.getBulletPrefab("Flame Strike"),
+                indicator.transform.position,
+                indicator.transform.rotation
+            );
+            BossController.instance.RemoveIndicator(indicator);
+        }
+        yield return new WaitForSeconds(.25f);
+        m_Animator.SetTrigger("Run");
+        PhaseChange();
     }
+
 
     public IEnumerator Run()
     {
@@ -489,7 +482,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         m_Animator.SetTrigger("Run");
         float timer = 0f;
         float duration = 2 / difficultyMultiplier; // duration gets shorter the harder the difficulty
-        // Keep moving towards the player for the specified duration
+                                                   // Keep moving towards the player for the specified duration
         while (timer < duration)
         {
             Vector3 directionToPlayer = PlayerController.instance.transform.position - transform.position;
