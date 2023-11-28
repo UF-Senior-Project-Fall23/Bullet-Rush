@@ -7,7 +7,6 @@ public class PerkPickup : MonoBehaviour
 {
     public Perk perk;
     public string title;
-    public string description;
     public Vector3 offset;
 
     private float startY;
@@ -27,7 +26,7 @@ public class PerkPickup : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        HUDManager.instance.ShowTooltip(title, description, transform.position + offset);
+        HUDManager.instance.ShowTooltip(title, perk.description, transform.position + offset);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

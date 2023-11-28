@@ -21,3 +21,4 @@ MonoBehaviour:
   - bulletForce
   modifier:
   - 50
+  description: Your bullets move 50% faster and further.

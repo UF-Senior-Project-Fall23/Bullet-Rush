@@ -21,3 +21,4 @@ MonoBehaviour:
   - Health
   modifier:
   - 50
+  description: Your max HP is increased by 50%.
