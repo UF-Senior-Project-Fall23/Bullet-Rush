@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7059f1e614207874e9a7a5607ab6d4d4, type: 3}
   m_Name: Frenzy
   m_EditorClassIdentifier: 
-  sprite: {fileID: 323937215, guid: ddfba12351dc7b648abf905be78966d5, type: 3}
+  sprite: {fileID: 761111846, guid: ddfba12351dc7b648abf905be78966d5, type: 3}
   type: 0
   modificationSelected: 0
   typeSelected: 2
@@ -21,3 +21,4 @@ MonoBehaviour:
   - bulletDelay
   modifier:
   - -33
+  description: Time between shots is reduced by 33%.
