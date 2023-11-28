@@ -463,7 +463,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         foreach (var indicator in indicators)
         {
             Instantiate(
-                GameManager.instance.getBulletPrefab("Flame Strike"),
+                GameManager.instance.getBulletPrefab("Grenade Strike"),
                 indicator.transform.position,
                 indicator.transform.rotation
             );
