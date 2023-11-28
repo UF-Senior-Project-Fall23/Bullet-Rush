@@ -123,7 +123,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Perk_Sprite_Sheet_0
+      name: Perk_HeatSinks
       rect:
         serializedVersion: 2
         x: 0
@@ -131,7 +131,7 @@ TextureImporter:
         width: 31
         height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -144,7 +144,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Sprite_Sheet_1
+      name: Perk_PowerfulShots
       rect:
         serializedVersion: 2
         x: 31
@@ -152,7 +152,7 @@ TextureImporter:
         width: 31
         height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -165,7 +165,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Sprite_Sheet_2
+      name: Perk_Aggravate
       rect:
         serializedVersion: 2
         x: 62
@@ -173,7 +173,7 @@ TextureImporter:
         width: 31
         height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -186,7 +186,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Sprite_Sheet_3
+      name: Perk_Frenzy
       rect:
         serializedVersion: 2
         x: 0
@@ -194,7 +194,7 @@ TextureImporter:
         width: 31
         height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -207,7 +207,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Sprite_Sheet_4
+      name: Perk_Phantasmal
       rect:
         serializedVersion: 2
         x: 31
@@ -215,7 +215,7 @@ TextureImporter:
         width: 31
         height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -228,7 +228,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Sprite_Sheet_5
+      name: Perk_Healthy
       rect:
         serializedVersion: 2
         x: 62
@@ -236,7 +236,7 @@ TextureImporter:
         width: 31
         height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -249,7 +249,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Sprite_Sheet_6
+      name: Perk_FarDash
       rect:
         serializedVersion: 2
         x: 0
@@ -257,7 +257,7 @@ TextureImporter:
         width: 31
         height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -270,7 +270,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Sprite_Sheet_7
+      name: Perk_BurstFire
       rect:
         serializedVersion: 2
         x: 31
@@ -278,7 +278,7 @@ TextureImporter:
         width: 31
         height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -301,14 +301,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Perk_Sprite_Sheet_0: 1771556332
-      Perk_Sprite_Sheet_1: 323937215
-      Perk_Sprite_Sheet_2: -888643439
-      Perk_Sprite_Sheet_3: 761111846
-      Perk_Sprite_Sheet_4: -1634521631
-      Perk_Sprite_Sheet_5: -390532326
-      Perk_Sprite_Sheet_6: 1599239456
-      Perk_Sprite_Sheet_7: -901719895
+      Perk_Aggravate: -888643439
+      Perk_BurstFire: -901719895
+      Perk_FarDash: 1599239456
+      Perk_Frenzy: 761111846
+      Perk_Healthy: -390532326
+      Perk_HeatSinks: 1771556332
+      Perk_Phantasmal: -1634521631
+      Perk_PowerfulShots: 323937215
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

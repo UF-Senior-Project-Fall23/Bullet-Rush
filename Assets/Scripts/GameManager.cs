@@ -17,7 +17,8 @@ public enum RoomType
 {
     Start,
     LootRoom,
-    Boss
+    Boss,
+    Error
 }
 
 public class GameManager : MonoBehaviour
@@ -27,7 +28,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> levelCoordinates;
     public Dictionary<string, GameObject> bulletPrefabs;
 
-    public float gameTime = 0f;
+    public static float gameTime = 0f;
 
     [HideInInspector]
     public UnityEvent ScoreChanged;
@@ -147,6 +148,8 @@ public class GameManager : MonoBehaviour
         PlayerController.instance.transform.position = getStartAreaLocation();
         roomType = RoomType.Start;
         setLevel(0);
+        PerkManager.instance.ResetHeldPerks();
+        PerkManager.instance.ResetPerks();
         MusicManager.instance.FadeCurrentInto("Start Area Theme", 0.5f);
     }
 
