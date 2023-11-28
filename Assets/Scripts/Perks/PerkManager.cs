@@ -11,11 +11,15 @@ public class PerkManager : MonoBehaviour
 {
     public static PerkManager instance;
     public GameObject perkPreFab;
+    public GameObject pedestals;
 
-    Dictionary<string, Perk> perks;
+    public static Dictionary<string, Perk> perks;
 
     [HideInInspector]
     public UnityEvent<Perk> onAddPerk;
+
+    private List<GameObject> spawnedPerks = new();
+    private List<Perk> takenPerks = new();
 
     private void Awake()
     {
@@ -29,11 +33,13 @@ public class PerkManager : MonoBehaviour
         }
 
         onAddPerk.AddListener(addPerk);
+        Portal.ChangeRoom.AddListener(SpawnPerks);
         perks = Resources.LoadAll<Perk>("Perks").ToDictionary(x => x.name, x => x);
     }
 
     void addPerk(Perk perk)
     {
+        takenPerks.Add(perk);
         if(perk.type == PerkType.Weapon)
         {
             for(int i = 0; i < perk.amount; i++)
@@ -60,5 +66,40 @@ public class PerkManager : MonoBehaviour
         GameObject newPerk = Instantiate(perkPreFab, position, Quaternion.identity);
         newPerk.GetComponent<PerkPickup>().SetPerk(perk);
         return newPerk;
+    }
+
+    public void ResetPerks()
+    {
+        spawnedPerks.Clear();
+        takenPerks.Clear();
+    }
+    
+    void DespawnPerks()
+    {
+        foreach(var perk in spawnedPerks)
+        {
+            Destroy(perk);
+        }
+        spawnedPerks.Clear();
+    }
+    
+    void SpawnPerks(RoomType from, RoomType to)
+    {
+        DespawnPerks();
+        
+        if (to != RoomType.LootRoom) return;
+        
+        var perksToShow = perks
+            .Where(kv => !takenPerks.Contains(kv.Value))
+            .OrderBy(x => new System.Random().Next())
+            .Take(3).Select(kv => kv.Value).ToList();
+
+        int i = 0;
+        foreach (Transform child in pedestals.transform)
+        {
+            Vector3 pos = child.position;
+            pos.y += 1;
+            spawnedPerks.Add(SpawnPerk(perksToShow[i++], pos));
+        }
     }
 }

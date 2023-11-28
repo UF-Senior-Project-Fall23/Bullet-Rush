@@ -8,9 +8,10 @@ public class Portal : MonoBehaviour
     public string destination;
     public bool deleteOnUse = false;
     
-    public UnityEvent EnterBossRoom;
-    public UnityEvent EnterLootRoom;
-    public UnityEvent EnterStartRoom;
+    public static UnityEvent EnterBossRoom = new();
+    public static UnityEvent EnterLootRoom = new();
+    public static UnityEvent EnterStartRoom = new();
+    public static UnityEvent<RoomType, RoomType> ChangeRoom = new();
     
     private void OnCollisionEnter2D(Collision2D playerCollision)
     {
@@ -24,7 +25,9 @@ public class Portal : MonoBehaviour
         
         var bossManager = BossController.instance;
         if (bossManager is null) return;
-        
+
+        RoomType originalRoom = gameManager.roomType;
+        RoomType newRoom;
         
         switch (destination)
         {
@@ -33,7 +36,7 @@ public class Portal : MonoBehaviour
                 EnterLootRoom.Invoke();
             
                 playerCollision.transform.position = gameManager.getLootRoomLocation();
-                gameManager.roomType = RoomType.LootRoom;
+                newRoom = RoomType.LootRoom;
                 FindObjectOfType<MusicManager>()?.FadeOutThenPlay("Loot Room", 0.25f);
                 
                 // TODO: Delete this later and make it instead spawn when you pick up a perk
@@ -48,7 +51,7 @@ public class Portal : MonoBehaviour
                 EnterBossRoom.Invoke();
                 
                 playerCollision.transform.position = gameManager.getNextLevelLocation();
-                gameManager.roomType = RoomType.Boss;
+                newRoom = RoomType.Boss;
                 
                 bossManager.StartBoss(gameManager.getCurrentLevel());
                 gameManager.incrementLevel();
@@ -56,12 +59,13 @@ public class Portal : MonoBehaviour
             
             case "Initialize":
                 Debug.Log("Initialize & Teleport To Next Level");
+                EnterBossRoom.Invoke();
                 
                 // Initialization code, the rest is just the boss case but again (C# is bad and doesn't have fallthrough)
                 bossManager.GenerateRun();
                 
                 playerCollision.transform.position = gameManager.getNextLevelLocation();
-                gameManager.roomType = RoomType.Boss;
+                newRoom = RoomType.Boss;
                 
                 bossManager.StartBoss(gameManager.getCurrentLevel());
                 gameManager.incrementLevel();
@@ -70,16 +74,25 @@ public class Portal : MonoBehaviour
             case "Start":
                 Debug.Log("Teleport To Start Area");
                 EnterStartRoom.Invoke();
-                
+
+                newRoom = RoomType.Start;
                 gameManager.GoToStart();
                 break;
             
             default:
                 Debug.LogWarning("Attempting to teleport somewhere nonexistent");
+                newRoom = RoomType.Error;
                 break;
                 
         }
 
+        if (newRoom != RoomType.Error)
+        {
+            gameManager.roomType = newRoom;
+        }
+        
+        ChangeRoom.Invoke(originalRoom, newRoom);
+        
         if (deleteOnUse)
         {
             Destroy(gameObject);

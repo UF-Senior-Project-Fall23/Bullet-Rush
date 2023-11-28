@@ -9,9 +9,18 @@ public class PerkPickup : MonoBehaviour
     public string description;
     public Vector3 offset;
 
+    private float startY;
+
     public void Start()
     {
-
+        startY = gameObject.transform.position.y;
+    }
+    
+    public void FixedUpdate()
+    {
+        float x = gameObject.transform.position.x;
+        float y = startY + Mathf.Sin(GameManager.gameTime);
+        //gameObject.transform.position = new Vector3(x, y, 0);
     }
 
 

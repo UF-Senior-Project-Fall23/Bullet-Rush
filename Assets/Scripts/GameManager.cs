@@ -17,7 +17,8 @@ public enum RoomType
 {
     Start,
     LootRoom,
-    Boss
+    Boss,
+    Error
 }
 
 public class GameManager : MonoBehaviour
@@ -27,7 +28,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> levelCoordinates;
     public Dictionary<string, GameObject> bulletPrefabs;
 
-    public float gameTime = 0f;
+    public static float gameTime = 0f;
 
     [HideInInspector]
     public UnityEvent ScoreChanged;
