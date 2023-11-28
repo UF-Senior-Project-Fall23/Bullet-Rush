@@ -577,7 +577,6 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         {
             //int r = Random.Range(0, level + 3);
             int randAttack = Random.Range(0, 5);
-            randAttack = 1;
             switch (randAttack)
             {
                 case 0:
