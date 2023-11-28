@@ -96,40 +96,63 @@ public class Onyx : MonoBehaviour, Boss, IHealth
     }
     IEnumerator Pistol_Blast()
     {
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         int yOffsetIndicator = 1;
         int xOffsetIndicator = 1;
         //Get the player postition relative to the boss
         Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
         //Get the angle from the position
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-        // if btwn -45 and 45, to the right
-        if (playerAngle < (Mathf.PI / 4) && playerAngle > (-1 * Mathf.PI / 4))
+        // Check for the 8 directions
+        if (playerAngle >= (-1 * Mathf.PI / 8) && playerAngle < (Mathf.PI / 8))
         {
             m_Animator.SetTrigger("Pistol Blast");
             yOffsetIndicator = 1;
+            xOffsetIndicator = 3;
+        }
+        else if (playerAngle >= (Mathf.PI / 8) && playerAngle < (3 * Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Pistol NE");
+            yOffsetIndicator = 2;
             xOffsetIndicator = 1;
         }
-        else if (playerAngle > (Mathf.PI / 4) && playerAngle < (3 * Mathf.PI / 4))
+        else if (playerAngle >= (3 * Mathf.PI / 8) && playerAngle < (5 * Mathf.PI / 8))
         {
             m_Animator.SetTrigger("Pistol Up");
-            yOffsetIndicator = 2;
+            yOffsetIndicator = 3;
             xOffsetIndicator = -1;
         }
-        //135, 225 degrees (on sides) to the left
-        else if (playerAngle > (3 * Mathf.PI / 4) || playerAngle < (-3 * Mathf.PI / 4))
+        else if (playerAngle >= (5 * Mathf.PI / 8) && playerAngle < (7 * Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Pistol NW");
+            yOffsetIndicator = 2;
+            xOffsetIndicator = -2;
+        }
+        else if (playerAngle >= (7 * Mathf.PI / 8) || playerAngle < (-7 * Mathf.PI / 8))
         {
             m_Animator.SetTrigger("Pistol Blast");
             yOffsetIndicator = 1;
-            xOffsetIndicator = -1;
+            xOffsetIndicator = -2;
         }
-        else
+        else if (playerAngle >= (-7 * Mathf.PI / 8) && playerAngle < (-5 * Mathf.PI / 8))
+        {
+            m_Animator.SetTrigger("Pistol SW");
+            yOffsetIndicator = -1;
+            xOffsetIndicator = -2;
+        }
+        else if (playerAngle >= (-5 * Mathf.PI / 8) && playerAngle < (-3 * Mathf.PI / 8))
         {
             m_Animator.SetTrigger("Pistol Down");
             yOffsetIndicator = -2;
             xOffsetIndicator = 1;
         }
-        //after setting the trigger, wait to make timing of shots line up with animation
-        yield return new WaitForSeconds(.5f);
+        else
+        {
+            m_Animator.SetTrigger("Pistol SE");
+            yOffsetIndicator = -1;
+            xOffsetIndicator = 2;
+        }
+        yield return new WaitForSeconds(.15f);
         //6 fast revolver shots
         List<GameObject> indicators = new(1);
         bool indicate = true;
@@ -152,16 +175,21 @@ public class Onyx : MonoBehaviour, Boss, IHealth
                 indicators.Add(indicator);
                 //next loop, bullet
                 indicate = false;
-                yield return new WaitForSeconds(.1f);
+                yield return new WaitForSeconds(.06f);
             }
             else
             {
                 //bullet
                 GameObject indicator = indicators[0];
+                Vector3 bulletPosition = new Vector3(transform.position.x + xOffsetIndicator, transform.position.y + yOffsetIndicator, 1) + (1 * playerPos / 5);
                 GameObject bullet = Instantiate(
                     GameManager.instance.getBulletPrefab("Test Bullet"),
-                    new Vector3(transform.position.x + xOffsetIndicator, transform.position.y + yOffsetIndicator, 1) + (1 * playerPos / 5),
+                    bulletPosition,
                     indicator.transform.rotation);
+                if (BulletWillHitBoss(bulletPosition))
+                {
+                    Debug.Log("BULLET WILL HIT BOSS");
+                }
                 bullet.transform.Rotate(0, 0, 270);
                 //get rid of indicator
                 Destroy(indicator);
@@ -171,13 +199,38 @@ public class Onyx : MonoBehaviour, Boss, IHealth
                 float bulletSpeed = 30 * difficultyMultiplier;
                 rb.AddForce(bullet.transform.right * bulletSpeed, ForceMode2D.Impulse);
                 indicate = true;
-                yield return new WaitForSeconds(.1f);
+                yield return new WaitForSeconds(.06f);
             }
         }
         m_Animator.SetTrigger("Run");
         PhaseChange();
     }
 
+    bool BulletWillHitBoss(Vector3 bulletPosition)
+    {
+        // Perform a raycast from the boss's position to the bullet's position
+        Vector3 bossPosition = transform.position;
+        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
+        Vector3 direction = (bulletPosition - playerPos).normalized;
+        float distance = Vector3.Distance(playerPos, bulletPosition);
+        RaycastHit2D hit = Physics2D.Raycast(bulletPosition, direction, distance);
+        Debug.Log("boss position" + bossPosition);
+        Debug.Log("direction" + direction);
+        Debug.Log("distance" + distance);
+        Debug.Log("\n");
+
+        // Check if the raycast hits the boss's collider
+        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+        {
+            // The bullet will hit the boss
+            Debug.Log("OUCH");
+            return true;
+        }
+
+        // The bullet will not hit the boss
+        Debug.Log("No ouch");
+        return false;
+    }
     IEnumerator Dual_Danger()
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
@@ -201,7 +254,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         else if (playerAngle >= (3 * Mathf.PI / 8) && playerAngle < (5 * Mathf.PI / 8))
         {
             m_Animator.SetTrigger("Dual Up");
-            yOffsetIndicator = 2;
+            yOffsetIndicator = 3;
             xOffsetIndicator = -1;
         }
         else if (playerAngle >= (5 * Mathf.PI / 8) && playerAngle < (7 * Mathf.PI / 8))
@@ -213,8 +266,8 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         else if (playerAngle >= (7 * Mathf.PI / 8) || playerAngle < (-7 * Mathf.PI / 8))
         {
             m_Animator.SetTrigger("Dual Danger");
-            yOffsetIndicator = 0;
-            xOffsetIndicator = -2;
+            yOffsetIndicator = 1;
+            xOffsetIndicator = -3;
         }
         else if (playerAngle >= (-7 * Mathf.PI / 8) && playerAngle < (-5 * Mathf.PI / 8))
         {
@@ -225,17 +278,17 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         else if (playerAngle >= (-5 * Mathf.PI / 8) && playerAngle < (-3 * Mathf.PI / 8))
         {
             m_Animator.SetTrigger("Dual Down");
-            yOffsetIndicator = -2;
+            yOffsetIndicator = -3;
             xOffsetIndicator = 1;
         }
         else
         {
             m_Animator.SetTrigger("Dual SE");
-            yOffsetIndicator = -1;
-            xOffsetIndicator = 2;
+            yOffsetIndicator = -2;
+            xOffsetIndicator = 1;
         }
         //pause to let animation catch up to firing
-        yield return new WaitForSeconds(.9f);
+        yield return new WaitForSeconds(.15f);
 
         List<GameObject> indicators = new(4);
         foreach (var _ in Enumerable.Range(0, 3))
@@ -523,8 +576,8 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         if (!m_Run)
         {
             //int r = Random.Range(0, level + 3);
-            //int randAttack = Random.Range(0, 5);
-            int randAttack = 5;
+            int randAttack = Random.Range(0, 5);
+            randAttack = 1;
             switch (randAttack)
             {
                 case 0:
