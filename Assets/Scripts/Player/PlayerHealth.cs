@@ -26,6 +26,7 @@ public class PlayerHealth : MonoBehaviour, IHealth
         m_currHealth = MaxHealth;
         oldMaxHP = MaxHealth;
         PlayerController.instance.stats.onStatUpdate.AddListener(UpdateMaxHP);
+        PlayerHealthChanged.AddListener(HPChange);
     }
 
     public void Die()
@@ -39,6 +40,11 @@ public class PlayerHealth : MonoBehaviour, IHealth
         CurrentHealth += MaxHealth - oldMaxHP;
         oldMaxHP = MaxHealth;
         PlayerHealthChanged.Invoke();
+    }
+
+    public void HPChange()
+    {
+        FillableBar.AllBars["Player"].SetFill(CurrentHealth, MaxHealth);
     }
 
 }
