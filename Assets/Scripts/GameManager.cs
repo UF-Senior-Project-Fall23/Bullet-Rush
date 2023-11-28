@@ -148,6 +148,8 @@ public class GameManager : MonoBehaviour
         PlayerController.instance.transform.position = getStartAreaLocation();
         roomType = RoomType.Start;
         setLevel(0);
+        PerkManager.instance.ResetHeldPerks();
+        PerkManager.instance.ResetPerks();
         MusicManager.instance.FadeCurrentInto("Start Area Theme", 0.5f);
     }
 

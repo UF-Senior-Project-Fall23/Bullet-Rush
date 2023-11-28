@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,8 +20,8 @@ public class PerkPickup : MonoBehaviour
     public void FixedUpdate()
     {
         float x = gameObject.transform.position.x;
-        float y = startY + Mathf.Sin(GameManager.gameTime);
-        //gameObject.transform.position = new Vector3(x, y, 0);
+        float y = startY + 0.25f + Mathf.Sin(2 * GameManager.gameTime) / 4f;
+        gameObject.transform.position = new Vector3(x, y, 0);
     }
 
 
@@ -35,7 +36,7 @@ public class PerkPickup : MonoBehaviour
         {
             PerkManager.instance.onAddPerk.Invoke(perk);
             gameObject.GetComponent<Collider2D>().enabled = false;
-            Destroy(gameObject);
+            PerkManager.instance.DespawnPerks();
         }
     }
 
@@ -51,4 +52,8 @@ public class PerkPickup : MonoBehaviour
         title = perk.name;
     }
 
+    private void OnDestroy()
+    {
+        // Some cool particle effect
+    }
 }

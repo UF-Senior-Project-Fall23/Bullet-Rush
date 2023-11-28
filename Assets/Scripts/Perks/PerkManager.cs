@@ -20,6 +20,7 @@ public class PerkManager : MonoBehaviour
 
     private List<GameObject> spawnedPerks = new();
     private List<Perk> takenPerks = new();
+    private List<Perk> heldPerks = new(); // Differs from taken perks in that this can persist between runs.
 
     private void Awake()
     {
@@ -40,6 +41,7 @@ public class PerkManager : MonoBehaviour
     void addPerk(Perk perk)
     {
         takenPerks.Add(perk);
+        heldPerks.Add(perk);
         if(perk.type == PerkType.Weapon)
         {
             for(int i = 0; i < perk.amount; i++)
@@ -54,6 +56,45 @@ public class PerkManager : MonoBehaviour
             }
         }
     }
+
+    // Does not actually remove the perk from any lists
+    void removePerk(Perk perk)
+    {
+        //Debug.LogWarning($"Removing perk {perk.name}");
+        if(perk.type == PerkType.Weapon)
+        {
+            for(int i = 0; i < perk.amount; i++)
+                UpdateStat(PlayerController.instance.weapon.currWeapon.GetComponent<Weapon>(), perk.modifying[i], ToInverse(perk.modifier[i]));
+        }
+        else
+        {
+            for (int i = 0; i < perk.amount; i++)
+            {
+                PlayerController.instance.stats.IncreaseStat(perk.modifying[i], ToInverse(perk.modifier[i]));
+                PlayerController.instance.stats.onStatUpdate.Invoke();
+            }
+        }
+    }
+
+    // TODO: Find better way to do this. This is prone to rounding errors over long periods of usage
+    private static float ToInverse(float x)
+    {
+        var inverse = 100 * (1 / (1 + x / 100) - 1) ;
+        //Debug.LogWarning($"Input = {x}, Inverse = {inverse}");
+        return inverse;
+    }
+    
+    public void ResetHeldPerks()
+    {
+        //Debug.LogWarning($"It reset the perks. Before, heldPerks = {string.Join(", ", heldPerks)}");
+        foreach (var perk in heldPerks)
+        {
+            removePerk(perk);
+        }
+        heldPerks.Clear();
+    }
+    
+    
     
     public void UpdateStat<T>(T instance, string stat, float value)
     {
@@ -74,7 +115,7 @@ public class PerkManager : MonoBehaviour
         takenPerks.Clear();
     }
     
-    void DespawnPerks()
+    public void DespawnPerks()
     {
         foreach(var perk in spawnedPerks)
         {
