@@ -395,7 +395,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
 
         m_Animator.SetTrigger("High Explosive");
-        //throw grenades (similar to blag attack)
+        //throw cinder clusters (similar to blag attack)
         GameObject bulletPreFab = GameManager.instance.getBulletPrefab("Cinder Cluster");
 
         //Get the player postition relative to the boss
@@ -436,6 +436,50 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         }
         m_Animator.SetTrigger("Run");
         PhaseChange();
+    }
+
+    public IEnumerator Grenade()
+    {
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+
+        m_Animator.SetTrigger("High Explosive");
+
+        //Get the player postition relative to the boss
+        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
+        //Get the angle from the position
+        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+
+        {
+            foreach (var _ in Enumerable.Range(0, 1))
+            {
+                yield return new WaitForSeconds(.5f);
+                for (float i = Mathf.PI / 2; i <= 3 * Mathf.PI / 2; i += Mathf.PI / 12)
+                {
+                    GameObject bullet = Instantiate(
+                        GameManager.instance.getBulletPrefab("Radial Blast"),
+                        transform.position,
+                        Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
+                    );
+
+                    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                    rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
+                }
+                yield return new WaitForSeconds(.5f);
+                for (float i = 13 * Mathf.PI / 24; i <= 37 * Mathf.PI / 24; i += Mathf.PI / 12)
+                {
+                    GameObject bullet = Instantiate(
+                        GameManager.instance.getBulletPrefab("Radial Blast"),
+                        transform.position,
+                        Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
+                    );
+
+                    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                    rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
+                }
+                yield return new WaitForSeconds(.5f);
+            }
+            PhaseChange();
+        }
     }
 
     public IEnumerator Run()
@@ -485,19 +529,32 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
         if (!m_Run)
         {
-            //int r = Random.Range(0, level + 2);
-            int r = Random.Range(0, 5);
-            //int r = 4;
-            if (r == 0)
-                StartCoroutine(Pistol_Blast());
-            else if (r == 1)
-                StartCoroutine(Dual_Danger());
-            else if (r == 2)
-                StartCoroutine(Machine_Assault());
-            else if (r == 3)
-                jetChargeCoroutine = StartCoroutine(JetCharge());
-            else if (r == 4)
-                StartCoroutine(HighExplosive());
+            //int r = Random.Range(0, level + 3);
+            //int randAttack = Random.Range(0, 5);
+            int randAttack = 5;
+            switch (randAttack)
+            {
+                case 0:
+                    StartCoroutine(Pistol_Blast());
+                    break;
+                case 1:
+                    StartCoroutine(Dual_Danger());
+                    break;
+                case 2:
+                    StartCoroutine(Machine_Assault());
+                    break;
+                case 3:
+                    jetChargeCoroutine = StartCoroutine(JetCharge());
+                    break;
+                case 4:
+                    StartCoroutine(HighExplosive());
+                    break;
+                case 5:
+                    StartCoroutine(Grenade());
+                    break;
+                default:
+                    break;
+            }
 
             m_Run = true;
         }
