@@ -1,11 +1,16 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Portal : MonoBehaviour
 {
 
     public string destination;
     public bool deleteOnUse = false;
+    
+    public UnityEvent EnterBossRoom;
+    public UnityEvent EnterLootRoom;
+    public UnityEvent EnterStartRoom;
     
     private void OnCollisionEnter2D(Collision2D playerCollision)
     {
@@ -25,6 +30,7 @@ public class Portal : MonoBehaviour
         {
             case "Loot Room":
                 Debug.Log("Teleport To Loot Room");
+                EnterLootRoom.Invoke();
             
                 playerCollision.transform.position = gameManager.getLootRoomLocation();
                 gameManager.roomType = RoomType.LootRoom;
@@ -39,6 +45,7 @@ public class Portal : MonoBehaviour
             
             case "Boss":
                 Debug.Log("Teleport To Next Level");
+                EnterBossRoom.Invoke();
                 
                 playerCollision.transform.position = gameManager.getNextLevelLocation();
                 gameManager.roomType = RoomType.Boss;
@@ -62,6 +69,7 @@ public class Portal : MonoBehaviour
             
             case "Start":
                 Debug.Log("Teleport To Start Area");
+                EnterStartRoom.Invoke();
                 
                 gameManager.GoToStart();
                 break;
