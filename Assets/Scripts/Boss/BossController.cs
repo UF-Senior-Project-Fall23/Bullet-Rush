@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BossController : MonoBehaviour
@@ -18,9 +19,12 @@ public class BossController : MonoBehaviour
     public GameObject portalPrefab;
     public GameObject indicatorPrefab;
     public GameObject CircleIndicatorPrefab;
-
+    
     public GameObject inidcatorSmallPrefab;
 
+    public List<string> runBosses; // The list of bosses for the currently generated run, in order.
+
+    // Establishes singleton instance
     private void Awake()
     {
         Debug.Log("Awakened Boss Controller");
@@ -34,11 +38,19 @@ public class BossController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    // Start is called before the first frame update
+    
+    // Generates boss prefab dictionary and gets player instance
     void Start()
     {
         bossPrefabs = Resources.LoadAll<GameObject>("Prefabs/Boss").ToDictionary(x => x.name, x => x);
+        string[] actualBosses = {"Cordelia", "Blagthoroth", "Onyx"};
+        foreach (var key in bossPrefabs.Keys.ToList())
+        {
+            if (!actualBosses.Contains(key))
+            {
+                bossPrefabs.Remove(key);
+            }
+        }
 
         if (player == null)
             player = PlayerController.instance.gameObject;
@@ -54,23 +66,39 @@ public class BossController : MonoBehaviour
     public void LoadBoss(string bossName)
     {
         Debug.Log("Loading Boss: " + bossName);
-
+        
         currentBossPrefab = bossPrefabs[bossName];
-
-        //FindObjectOfType<MusicManager>().LoadBossMusic(bossName);
+        
+        FindObjectOfType<MusicManager>()?.LoadBossMusic(bossName);
     }
-
+    
     public void BossDie(Vector3 deathPos, Quaternion deathAng)
     {
         Debug.Log("Boss Died");
-        if (currentBoss == null)
+
+        GameObject portal;
+        
+        if (currentBoss is null)
         {
-            Instantiate(portalPrefab, deathPos, deathAng);
+            portal = Instantiate(portalPrefab, deathPos, deathAng);
         }
         else
         {
-            Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
+            portal = Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
         }
+        
+        Debug.LogWarning($"Current Level is {GameManager.instance.getCurrentLevel()}");
+        
+        if (GameManager.instance.getCurrentLevel() == 3)
+        {
+            portal.GetComponent<Portal>().destination = "Start";
+            Debug.Log("You won, generating start portal!");
+        }
+        else
+        {
+            portal.GetComponent<Portal>().destination = "Loot Room"; 
+        }
+        
 
         currentBossPrefab = null;
         currentBoss = null;
@@ -78,12 +106,7 @@ public class BossController : MonoBehaviour
 
     public void BossDie()
     {
-        Debug.Log("Boss Died");
-
-        Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
-
-        currentBossPrefab = null;
-        currentBoss = null;
+        BossDie(currentBoss.transform.position, currentBoss.transform.rotation);
     }
 
     public void MinionDie()
@@ -128,5 +151,20 @@ public class BossController : MonoBehaviour
     {
         indicators.Remove(indicator);
         Destroy(indicator);
+    }
+
+    public void GenerateRun()
+    {
+        runBosses = bossPrefabs.Keys.OrderBy(x => new System.Random().Next()).Take(3).ToList();
+        GameManager.instance.setLevel(0);
+        
+        Debug.Log($"Generated new run. Bosses: {string.Join(", ", runBosses)}");
+    }
+
+    public void StartBoss(int index)
+    {
+        string boss = runBosses[index];
+        LoadBoss(boss);
+        SummonBoss(new Vector3(-75, 25), 40); // TODO: Make this automatically adjust based on the boss
     }
 }
