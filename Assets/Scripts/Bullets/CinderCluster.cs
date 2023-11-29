@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class CinderCluster : MonoBehaviour
 {
+    public int ShardCount = 8;
     void OnDestroy()
     {
-        for(float i = 0; i <= 2*Mathf.PI; i += Mathf.PI/4)
+        for(float i = 0; i <= 2*Mathf.PI; i += Mathf.PI/(ShardCount/2))
         {
             GameObject bullet = Instantiate(
                 GameManager.instance.getBulletPrefab("Cinder Cluster Shard"),
