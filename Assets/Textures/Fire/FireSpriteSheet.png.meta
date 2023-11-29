@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ddfba12351dc7b648abf905be78966d5
+guid: c25d084abe800da448284f31437cf8a9
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 31
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -69,19 +69,6 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -123,169 +110,106 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Perk_HeatSinks
+      name: FireSpriteSheet_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 62
-        width: 31
-        height: 31
+        x: 45
+        y: 345
+        width: 75
+        height: 115
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 55b9cee414ea7d5489b985b04cb1cea5
-      internalID: 1771556332
+      spriteID: a552cd9bad8cbbb438f027d190e2084b
+      internalID: 1334980774
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_PowerfulShots
+      name: FireSpriteSheet_1
       rect:
         serializedVersion: 2
-        x: 31
-        y: 62
-        width: 31
-        height: 31
+        x: 210
+        y: 345
+        width: 70
+        height: 115
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee9adf08f41c0c54a9b3196fc2f1648f
-      internalID: 323937215
+      spriteID: b28c86480235c6644b586e3420d577b0
+      internalID: 1868631689
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Aggravate
+      name: FireSpriteSheet_2
       rect:
         serializedVersion: 2
-        x: 62
-        y: 62
-        width: 31
-        height: 31
+        x: 40
+        y: 185
+        width: 75
+        height: 120
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8939f9bfb91e85b40801c025a0d76af0
-      internalID: -888643439
+      spriteID: 60465fecefd7dd340b45dcd4e99b9a5e
+      internalID: 802688734
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Frenzy
+      name: FireSpriteSheet_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 31
-        width: 31
-        height: 31
+        x: 200
+        y: 185
+        width: 75
+        height: 120
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a31fc0e95200e1f4484caf315807c41b
-      internalID: 761111846
+      spriteID: 631551d0ab85c434b9069798bec13aac
+      internalID: 1145977224
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Perk_Phantasmal
+      name: FireSpriteSheet_4
       rect:
         serializedVersion: 2
-        x: 31
-        y: 31
-        width: 31
-        height: 31
+        x: 40
+        y: 25
+        width: 75
+        height: 115
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: db6d930ca7feb5c4196e8622ff452705
-      internalID: -1634521631
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Perk_Healthy
-      rect:
-        serializedVersion: 2
-        x: 62
-        y: 31
-        width: 31
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f54a4a5f7bf15c24f82d067d5cb262e1
-      internalID: -390532326
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Perk_FarDash
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 31
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2bead81ca8d402741b870541dd547d94
-      internalID: 1599239456
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Perk_BurstFire
-      rect:
-        serializedVersion: 2
-        x: 31
-        y: 0
-        width: 31
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 53cf5bec85b3c0b49a0f28845ef45614
-      internalID: -901719895
+      spriteID: 9a752d4b281e31c48afaba90702a5aa0
+      internalID: 1671233056
       vertices: []
       indices: 
       edges: []
@@ -301,14 +225,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Perk_Aggravate: -888643439
-      Perk_BurstFire: -901719895
-      Perk_FarDash: 1599239456
-      Perk_Frenzy: 761111846
-      Perk_Healthy: -390532326
-      Perk_HeatSinks: 1771556332
-      Perk_Phantasmal: -1634521631
-      Perk_PowerfulShots: 323937215
+      FireSpriteSheet_0: 1334980774
+      FireSpriteSheet_1: 1868631689
+      FireSpriteSheet_2: 802688734
+      FireSpriteSheet_3: 1145977224
+      FireSpriteSheet_4: 1671233056
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -32,6 +32,11 @@ public class Perk : ScriptableObject
 
     [Tooltip("Percentage modifier")]
     public List<float> modifier = new(1);
+
+    [TextArea(3, 10)] 
+    [Tooltip("Tooltip description of what the perk does.")]
+    public string description;
+
 }
 
 [CustomEditor(typeof(Perk))]
@@ -44,6 +49,7 @@ public class PerkEditor : Editor
     SerializedProperty modifier;
     SerializedProperty typeSelected;
     SerializedProperty modificationSelected;
+    SerializedProperty description;
     string[] options;
     string[] mOptions;
 
@@ -56,6 +62,7 @@ public class PerkEditor : Editor
         sprite = serializedObject.FindProperty("sprite");
         typeSelected = serializedObject.FindProperty("typeSelected");
         modificationSelected = serializedObject.FindProperty("modificationSelected");
+        description = serializedObject.FindProperty("description");
         UpdateLists();
     }
 
@@ -123,6 +130,9 @@ public class PerkEditor : Editor
         EditorGUILayout.PropertyField(modifier);
 
         UpdateLists();
+
+        EditorGUILayout.PropertyField(description);
+        
         serializedObject.ApplyModifiedProperties();
     }
 

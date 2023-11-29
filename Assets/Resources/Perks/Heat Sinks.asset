@@ -21,3 +21,4 @@ MonoBehaviour:
   - maxHeat
   modifier:
   - 25
+  description: Your heat capacity is increased by 25%.

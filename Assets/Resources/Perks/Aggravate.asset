@@ -21,3 +21,4 @@ MonoBehaviour:
   - damage
   modifier:
   - 25
+  description: Increases you damage by 25%.

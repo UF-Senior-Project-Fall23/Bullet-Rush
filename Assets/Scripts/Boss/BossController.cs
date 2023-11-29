@@ -181,6 +181,7 @@ public class BossController : MonoBehaviour
     {
         runBosses = bossPrefabs.Keys.OrderBy(x => new System.Random().Next()).Take(3).ToList();
         GameManager.instance.setLevel(0);
+        PerkManager.instance.ResetPerks();
         
         Debug.Log($"Generated new run. Bosses: {string.Join(", ", runBosses)}");
     }
