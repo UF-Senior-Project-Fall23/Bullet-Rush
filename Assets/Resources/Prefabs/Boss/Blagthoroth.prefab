@@ -1101,7 +1101,7 @@ Transform:
   m_GameObject: {fileID: 5934023521031267382}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -79.48, y: 13.58, z: -0.98561156}
+  m_LocalPosition: {x: -238.31168, y: 74.54048, z: -0.98561156}
   m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1123,6 +1123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 240447c636c29f044955ecc3021faf68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BaseAttackCooldown: 1
   MaxHP: 20
   deathParticles: {fileID: 7270446988365586537, guid: 866980469543165428ee8f4fd8f48653, type: 3}
 --- !u!95 &6230863262845722344

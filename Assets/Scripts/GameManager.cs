@@ -109,9 +109,7 @@ public class GameManager : MonoBehaviour
     }
     public Vector3 getNextLevelLocation()
     {
-        // Vector3 nextLevelLocation = levelCoordinates[currentLevel + 1].transform.position;
-        // return nextLevelLocation;
-        return levelCoordinates[1].transform.position;
+        return levelCoordinates.Where((i) => i.name == BossController.instance.BossName || i.name == "DefaultTeleport").FirstOrDefault().transform.position;
     }
     public Vector3 getLootRoomLocation()
     {
@@ -131,6 +129,11 @@ public class GameManager : MonoBehaviour
     public Difficulty getCurrentDifficulty()
     {
         return difficulty;
+    }
+
+    public int getCurrentDifficultyInt()
+    {
+        return ((int)difficulty);
     }
 
     public Vector3 getStartAreaLocation()

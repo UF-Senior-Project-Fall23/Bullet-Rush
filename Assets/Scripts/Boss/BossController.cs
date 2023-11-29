@@ -68,6 +68,7 @@ public class BossController : MonoBehaviour
         Debug.Log("Loading Boss: " + bossName);
         
         currentBossPrefab = bossPrefabs[bossName];
+        BossName = currentBossPrefab.name;
         
         FindObjectOfType<MusicManager>()?.LoadBossMusic(bossName);
     }
@@ -166,6 +167,6 @@ public class BossController : MonoBehaviour
     {
         string boss = runBosses[index];
         LoadBoss(boss);
-        SummonBoss(new Vector3(-75, 25), 40); // TODO: Make this automatically adjust based on the boss
+        SummonBoss(currentBossPrefab.transform.position, 40); // TODO: Make this automatically adjust based on the boss
     }
 }
