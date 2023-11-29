@@ -60,6 +60,9 @@ TagManager:
   - name: LeftStairs
     uniqueID: 2047069201
     locked: 0
+  - name: Bullet
+    uniqueID: 1451688987
+    locked: 0
   - name: HUD
     uniqueID: 1183204077
     locked: 0

@@ -11,8 +11,13 @@ using Random = UnityEngine.Random;
 
 public class Blagthoroth : MonoBehaviour, Boss, IHealth
 {
+    public float BaseAttackCooldown = 1f;
+
     public float MaxHP = 5.0f;
     private float m_CurrHP;
+
+    private float m_DifficultyModifier;
+    private float m_LevelModifier;
 
     public GameObject deathParticles;
 
@@ -35,13 +40,15 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
     {
         m_CurrHP = MaxHP;
         m_Animator = GetComponent<Animator>();
+        m_DifficultyModifier = GameManager.instance.getCurrentDifficultyInt() * 0.5f + 1;
+        m_LevelModifier = (GameManager.instance.getCurrentLevel() - 1) * 0.5f + 1;
     }
 
-    IEnumerator Firebolt(int count)
+    IEnumerator Firebolt(float countModifier, float speedModifier)
     {
         List<GameObject> indicators = new();
 
-        foreach (var _ in Enumerable.Range(0, count))
+        foreach (var _ in Enumerable.Range(0, Convert.ToInt32(3*countModifier)))
         {
             //Get the player postition relative to the boss
             Vector3 playerPos = BossController.instance.GetPredictedPos(3.0f) - transform.position;
@@ -55,11 +62,12 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
 
             indicator.transform.localScale = new Vector3(1, playerPos.magnitude, 1);
             indicators.Add(indicator);
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.15f/speedModifier);
         }
-        
 
-        foreach(var indicator in indicators)
+        yield return new WaitForSeconds(.25f / speedModifier);
+
+        foreach (var indicator in indicators)
         {
             //Fire a bullet at the player based on its position
             GameObject bullet = Instantiate(
@@ -79,7 +87,7 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
         PhaseChange();
     }
 
-    IEnumerator Cinder_Cluster()
+    IEnumerator Cinder_Cluster(float shardModifier, float speedModifier)
     {
         GameObject bulletPreFab = GameManager.instance.getBulletPrefab("Cinder Cluster");
 
@@ -103,11 +111,12 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
             indicator.transform.rotation
         );
         bullet.transform.Rotate(0, 0, 180);
+        bullet.GetComponent<CinderCluster>().ShardCount = Convert.ToInt32(bullet.GetComponent<CinderCluster>().ShardCount * shardModifier);
 
         BossController.instance.RemoveIndicator(indicator);
 
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
+        rb.AddForce(bullet.transform.up * 20f * speedModifier, ForceMode2D.Impulse);
         
 
         yield return new WaitForSeconds(1f);
@@ -210,37 +219,52 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
         PhaseChange();
     }
 
-    IEnumerator Flame_Strike()
+    IEnumerator Flame_Strike(float speedModifier, float sizeModifier)
     {
+        float basesize = 4 * sizeModifier;
         GameObject indicator = BossController.instance.IndicateCircle(
            PlayerController.instance.transform.position,
            Quaternion.identity
         );
-        indicator.transform.localScale = new Vector3(4, 4, 1);
+        indicator.transform.localScale = new Vector3(basesize, basesize, 1);
 
-        float startSize = indicator.transform.localScale.x;
+        float size = basesize;
+        float startTime = Time.time;
 
-        for (float size = startSize; size >= 0; size -= startSize/100)
+        while (size > 0f)
         {
+            var elapsedTime = Time.time - startTime;
+            size = 4 - (Mathf.Clamp01(elapsedTime / (1/speedModifier)) * 4);
             indicator.transform.localScale = new Vector3(size, size, 1);
-            yield return new WaitForSeconds(.01f);
+            yield return null;
         }
 
-        Instantiate(
+        var fs = Instantiate(
             GameManager.instance.getBulletPrefab("Flame Strike"),
             indicator.transform.position,
             indicator.transform.rotation
         );
+        fs.transform.localScale *= sizeModifier;
         BossController.instance.RemoveIndicator(indicator);
         yield return new WaitForSeconds(.25f);
         PhaseChange();
     }
 
-    IEnumerator Radial_Blast()
+    IEnumerator Radial_Blast(float speedModifier)
     {
         foreach(var _ in Enumerable.Range(0, 1))
         {
+            for (float i = Mathf.PI / 2; i <= 3 * Mathf.PI / 2; i += Mathf.PI / 12)
+            {
+                var indicator = BossController.instance.Indicate(
+                    new Vector3(transform.position.x, transform.position.y, 1),
+                    Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
+                );
+                indicator.transform.localScale = new Vector3(1, 20, 1);
+                indicator.transform.position += indicator.transform.up * 10;
+            }
             yield return new WaitForSeconds(.5f);
+            BossController.instance.removeAllIndicators();
             for (float i = Mathf.PI / 2; i <= 3 * Mathf.PI / 2; i += Mathf.PI / 12)
             {
                 GameObject bullet = Instantiate(
@@ -250,10 +274,20 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
                 );
 
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
+                rb.AddForce(bullet.transform.up * 20f * speedModifier, ForceMode2D.Impulse);
+            }
+            for (float i = 13 * Mathf.PI / 24; i <= 37 * Mathf.PI / 24; i += Mathf.PI / 12)
+            {
+                var indicator = BossController.instance.Indicate(
+                    new Vector3(transform.position.x, transform.position.y, 1),
+                    Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
+                );
+                indicator.transform.localScale = new Vector3(1, 20, 1);
+                indicator.transform.position += indicator.transform.up * 10;
             }
             yield return new WaitForSeconds(.5f);
-            for (float i = 13 * Mathf.PI / 24; i <= 37 * Mathf.PI / 24; i += Mathf.PI / 12)
+            BossController.instance.removeAllIndicators();
+            for (float i = 13 * Mathf.PI / 24; i <= 35 * Mathf.PI / 24; i += Mathf.PI / 12)
             {
                 GameObject bullet = Instantiate(
                     GameManager.instance.getBulletPrefab("Radial Blast"),
@@ -262,7 +296,7 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
                 );
 
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
+                rb.AddForce(bullet.transform.up * 20f * speedModifier, ForceMode2D.Impulse);
             }
             yield return new WaitForSeconds(.5f);
         }
@@ -310,6 +344,8 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
         if (m_CurrHP <= MaxHP / 2 && !m_carcinized)
         {
             StartCoroutine(Carcinization());
+            m_DifficultyModifier *= 1.5f;
+            m_LevelModifier *= 1.5f;
         }
         else
         {
@@ -318,19 +354,19 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
             switch (r)
             {
                 case 0:
-                    StartCoroutine(Firebolt(m_carcinized ? 6 : 4));
+                    StartCoroutine(Firebolt(m_DifficultyModifier, m_LevelModifier));
                     break;
                 case 1:
-                    StartCoroutine(Cinder_Cluster());
+                    StartCoroutine(Cinder_Cluster(m_DifficultyModifier, m_LevelModifier));
                     break;
                 case 2:
                     StartCoroutine(Pinch());
                     break;
                 case 3:
-                    StartCoroutine(Flame_Strike());
+                    StartCoroutine(Flame_Strike(m_DifficultyModifier, m_LevelModifier));
                     break;
                 case 4:
-                    StartCoroutine(Radial_Blast());
+                    StartCoroutine(Radial_Blast(m_DifficultyModifier));
                     break;
                 default:
                     PhaseChange();

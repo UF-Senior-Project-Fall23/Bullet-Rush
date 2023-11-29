@@ -4795,8 +4795,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1451688987
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_RenderMode: 4
   m_MeshDistribution: 0
@@ -4948,6 +4948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44316fe64ce461641895fb10bd9d2e5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShardCount: 8
 --- !u!4 &1082959636033589434 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6992979119922663774, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
