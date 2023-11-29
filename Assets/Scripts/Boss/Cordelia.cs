@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Cordelia : MonoBehaviour, Boss
+public class Cordelia : MonoBehaviour, Boss, IHealth
 {
     public GameObject bulletPreFab;
     public GameObject puppetPreFab;
@@ -40,8 +40,18 @@ public class Cordelia : MonoBehaviour, Boss
     
     private List<GameObject> puppets = new List<GameObject>();
 
+
+    //IHealth Stuff
+    public float MaxHP = 5.0f;
+    private float m_CurrHP;
+    bool m_invulnerable = false;
+    public float MaxHealth { get => MaxHP; set => MaxHP = value; }
+    public float CurrentHealth { get => m_CurrHP; set => m_CurrHP = value; }
+    public bool Invulnerable { get => m_invulnerable; set => m_invulnerable = value; }
+
     void Start()
     {
+        m_CurrHP = MaxHP;
         StartCoroutine(SummonPuppets());
         cb = BossController.instance.currentBoss;
         playerPos = PlayerController.instance.gameObject.transform.position;
@@ -389,28 +399,27 @@ public class Cordelia : MonoBehaviour, Boss
         }
         }
 
-    //Run this so the boss controller wont call bosslogic anymore
-    private void OnDestroy()
+    public void Die()
     {
         if (!isPuppet)
         {
             // kills any remaining puppets once Cordelia dies
             for (int i = 0; i < puppets.Count; i++)
             {
-                if(puppets[i] != null) 
+                if (puppets[i] != null)
                 {
                     int damage = (int)MathF.Floor(puppets[i].GetComponent<IHealth>().MaxHealth);
                     puppets[i].GetComponent<IHealth>().takeDamage(damage);
                 }
             }
-            
+
             BossController.instance.BossDie(transform.position, transform.rotation);
         }
         else
         {
             BossController.instance.MinionDie();
         }
-        
+        Destroy(gameObject);
     }
 
 }
