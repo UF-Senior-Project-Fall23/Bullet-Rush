@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
-    public List<GameObject> levelCoordinates;
+    public Dictionary<string, Vector3> warpCoordinates;
     public Dictionary<string, GameObject> bulletPrefabs;
 
     public static float gameTime = 0f;
@@ -52,6 +52,16 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             SceneManager.sceneLoaded += OnSceneLoaded;
+            warpCoordinates = new();
+            warpCoordinates["Default"] = new Vector3(30, 24, 0); // Set to Start Area
+            foreach (Transform child in transform)
+            {
+                if (child.gameObject.CompareTag("Teleport"))
+                {
+                    var warpname = child.gameObject.name;
+                    warpCoordinates[warpname.Remove(warpname.LastIndexOf("Teleport"))] = child.position;
+                }
+            }
         }
         else
         {
@@ -62,17 +72,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         roomType = RoomType.Start;
-        //levelCoordinates[0] is the lootRoom location
-        //levelCoordinates[1] is level 1 location
-        //... and so on
-        //levelCoordinates[6] is the start room
-        foreach (Transform child in transform)
-        {
-            if (child.gameObject.CompareTag("Teleport"))
-            {
-                levelCoordinates.Add(child.gameObject);
-            }
-        }
 
         bulletPrefabs = Resources.LoadAll<GameObject>("Prefabs/Bullets").ToDictionary(x => x.name, x => x);
     }
@@ -109,12 +108,22 @@ public class GameManager : MonoBehaviour
     }
     public Vector3 getNextLevelLocation()
     {
-        return levelCoordinates.Where((i) => i.name == BossController.instance.BossName || i.name == "DefaultTeleport").FirstOrDefault().transform.position;
+        return getWarpLocation(BossController.instance.BossName);
     }
+
+    public Vector3 getWarpLocation(string destination)
+    {
+        if (warpCoordinates.ContainsKey(destination))
+        {
+            return warpCoordinates[destination];
+        }
+        
+        return warpCoordinates["Default"];
+    }
+    
     public Vector3 getLootRoomLocation()
     {
-        Vector3 lootRoomVector = levelCoordinates[0].transform.position;
-        return lootRoomVector;
+        return getWarpLocation("LootRoom");
     }
 
     public GameObject getBulletPrefab(string name)
@@ -138,7 +147,7 @@ public class GameManager : MonoBehaviour
 
     public Vector3 getStartAreaLocation()
     {
-        return new Vector3(30, 25, 0);
+        return getWarpLocation("StartArea");
     }
 
     public Vector3 getLootRoomExitLocation()
