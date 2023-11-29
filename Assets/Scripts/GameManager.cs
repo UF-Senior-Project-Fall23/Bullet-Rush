@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
                     warpCoordinates[warpname.Remove(warpname.LastIndexOf("Teleport"))] = child.position;
                 }
             }
+            Debug.LogWarning($"Created Warp Locations {string.Join(", ", warpCoordinates)}");
         }
         else
         {
@@ -108,16 +109,22 @@ public class GameManager : MonoBehaviour
     }
     public Vector3 getNextLevelLocation()
     {
-        return getWarpLocation(BossController.instance.BossName);
+        return getWarpLocation(BossController.instance.currentBoss.name);
     }
 
     public Vector3 getWarpLocation(string destination)
     {
+        if (destination.EndsWith("(Clone)"))
+        {
+            destination = destination.Remove(destination.LastIndexOf("(Clone)"));
+        }
+        
         if (warpCoordinates.ContainsKey(destination))
         {
             return warpCoordinates[destination];
         }
-        
+
+        Debug.LogWarning($"Error! Attempting to warp to unknown destination \"{destination}\"");
         return warpCoordinates["Default"];
     }
     

@@ -8,7 +8,7 @@ public class FillableBar : MonoBehaviour
     public string name;
     public static Dictionary<string, FillableBar> AllBars = new();
 
-    void Start()
+    void Awake()
     {
         barImage = GetComponent<Image>();
         AllBars[name] = GetComponent<FillableBar>();

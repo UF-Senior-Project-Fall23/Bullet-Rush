@@ -14,6 +14,9 @@ public class Blagthoroth : Damageable, Boss
     public GameObject deathParticles;
 
     private Animator m_Animator;
+    private float m_DifficultyModifier;
+    private float m_LevelModifier;
+    public float BaseAttackCooldown = 1f;
     
     bool m_carcinized = false;
     

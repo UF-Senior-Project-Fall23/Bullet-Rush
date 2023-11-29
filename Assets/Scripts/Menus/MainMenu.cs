@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
     {
         GameObject.FindWithTag("MusicManager").GetComponent<MusicManager>().FadeOut(0.5f);
 
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("AlphaTest");
     }
 
     public void ExitButton()

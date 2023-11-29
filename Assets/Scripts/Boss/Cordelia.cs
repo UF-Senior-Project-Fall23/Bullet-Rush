@@ -383,35 +383,25 @@ public class Cordelia : Damageable, Boss
         {
             timeIndicator = true;
         }
-        }
+    }
 
-    //Run this so the boss controller wont call bosslogic anymore
-    private void OnDestroy()
+    public override void Die()
     {
         if (!isPuppet)
         {
             // kills any remaining puppets once Cordelia dies
-            for (int i = 0; i < puppets.Count; i++)
+            foreach (var puppet in puppets)
             {
-                if(puppets[i] != null) 
+                if(puppet is not null) 
                 {
-                    int damage = (int)MathF.Floor(puppets[i].GetComponent<Damageable>().MaxHealth);
-                    puppets[i].GetComponent<Damageable>().takeDamage(damage);
+                    var puppetHP = puppet.GetComponent<Damageable>();
+                    puppetHP?.takeDamage(puppetHP.MaxHealth);
                 }
             }
             
             BossController.instance.BossDie(transform.position, transform.rotation);
         }
-        else
-        {
-            BossController.instance.MinionDie();
-        }
-        
-    }
-
-    public override void Die()
-    {
-        
+        Destroy(gameObject);
     }
     
 

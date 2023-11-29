@@ -16,7 +16,6 @@ public class BossController : MonoBehaviour
 
     public GameObject currentBoss = null;
     public Dictionary<string, GameObject> bossPrefabs;
-    public String BossName;
     public GameObject portalPrefab;
     public GameObject indicatorPrefab;
     public GameObject CircleIndicatorPrefab;
@@ -175,6 +174,6 @@ public class BossController : MonoBehaviour
     {
         string boss = runBosses[index];
         LoadBoss(boss);
-        SummonBoss(currentBossPrefab.transform.position, 40); // TODO: Make this automatically adjust based on the boss
+        SummonBoss(currentBossPrefab.transform.position, 50); // TODO: Make HP automatically adjust based on the boss
     }
 }
