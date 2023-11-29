@@ -49,11 +49,12 @@ public class Portal : MonoBehaviour
             case "Boss":
                 Debug.Log("Teleport To Next Level");
                 EnterBossRoom.Invoke();
-                
+
+                bossManager.StartBoss(gameManager.getCurrentLevel());
+
                 playerCollision.transform.position = gameManager.getNextLevelLocation();
                 newRoom = RoomType.Boss;
                 
-                bossManager.StartBoss(gameManager.getCurrentLevel());
                 gameManager.incrementLevel();
                 break;
             
@@ -63,11 +64,11 @@ public class Portal : MonoBehaviour
                 
                 // Initialization code, the rest is just the boss case but again (C# is bad and doesn't have fallthrough)
                 bossManager.GenerateRun();
-                
+
+                bossManager.StartBoss(gameManager.getCurrentLevel());
                 playerCollision.transform.position = gameManager.getNextLevelLocation();
                 newRoom = RoomType.Boss;
                 
-                bossManager.StartBoss(gameManager.getCurrentLevel());
                 gameManager.incrementLevel();
                 break;
             

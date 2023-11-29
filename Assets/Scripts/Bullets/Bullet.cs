@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float damage;
+    public bool IsPiercing = false;
     bool m_alive = true;
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -16,7 +17,8 @@ public class Bullet : MonoBehaviour
         else
             collision.GetComponentInParent<Damageable>()?.takeDamage(damage);
         
-        Destroy(gameObject);
+        if(!IsPiercing)
+            Destroy(gameObject);
         m_alive = false;
     }
 

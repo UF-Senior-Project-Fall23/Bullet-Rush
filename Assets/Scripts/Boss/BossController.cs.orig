@@ -74,7 +74,11 @@ public class BossController : MonoBehaviour
         Debug.Log("Loading Boss: " + bossName);
         
         currentBossPrefab = bossPrefabs[bossName];
+<<<<<<< HEAD
         BossHPBar.instance.SetFrame(bossName);
+=======
+        BossName = currentBossPrefab.name;
+>>>>>>> origin/main
         
         FindObjectOfType<MusicManager>()?.LoadBossMusic(bossName);
     }
