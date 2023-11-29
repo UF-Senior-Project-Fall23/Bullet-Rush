@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3264349695335683950}
   - component: {fileID: 8461969522309716461}
   - component: {fileID: 8654301126200762869}
-  - component: {fileID: 5734584593115784832}
   - component: {fileID: -1010764644532094229}
   - component: {fileID: -4167771728942715207}
   m_Layer: 0
@@ -136,26 +135,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2a6f692f977c241bd2c8acaf4fd496, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  HPChange:
+    m_PersistentCalls:
+      m_Calls: []
   bulletPreFab: {fileID: 7198250052750651505, guid: 7dee2bc374dd7ca48af642f035054302, type: 3}
   puppetPreFab: {fileID: 7764645947890026743}
   dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
   puppetCount: 0
   isPuppet: 1
   attackNum: 4
---- !u!114 &5734584593115784832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7764645947890026743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd15d192346f69c4dbca1b0d31f0d1b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 1
-  MaxHP: 5
 --- !u!114 &-1010764644532094229
 MonoBehaviour:
   m_ObjectHideFlags: 0

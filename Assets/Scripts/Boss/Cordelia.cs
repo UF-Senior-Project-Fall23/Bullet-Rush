@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Cordelia : MonoBehaviour, Boss
+public class Cordelia : Damageable, Boss
 {
     public GameObject bulletPreFab;
     public GameObject puppetPreFab;
@@ -45,8 +45,6 @@ public class Cordelia : MonoBehaviour, Boss
         StartCoroutine(SummonPuppets());
         cb = BossController.instance.currentBoss;
         playerPos = PlayerController.instance.gameObject.transform.position;
-
-        
     }
 
     public string[] Attacks { get; } =
@@ -62,7 +60,7 @@ public class Cordelia : MonoBehaviour, Boss
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Collision with " + collision.gameObject.name);
-        Debug.Log(collision.gameObject.tag);
+        //Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Wall" && rushMode)
         {
             rushDirection = Vector3.Reflect(rushDirection.normalized, collision.contacts[0].normal);
@@ -120,8 +118,6 @@ public class Cordelia : MonoBehaviour, Boss
             
         }
         
-
-        
         
         yield return null;
     }
@@ -149,7 +145,7 @@ public class Cordelia : MonoBehaviour, Boss
             {
                 GameObject puppet = Instantiate(puppetPreFab, bossPos, Quaternion.identity);
                 puppets.Add(puppet);
-                puppet.GetComponent<IHealth>().MaxHealth = health;
+                puppet.GetComponent<Damageable>().MaxHealth = health;
                 StartCoroutine(puppet.GetComponent<Boss>().StartPhase());
                 bossPos = new Vector3(-74 + i, 11 + i, 0);
                 puppet.GetComponent<puppetAttack>().attack = attackNum;
@@ -168,8 +164,8 @@ public class Cordelia : MonoBehaviour, Boss
                 {
                     // explode animation
                     // check if player is in range and do damage if they are.
-                    int damage = (int)MathF.Floor(puppets[i].GetComponent<IHealth>().MaxHealth);
-                    puppets[i].GetComponent<IHealth>().takeDamage(damage);
+                    int damage = (int)MathF.Floor(puppets[i].GetComponent<Damageable>().MaxHealth);
+                    puppets[i].GetComponent<Damageable>().takeDamage(damage);
                 }
             }
 
@@ -299,8 +295,8 @@ public class Cordelia : MonoBehaviour, Boss
 
         // sets Cordelia's attack if the time has counted down from 6
         // lasts a second
-        Debug.Log(second);
-        Debug.Log(attackNum);
+        //Debug.Log(second);
+        //Debug.Log(attackNum);
         if (second == 0 && !isPuppet)
         {
             if (!isPuppet)
@@ -399,8 +395,8 @@ public class Cordelia : MonoBehaviour, Boss
             {
                 if(puppets[i] != null) 
                 {
-                    int damage = (int)MathF.Floor(puppets[i].GetComponent<IHealth>().MaxHealth);
-                    puppets[i].GetComponent<IHealth>().takeDamage(damage);
+                    int damage = (int)MathF.Floor(puppets[i].GetComponent<Damageable>().MaxHealth);
+                    puppets[i].GetComponent<Damageable>().takeDamage(damage);
                 }
             }
             
@@ -412,5 +408,11 @@ public class Cordelia : MonoBehaviour, Boss
         }
         
     }
+
+    public override void Die()
+    {
+        
+    }
+    
 
 }

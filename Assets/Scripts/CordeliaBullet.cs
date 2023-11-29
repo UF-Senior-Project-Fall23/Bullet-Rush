@@ -15,7 +15,7 @@ public class CordeliaBullet : MonoBehaviour
         {
             Destroy(gameObject);
             m_alive = false;
-            collision.GetComponent<IHealth>()?.takeDamage(damage);
+            collision.GetComponent<Damageable>()?.takeDamage(damage);
         }
 
     }

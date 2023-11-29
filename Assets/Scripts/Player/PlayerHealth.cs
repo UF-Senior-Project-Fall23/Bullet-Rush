@@ -1,50 +1,50 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class PlayerHealth : MonoBehaviour, IHealth
+public class PlayerHealth : Damageable
 {
-    //Is Invulnerable
-    bool m_invulnerable = false;
-
-    float oldMaxHP;
-
-    //Player current health
-    float m_currHealth;
-
-    public float MaxHealth { get => PlayerController.instance.stats.GetStat("Health").value; set => PlayerController.instance.stats.SetStat("Health", value); }
-    public float CurrentHealth { get => m_currHealth; set => m_currHealth = value; }
-    public bool Invulnerable { get => m_invulnerable; set => m_invulnerable = value; }
-
-    [HideInInspector]
-    public UnityEvent PlayerHealthChanged;
+    public float baseMaxHP;
 
     void Awake()
     {
-        m_currHealth = MaxHealth;
-        oldMaxHP = MaxHealth;
-        PlayerController.instance.stats.onStatUpdate.AddListener(UpdateMaxHP);
-        PlayerHealthChanged.AddListener(HPChange);
+        MaxHealth = baseMaxHP;
+        CurrentHealth = baseMaxHP;
+        
+        PlayerController.instance.stats.onStatUpdate.AddListener(UpdateMaxHPStat);
+        HPChange.AddListener(UpdateHPBar);
+        HPChange.AddListener(UpdateHealthStat);
+        Portal.EnterLootRoom.AddListener(LootRoomHeal);
     }
 
-    public void Die()
+    public override void Die()
     {
         Destroy(gameObject);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void UpdateMaxHP()
+    // Runs exclusively when the PlayerStats's Max HP manager changes.
+    public void UpdateMaxHPStat()
     {
-        CurrentHealth += MaxHealth - oldMaxHP;
-        oldMaxHP = MaxHealth;
-        PlayerHealthChanged.Invoke();
+        var oldMaxHP = MaxHealth;
+        MaxHealth = PlayerController.instance.stats.GetStat("Health").value;
+        CurrentHealth += MaxHealth - oldMaxHP; // Heal or damage based on HP change.
     }
 
-    public void HPChange()
+    public void UpdateHPBar(float current, float max)
     {
-        FillableBar.AllBars["Player"].SetFill(CurrentHealth, MaxHealth);
+        Debug.LogWarning($"Setting Player HP Bar to {current}/{max}");
+        FillableBar.AllBars["Player"].SetFill(current, max);
+    }
+
+    void UpdateHealthStat(float current, float max)
+    {
+        PlayerController.instance.stats.SetStat("Health", max);
+    }
+
+    void LootRoomHeal()
+    {
+        CurrentHealth += Mathf.Round(CurrentHealth * 0.33f);
     }
 
 }

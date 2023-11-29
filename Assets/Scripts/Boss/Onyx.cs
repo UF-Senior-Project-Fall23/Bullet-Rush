@@ -5,13 +5,11 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Onyx : MonoBehaviour, Boss, IHealth
+public class Onyx : Damageable, Boss
 {
     float m_MaxBulletVelocity;
-
-    public float MaxHP = 5.0f;
+    
     public float speed = 5.0f;
-    private float m_CurrHP;
 
     private Animator m_Animator;
     public ParticleSystem fireParticlesR;
@@ -27,11 +25,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
     private int difficulty = 0; //0 = easy, 1 = medium, 2 = hard
     private float difficultyMultiplier = 1f;
     private int level = 0;
-
-    //IHealth Stuff
-    public float MaxHealth { get => MaxHP; set => MaxHP = value; }
-    public float CurrentHealth { get => m_CurrHP; set => m_CurrHP = value; }
-    public bool Invulnerable { get => m_invulnerable; set => m_invulnerable = value; }
+    
     private Rigidbody2D OnyxRB;
     public string[] Attacks { get; } =
     {
@@ -40,7 +34,6 @@ public class Onyx : MonoBehaviour, Boss, IHealth
 
     void Start()
     {
-        m_CurrHP = MaxHP;
         m_MaxBulletVelocity = 40f;
         m_Animator = GetComponent<Animator>();
         GameObject gameManagerObject = GameObject.Find("GameManager");
@@ -619,7 +612,7 @@ public class Onyx : MonoBehaviour, Boss, IHealth
         PhaseChange();
     }
 
-    public void Die()
+    public override void Die()
     {
         Invulnerable = true;
         StopAllCoroutines();

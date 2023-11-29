@@ -22,12 +22,7 @@ public class BossController : MonoBehaviour
     public GameObject CircleIndicatorPrefab;
     
     public GameObject inidcatorSmallPrefab;
-
-    public GameObject bossHPFrame;
-    public Sprite cordeliaFrame;
-    public Sprite blagFrame;
-    public Sprite onyxFrame;
-    public Sprite defaultFrame;
+    
 
     public List<string> runBosses; // The list of bosses for the currently generated run, in order.
 
@@ -66,7 +61,11 @@ public class BossController : MonoBehaviour
     public void SummonBoss(Vector3 pos, float health)
     {
         currentBoss = Instantiate(currentBossPrefab, pos, Quaternion.identity);
-        currentBoss.GetComponent<IHealth>().MaxHealth = health;
+        
+        currentBoss.GetComponent<Damageable>().MaxHealth = health;
+        currentBoss.GetComponent<Damageable>().CurrentHealth = health;
+        
+        BossHPBar.instance.Setup(currentBoss);
         StartCoroutine(currentBoss.GetComponent<Boss>().StartPhase());
     }
 
@@ -75,23 +74,7 @@ public class BossController : MonoBehaviour
         Debug.Log("Loading Boss: " + bossName);
         
         currentBossPrefab = bossPrefabs[bossName];
-
-        Image img = bossHPFrame.GetComponent<Image>();
-        switch (bossName)
-        {
-            case "Cordelia":
-                img.sprite = cordeliaFrame;
-                break;
-            case "Blagthoroth":
-                img.sprite = blagFrame;
-                break;
-            case "Onyx":
-                img.sprite = onyxFrame;
-                break;
-            default:
-                img.sprite = defaultFrame;
-                break;
-        }
+        BossHPBar.instance.SetFrame(bossName);
         
         FindObjectOfType<MusicManager>()?.LoadBossMusic(bossName);
     }
@@ -99,6 +82,8 @@ public class BossController : MonoBehaviour
     public void BossDie(Vector3 deathPos, Quaternion deathAng)
     {
         Debug.Log("Boss Died");
+        
+        BossHPBar.instance.SetHPBarHidden(true);
 
         GameObject portal;
         
