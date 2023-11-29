@@ -11,12 +11,11 @@ GameObject:
   - component: {fileID: 3732775025458630300}
   - component: {fileID: 3264349695335683950}
   - component: {fileID: 8461969522309716461}
-  - component: {fileID: 8654301126200762869}
-  - component: {fileID: -1010764644532094229}
   - component: {fileID: -4167771728942715207}
+  - component: {fileID: 8906719625648117746}
   m_Layer: 0
   m_Name: Puppet
-  m_TagString: Boss
+  m_TagString: Clone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,38 +122,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.28, y: 0.35}
   m_Direction: 0
---- !u!114 &8654301126200762869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7764645947890026743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c2a6f692f977c241bd2c8acaf4fd496, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletPreFab: {fileID: 7198250052750651505, guid: 7dee2bc374dd7ca48af642f035054302, type: 3}
-  puppetPreFab: {fileID: 7764645947890026743}
-  dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
-  puppetCount: 0
-  isPuppet: 1
-  attackNum: 4
-  MaxHP: 5
---- !u!114 &-1010764644532094229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7764645947890026743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9365ddac0c9b264439c96cf49901f91d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  a: 7
 --- !u!50 &-4167771728942715207
 Rigidbody2D:
   serializedVersion: 4
@@ -182,3 +149,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &8906719625648117746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7764645947890026743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9365ddac0c9b264439c96cf49901f91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  a: 7
+  bulletPreFab: {fileID: 7198250052750651505, guid: 7dee2bc374dd7ca48af642f035054302, type: 3}
+  dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
+  MaxHP: 5
