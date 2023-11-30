@@ -70,7 +70,7 @@ public class blade : Weapon {
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.tag == "Enemy") {
             //other.GetComponent<Enemy>().TakeDamage(damage);
-            collision.GetComponent<IHealth>()?.takeDamage(damage);
+            collision.GetComponent<Damageable>()?.takeDamage(damage);
             Debug.Log("Enemy hit");
         }
     }

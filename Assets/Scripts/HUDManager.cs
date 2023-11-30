@@ -37,11 +37,11 @@ public class HUDManager : MonoBehaviour
     {
         weaponText.text = "Weapon: None";
         UpdateScoreText();
-        UpdateHealthText();
+        UpdateHealthText(PlayerController.instance.health.CurrentHealth, PlayerController.instance.health.MaxHealth);
         UpdateDifficultyText();
         UpdateLevelText();
 
-        PlayerController.instance.health.PlayerHealthChanged.AddListener(UpdateHealthText);
+        PlayerController.instance.health.HPChange.AddListener(UpdateHealthText);
         GameManager.instance.ScoreChanged.AddListener(UpdateScoreText);
         GameManager.instance.DifficultyChanged.AddListener(UpdateDifficultyText);
         GameManager.instance.LevelChanged.AddListener(UpdateLevelText);
@@ -52,9 +52,10 @@ public class HUDManager : MonoBehaviour
         timeText.text = "Time Elapsed: " + Mathf.Floor(GameManager.gameTime).ToString();
     }
 
-    void UpdateHealthText()
+    void UpdateHealthText(float current, float max)
     {
-        healthText.text = "Health: " + PlayerController.instance.health.CurrentHealth.ToString();
+        Debug.LogWarning($"Setting HP Text to {current}/{max}");
+        healthText.text = $"HP: {current}/{max}";
     }
 
     void UpdateScoreText()

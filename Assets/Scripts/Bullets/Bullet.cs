@@ -12,10 +12,10 @@ public class Bullet : MonoBehaviour
     {
         Debug.Log("Bullet hit " + collision.gameObject.name);
 
-        if(collision.GetComponent<IHealth>() != null)
-            collision.GetComponent<IHealth>().takeDamage(damage);
+        if(collision.GetComponent<Damageable>() != null)
+            collision.GetComponent<Damageable>().takeDamage(damage);
         else
-            collision.GetComponentInParent<IHealth>()?.takeDamage(damage);
+            collision.GetComponentInParent<Damageable>()?.takeDamage(damage);
         
         if(!IsPiercing)
             Destroy(gameObject);

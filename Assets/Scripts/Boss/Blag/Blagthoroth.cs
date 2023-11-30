@@ -9,27 +9,17 @@ using UnityEngine.Rendering;
 using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 
-public class Blagthoroth : MonoBehaviour, Boss, IHealth
+public class Blagthoroth : Damageable, Boss
 {
-    public float BaseAttackCooldown = 1f;
-
-    public float MaxHP = 5.0f;
-    private float m_CurrHP;
-
-    private float m_DifficultyModifier;
-    private float m_LevelModifier;
-
     public GameObject deathParticles;
 
     private Animator m_Animator;
-
-    bool m_invulnerable = false;
+    private float m_DifficultyModifier;
+    private float m_LevelModifier;
+    public float BaseAttackCooldown = 1f;
+    
     bool m_carcinized = false;
-
-    //IHealth Stuff
-    public float MaxHealth { get => MaxHP; set => MaxHP = value; }
-    public float CurrentHealth { get => m_CurrHP; set => m_CurrHP = value; }
-    public bool Invulnerable { get => m_invulnerable; set => m_invulnerable = value; }
+    
 
     public string[] Attacks { get; } =
     {
@@ -38,7 +28,6 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
 
     void Start()
     {
-        m_CurrHP = MaxHP;
         m_Animator = GetComponent<Animator>();
         m_DifficultyModifier = GameManager.instance.getCurrentDifficultyInt() * 0.5f + 1;
         m_LevelModifier = (GameManager.instance.getCurrentLevel() - 1) * 0.5f + 1;
@@ -167,7 +156,7 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
 
         //Setting flags
         m_carcinized = true;
-        m_invulnerable = true;
+        Invulnerable = true;
         m_Animator.SetTrigger("Carcinization");
         yield return new WaitForSeconds(1f);
 
@@ -214,7 +203,7 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
 
         //Finish Phase
         m_Animator.SetTrigger("Finish Attack");
-        m_invulnerable = false;
+        Invulnerable = false;
         yield return new WaitUntil(() => m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"));
         PhaseChange();
     }
@@ -341,7 +330,7 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
 
     public void PhaseChange()
     {
-        if (m_CurrHP <= MaxHP / 2 && !m_carcinized)
+        if (CurrentHealth <= MaxHealth / 2 && !m_carcinized)
         {
             StartCoroutine(Carcinization());
             m_DifficultyModifier *= 1.5f;
@@ -385,7 +374,7 @@ public class Blagthoroth : MonoBehaviour, Boss, IHealth
         PhaseChange();
     }
 
-    public void Die()
+    public override void Die()
     {
         Invulnerable = true;
         StopAllCoroutines();

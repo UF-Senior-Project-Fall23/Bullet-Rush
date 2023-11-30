@@ -8,6 +8,6 @@ public class BlagClaw : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
-            collision.gameObject.GetComponent<IHealth>().takeDamage(Damage);
+            collision.gameObject.GetComponent<Damageable>().takeDamage(Damage);
     }
 }

@@ -5,20 +5,14 @@ using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class EvilCube : MonoBehaviour, Boss, IHealth
+public class EvilCube : Damageable, Boss
 {
     public GameObject bulletPreFab;
     float m_MaxBulletVelocity;
 
     public float MaxHP = 5.0f;
     private float m_CurrHP;
-
-    bool m_invulnerable = false;
-
-    //IHealth Stuff
-    public float MaxHealth { get => MaxHP; set => MaxHP = value; }
-    public float CurrentHealth { get => m_CurrHP; set => m_CurrHP = value; }
-    public bool Invulnerable { get => m_invulnerable; set => m_invulnerable = value; }
+    
 
     public string[] Attacks { get; } =
     {
@@ -143,7 +137,7 @@ public class EvilCube : MonoBehaviour, Boss, IHealth
         PhaseChange();
     }
 
-    public void Die()
+    public override void Die()
     {
         gameObject.GetComponent<Collider2D>().enabled = false;
         StopAllCoroutines();

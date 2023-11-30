@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossController : MonoBehaviour
 {
@@ -15,12 +16,12 @@ public class BossController : MonoBehaviour
 
     public GameObject currentBoss = null;
     public Dictionary<string, GameObject> bossPrefabs;
-    public String BossName;
     public GameObject portalPrefab;
     public GameObject indicatorPrefab;
     public GameObject CircleIndicatorPrefab;
     
     public GameObject inidcatorSmallPrefab;
+    
 
     public List<string> runBosses; // The list of bosses for the currently generated run, in order.
 
@@ -59,7 +60,11 @@ public class BossController : MonoBehaviour
     public void SummonBoss(Vector3 pos, float health)
     {
         currentBoss = Instantiate(currentBossPrefab, pos, Quaternion.identity);
-        currentBoss.GetComponent<IHealth>().MaxHealth = health;
+        
+        currentBoss.GetComponent<Damageable>().MaxHealth = health;
+        currentBoss.GetComponent<Damageable>().CurrentHealth = health;
+        
+        BossHPBar.instance.Setup(currentBoss);
         StartCoroutine(currentBoss.GetComponent<Boss>().StartPhase());
     }
 
@@ -68,7 +73,7 @@ public class BossController : MonoBehaviour
         Debug.Log("Loading Boss: " + bossName);
         
         currentBossPrefab = bossPrefabs[bossName];
-        BossName = currentBossPrefab.name;
+        BossHPBar.instance.SetFrame(bossName);
         
         FindObjectOfType<MusicManager>()?.LoadBossMusic(bossName);
     }
@@ -76,6 +81,8 @@ public class BossController : MonoBehaviour
     public void BossDie(Vector3 deathPos, Quaternion deathAng)
     {
         Debug.Log("Boss Died");
+        
+        BossHPBar.instance.SetHPBarHidden(true);
 
         GameObject portal;
         
@@ -167,6 +174,6 @@ public class BossController : MonoBehaviour
     {
         string boss = runBosses[index];
         LoadBoss(boss);
-        SummonBoss(currentBossPrefab.transform.position, 40); // TODO: Make this automatically adjust based on the boss
+        SummonBoss(currentBossPrefab.transform.position, 50); // TODO: Make HP automatically adjust based on the boss
     }
 }
