@@ -53,7 +53,7 @@ public class Cordelia : MonoBehaviour, Boss, IHealth
     void Start()
     {
         m_CurrHP = MaxHP;
-        StartCoroutine(SummonPuppets());
+        //StartCoroutine(SummonPuppets());
         cb = BossController.instance.currentBoss;
         playerPos = PlayerController.instance.gameObject.transform.position;
         m_Animator = GetComponent<Animator>();
@@ -93,61 +93,37 @@ public class Cordelia : MonoBehaviour, Boss, IHealth
 
     }
 
-    // Sets the dance to Spin.
     IEnumerator SpinDance()
     {
-        float speed = 2f;
-        var step = speed * Time.deltaTime;
-        bool follow = false;
-        
-
-        // runs on the global timer, so every 3 seconds Cordelia will rush the player while spining.
-
-        if (MathF.Floor(globalTime) % 3 == 0)
+        float length = 0f;
+        float endTime = 3f;
+        float moveSpeed = .1f;
+        bool rush = false;
+        //playerPos = PlayerController.instance.gameObject.transform.position;
+        while (length < endTime)
         {
-            // rush once halfway in the rotation.
-            transform.position = Vector3.MoveTowards(transform.position, playerPos, step * 15f);
-            follow = true;
-        }
-        //could add a delay in the update so Cordelia is not exactly circuling the player and has a chance to touch them.
-        else
-        {
-            if (isPuppet)
+            if (length > 2.3f)
             {
-                if (spinSet)
+                rush = true;
+            }
+            var movementVector = (playerPos - transform.position).normalized * moveSpeed;
+            transform.Translate(movementVector);
+            if (puppets.Count != 0)
+            {
+                for (int i = 0; i < puppetCount; i++)
                 {
-                    rotationSpeed = UnityEngine.Random.Range(1, 5);
-                    rotationSize = UnityEngine.Random.Range(6, 13);
-                    spinSet = false;
+                    if (puppets[i] != null)
+                    {
+                        StartCoroutine(puppets[i].GetComponent<puppetAttack>().SpinDance(rush));
+                    }
                 }
-                playerPos = PlayerController.instance.gameObject.transform.position;
-
-                float x = Mathf.Cos(Time.time * rotationSpeed) * rotationSize;
-                float y = Mathf.Sin(Time.time * rotationSpeed) * rotationSize;
-                transform.position = new Vector3(x, y);
-                transform.position = transform.position + playerPos;
-                follow = false;
             }
-            else
-            {
-                rotationSpeed = 3;
-                rotationSize = 8;
-                playerPos = PlayerController.instance.gameObject.transform.position;
-                    
-                float x = Mathf.Cos(Time.time * rotationSpeed) * rotationSize;
-                float y = Mathf.Sin(Time.time * rotationSpeed) * rotationSize;
-                transform.position = new Vector3(x, y);
-                transform.position = transform.position + playerPos;
-                follow = false;
-            }
-                
-            
+            length += Time.deltaTime;
+            yield return null;
         }
-        
 
-        
-        
-        yield return null;
+
+        PhaseChange();
     }
 
     IEnumerator KickDance()
@@ -163,9 +139,9 @@ public class Cordelia : MonoBehaviour, Boss, IHealth
 
     IEnumerator SummonPuppets()
     {
-        if (!isPuppet && puppets.Count == 0) 
+        bool alive = false;
+        if (puppets.Count == 0) 
         {
-            // change to be in specific locations or circuling Cordelia
             Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
             float health = 7f;
             float radius = 5f;
@@ -180,7 +156,39 @@ public class Cordelia : MonoBehaviour, Boss, IHealth
                 puppet.GetComponent<puppetAttack>().attackNum = attackNum;
             }
         }
+        else
+        {
+            for (int i = 0; i < puppetCount; i++)
+            {
+                if (puppets[i] != null)
+                {
+                    alive = true;
+                }
+
+            }
+
+            if (!alive)
+            {
+                puppets.Clear();
+                Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
+                float health = 7f;
+                float radius = 5f;
+                float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+                for (int i = 0; i < puppetCount; i++)
+                {
+                    GameObject puppet = Instantiate(puppetPreFab, bossPos + (UnityEngine.Random.insideUnitCircle.normalized * radius), Quaternion.identity);
+                    puppet.transform.Translate(new Vector3(0, puppet.transform.localScale.y / 2, 0));
+
+                    puppets.Add(puppet);
+                    puppet.GetComponent<IHealth>().MaxHealth = health;
+                    puppet.GetComponent<puppetAttack>().attackNum = attackNum;
+                }
+            }
+        }
+
+        
         yield return null;
+        PhaseChange();
     }
 
     IEnumerator DetonatePuppets()
@@ -245,8 +253,12 @@ public class Cordelia : MonoBehaviour, Boss, IHealth
             {
                 for (int i = 0; i < puppetCount; i++)
                 {
-                    puppets[i].GetComponent<puppetAttack>().spotlight = true;
-                    StartCoroutine(puppets[i].GetComponent<puppetAttack>().Spotlight());
+                    if(puppets[i] != null)
+                    {
+                        puppets[i].GetComponent<puppetAttack>().spotlight = true;
+                        StartCoroutine(puppets[i].GetComponent<puppetAttack>().Spotlight());
+                    }
+                    
                 }
             }
             DimLights.instance.Appear();
@@ -258,7 +270,10 @@ public class Cordelia : MonoBehaviour, Boss, IHealth
             {
                 for (int i = 0; i < puppetCount; i++)
                 {
-                    puppets[i].GetComponent<puppetAttack>().spotlight = false;
+                    if (puppets[i] != null)
+                    {
+                        puppets[i].GetComponent<puppetAttack>().spotlight = false;
+                    }
                 }
             }
             DimLights.instance.TurnOff();
@@ -339,6 +354,7 @@ public class Cordelia : MonoBehaviour, Boss, IHealth
                 if (puppets[i] != null)
                 {
                     puppets[i].GetComponent<puppetAttack>().attackNum = attackNum;
+                    puppets[i].GetComponent<puppetAttack>().reset();
                 }
                
             }
@@ -349,12 +365,13 @@ public class Cordelia : MonoBehaviour, Boss, IHealth
     {
         
         {
-            attackNum = UnityEngine.Random.Range(1, 3);
-            //attackNum = 2;
+            attackNum = UnityEngine.Random.Range(1, 5);
+            //attackNum = 4;
             setPuppetAttack();
             switch (attackNum)
             {
                 case 1:
+                    playerPos = PlayerController.instance.gameObject.transform.position;
                     StartCoroutine(SpinDance());
                     break;
                 case 2:

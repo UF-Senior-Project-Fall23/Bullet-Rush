@@ -23,6 +23,7 @@ public class Clone : MonoBehaviour, puppetAttack, IHealth
     bool rushMode = false;
     bool timeIndicator = true;
     bool spinSet = true;
+    bool rush = false;
     GameObject cb;
 
     Vector3 playerPos;
@@ -52,6 +53,13 @@ public class Clone : MonoBehaviour, puppetAttack, IHealth
 
 
     }
+
+    public void reset()
+    {
+        spinSet = true;
+        rush = false;
+    }
+
     public IEnumerator Spotlight()
     {
         dim = Instantiate(dimPreFab, transform);
@@ -73,7 +81,34 @@ public class Clone : MonoBehaviour, puppetAttack, IHealth
         float y = Mathf.Sin(Time.time * rotationSpeed) * rotationSize;
         transform.position = new Vector3(x, y);
         transform.position = transform.position + playerPos;
-        Debug.Log("yep heer");
+
+        yield return null;
+    }
+
+    public IEnumerator SpinDance(bool rush)
+    {
+        float moveSpeed = .025f;
+        if (spinSet)
+        {
+            rotationSpeed = UnityEngine.Random.Range(1.0f, 5.0f);
+            rotationSize = UnityEngine.Random.Range(4.0f, 8.0f);
+            spinSet = false;
+        }
+        if (!rush)
+        {
+            playerPos = PlayerController.instance.transform.position;
+
+            float x = Mathf.Cos(Time.time * rotationSpeed) * rotationSize;
+            float y = Mathf.Sin(Time.time * rotationSpeed) * rotationSize;
+            transform.position = new Vector3(x, y);
+            transform.position = transform.position + playerPos;
+        }
+        else
+        {
+            var movementVector = (playerPos - transform.position).normalized * moveSpeed;
+            transform.Translate(movementVector);
+        }
+        
 
         yield return null;
     }
