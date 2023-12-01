@@ -10,4 +10,5 @@ public interface puppetAttack
     public IEnumerator Spotlight();
     public IEnumerator Rush();
     public IEnumerator SpinDance(bool rush);
+    public IEnumerator DetonatePuppets();
 }

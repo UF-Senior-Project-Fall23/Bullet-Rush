@@ -111,9 +111,9 @@ MonoBehaviour:
   puppetPreFab: {fileID: 7764645947890026743, guid: 290d0d0567c555348a313434335d0a99, type: 3}
   dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
   voidPreFab: {fileID: 8026783831929155456, guid: f93a8b4bd9214624cafe11eb7e6422d6, type: 3}
-  puppetCount: 4
+  stringPreFab: {fileID: 4930068019576248167, guid: 596ec6950ab3178468e043a6d1dc5ea5, type: 3}
+  puppetCount: 2
   attackNum: 4
-  voidList: []
 --- !u!70 &-3894961986207175519
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

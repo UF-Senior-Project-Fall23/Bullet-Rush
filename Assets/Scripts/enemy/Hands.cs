@@ -13,7 +13,7 @@ public class Hands : MonoBehaviour
     public GameObject voidMaskPreFab;
 
     GameObject handUp;
-    GameObject handDown;
+    GameObject handDown = null;
     GameObject voidArt;
     GameObject voidMask;
 
@@ -45,6 +45,11 @@ public class Hands : MonoBehaviour
         while (length < endTime)
         {
             float speed = 6f;
+            if(length > .8f)
+            {
+                Vector3 voidMaskPos = new Vector3(transform.position.x, transform.position.y + .2f, 0);
+                voidMask.transform.position = voidMaskPos;
+            }
             handUp.transform.position = Vector3.MoveTowards(handUp.transform.position, transform.position, speed * Time.deltaTime);
 
             length += Time.deltaTime;
@@ -98,5 +103,27 @@ public class Hands : MonoBehaviour
             myCollider.enabled = false;
             StartCoroutine(Hit());
         }
+    }
+
+    public void OnDestroy()
+    {
+        if(handDown != null)
+        {
+            Destroy(handDown);
+        }
+        if (handUp != null)
+        {
+            Destroy(handUp);
+        }
+        if(voidArt != null)
+        {
+            Destroy(voidArt);
+        }
+        if(voidMask != null)
+        {
+            Destroy(voidMask);
+        }
+
+        Destroy(gameObject);
     }
 }

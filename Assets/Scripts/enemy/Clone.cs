@@ -153,7 +153,10 @@ public class Clone : Damageable, puppetAttack
         yield return null;
     }
 
-
+    public IEnumerator DetonatePuppets()
+    {
+        yield return null;
+    }
 
 
     void Update()
