@@ -12,7 +12,7 @@ public class PerkManager : MonoBehaviour
     public static PerkManager instance;
     public GameObject perkPreFab;
     public GameObject pedestals;
-
+    
     public static Dictionary<string, Perk> perks;
 
     [HideInInspector]
@@ -64,24 +64,16 @@ public class PerkManager : MonoBehaviour
         if(perk.type == PerkType.Weapon)
         {
             for(int i = 0; i < perk.amount; i++)
-                UpdateStat(PlayerController.instance.weapon.currWeapon.GetComponent<Weapon>(), perk.modifying[i], ToInverse(perk.modifier[i]));
+                PlayerController.instance.weapon.currWeapon.GetComponent<Weapon>().ResetStat(perk.modifying[i]);
         }
         else
         {
             for (int i = 0; i < perk.amount; i++)
             {
-                PlayerController.instance.stats.IncreaseStat(perk.modifying[i], ToInverse(perk.modifier[i]));
+                PlayerController.instance.stats.ResetStat(perk.modifying[i]);
                 PlayerController.instance.stats.onStatUpdate.Invoke();
             }
         }
-    }
-
-    // TODO: Find better way to do this. This is prone to rounding errors over long periods of usage
-    private static float ToInverse(float x)
-    {
-        var inverse = 100 * (1 / (1 + x / 100) - 1) ;
-        //Debug.LogWarning($"Input = {x}, Inverse = {inverse}");
-        return inverse;
     }
     
     public void ResetHeldPerks()
@@ -93,8 +85,6 @@ public class PerkManager : MonoBehaviour
         }
         heldPerks.Clear();
     }
-    
-    
     
     public void UpdateStat<T>(T instance, string stat, float value)
     {

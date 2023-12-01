@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public WeaponStats baseStats;
     public Transform startingPosition;
 
     //Player
@@ -40,6 +41,11 @@ public class Weapon : MonoBehaviour
     {
         shootPoint = transform.Find("ShootPoint");
         isFlipped = false;
+    }
+
+    private void Start()
+    {
+        ResetStats();
     }
 
     public void Update()
@@ -124,5 +130,23 @@ public class Weapon : MonoBehaviour
 
         isShooting = false;
         yield return null;
+    }
+
+    public void ResetStats()
+    {
+        radius = baseStats.radius;
+        bulletForce = baseStats.bulletForce;
+        bulletDelay = baseStats.bulletDelay;
+        bulletLifetime = baseStats.bulletLifetime;
+        damage = baseStats.damage;
+        bulletPreFab = baseStats.bulletPreFab;
+        heatPerShot = baseStats.heatPerShot;
+        maxHeat = baseStats.maxHeat;
+        cooldownRate = baseStats.cooldownRate;
+    }
+
+    public void ResetStat(string stat)
+    {
+        this.GetType().GetField(stat).SetValue(this, (float)baseStats.GetType().GetField(stat).GetValue(baseStats));
     }
 }

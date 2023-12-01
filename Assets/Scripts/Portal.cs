@@ -11,8 +11,9 @@ public class Portal : MonoBehaviour
     public static UnityEvent EnterBossRoom = new();
     public static UnityEvent EnterLootRoom = new();
     public static UnityEvent EnterStartRoom = new();
+    public static UnityEvent MakeBossPortal = new();
     public static UnityEvent<RoomType, RoomType> ChangeRoom = new();
-    
+
     private void OnCollisionEnter2D(Collision2D playerCollision)
     {
 
@@ -28,6 +29,9 @@ public class Portal : MonoBehaviour
 
         RoomType originalRoom = gameManager.roomType;
         RoomType newRoom;
+
+        if (name == "Portal to Next level")
+            MakeBossPortal.AddListener(SpawnBossPortal);
         
         switch (destination)
         {
@@ -38,11 +42,6 @@ public class Portal : MonoBehaviour
                 playerCollision.transform.position = gameManager.getLootRoomLocation();
                 newRoom = RoomType.LootRoom;
                 FindObjectOfType<MusicManager>()?.FadeOutThenPlay("Loot Room", 0.25f);
-                
-                // TODO: Delete this later and make it instead spawn when you pick up a perk
-                var newPortal = Instantiate(bossManager.portalPrefab, gameManager.getLootRoomExitLocation(),
-                    Quaternion.identity);
-                newPortal.GetComponent<Portal>().destination = "Boss";
                 
                 break;
             
@@ -98,5 +97,12 @@ public class Portal : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void SpawnBossPortal()
+    {
+        var newPortal = Instantiate(BossController.instance.portalPrefab, GameManager.instance.getLootRoomExitLocation(),
+            Quaternion.identity);
+        newPortal.GetComponent<Portal>().destination = "Boss";
     }
 }

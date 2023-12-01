@@ -17,6 +17,8 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI heatText;
     public GameObject tooltip;
 
+    GameObject DeathScreen;
+
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI difficultyText;
 
@@ -30,6 +32,8 @@ public class HUDManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        DeathScreen = transform.Find("DeathScreen").gameObject;
     }
 
     // Start is called before the first frame update
@@ -84,5 +88,15 @@ public class HUDManager : MonoBehaviour
     public void HideTooltip()
     {
         tooltip.SetActive(false);
+    }
+
+    public void ShowDeathScreen()
+    {
+        DeathScreen.SetActive(true);
+    }
+
+    public void HideDeathScreen()
+    {
+        DeathScreen.SetActive(false);
     }
 }
