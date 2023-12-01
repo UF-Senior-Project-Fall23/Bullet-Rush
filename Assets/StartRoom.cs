@@ -40,7 +40,6 @@ public class StartRoom : MonoBehaviour
             else if (child.gameObject.CompareTag("DifficultyButton"))
             {
                 difficultyButtons.Add(child.gameObject);
-                Debug.Log("Added difficulty button");
             }
         }
     }
@@ -56,7 +55,7 @@ public class StartRoom : MonoBehaviour
         //check for trigger on tutorial message areas
         if (IsPlayerInsideSquare(player.transform.position, tutorialSquares[0]))
         {
-            tutorialText.text = "Walk into the weapon to pick it up.";
+            tutorialText.text = "Press Q while next to your weapon of choice.";
             disableImages();
         }
         else if (IsPlayerInsideSquare(player.transform.position, tutorialSquares[1]))
@@ -66,12 +65,12 @@ public class StartRoom : MonoBehaviour
         }
         else if (IsPlayerInsideSquare(player.transform.position, tutorialSquares[2]))
         {
-            tutorialText.text = "Select Easy, Medium, or Hard";
+            tutorialText.text = "Walk over the Easy, Medium, or Hard button.";
             disableImages();
         }
         else if (IsPlayerInsideSquare(player.transform.position, tutorialSquares[3]))
         {
-            tutorialText.text = "Enter Here to Start";
+            tutorialText.text = "Enter the Portal to Start";
             disableImages();
         }
         else
