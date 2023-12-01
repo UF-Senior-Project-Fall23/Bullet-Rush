@@ -163,7 +163,11 @@ public class BossController : MonoBehaviour
 
     public void GenerateRun()
     {
-        runBosses = bossPrefabs.Keys.OrderBy(x => new System.Random().Next()).Take(3).ToList();
+        //runBosses = bossPrefabs.Keys.OrderBy(x => new System.Random().Next()).Take(3).ToList();
+        runBosses.Add("Cordelia");
+        runBosses.Add("Blagthoroth");
+        runBosses.Add("Onyx");
+        //runBosses = bossPrefabs.Keys.OrderBy(x => new System.Random().Next()).Take(3).ToList();
         GameManager.instance.setLevel(0);
         PerkManager.instance.ResetPerks();
         

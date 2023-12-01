@@ -9,10 +9,11 @@ public class Cordelia : Damageable, Boss
     public GameObject bulletPreFab;
     public GameObject puppetPreFab;
     public GameObject dimPreFab;
+    public GameObject voidPreFab;
     GameObject dim;
     public int puppetCount = 4;
-    public bool isPuppet = false;
     public int attackNum = 4;
+    private Animator m_Animator;
 
     double attackSpeedModifier = 1;
     float globalTime = 0;
@@ -26,10 +27,10 @@ public class Cordelia : Damageable, Boss
     bool timeIndicator = true;
     bool spinSet = true;
     GameObject cb;
-    
+
     Vector3 playerPos;
 
-    
+
     int followPattern = 1;
     int rotationSpeed = 3;
     int rotationSize = 8;
@@ -37,14 +38,135 @@ public class Cordelia : Damageable, Boss
     private float bulletTime = 0f;
     private float bulletWait = .2f;
     private Vector3 rushDirection = Vector3.up;
-    
+
     private List<GameObject> puppets = new List<GameObject>();
+    public List<Vector3> voidList = new List<Vector3>();
 
     void Start()
     {
-        StartCoroutine(SummonPuppets());
+        //StartCoroutine(SummonPuppets());
         cb = BossController.instance.currentBoss;
         playerPos = PlayerController.instance.gameObject.transform.position;
+        dim = Instantiate(dimPreFab, transform);
+        spotlightActive = true;
+        if (puppets.Count != 0)
+        {
+            for (int i = 0; i < puppetCount; i++)
+            {
+                puppets[i].GetComponent<puppetAttack>().spotlight = true;
+                StartCoroutine(puppets[i].GetComponent<puppetAttack>().Spotlight());
+            }
+        }
+
+        {
+            voidList.Add(new Vector3(-82.47555f, -0.6747541f, 0));
+            voidList.Add(new Vector3(-74.66592f, -3.49f, 0));
+            voidList.Add(new Vector3(-67.09f, -3.02f, 0));
+            voidList.Add(new Vector3(-73.18208f, 1.824329f, 0));
+            voidList.Add(new Vector3(-81.92888f, 4.948183f, 0));
+            voidList.Add(new Vector3(-88.56707f, 5.651052f, 0));
+            voidList.Add(new Vector3(-74.74401f, 8.853002f, 0));
+            voidList.Add(new Vector3(-65.76293f, 8.384424f, 0));
+            voidList.Add(new Vector3(-67.87153f, 4.089124f, 0));
+            voidList.Add(new Vector3(-61.38953f, 1.980522f, 0));
+            voidList.Add(new Vector3(-62.17f, -2f, 0));
+            voidList.Add(new Vector3(-65.37244f, -5.985308f, 0));
+            voidList.Add(new Vector3(-88.25468f, 0.1062098f, 0));
+            voidList.Add(new Vector3(-93.0f, 1.36f, 0));
+            voidList.Add(new Vector3(-98.09f, 4.25f, 0));
+            voidList.Add(new Vector3(-91.92521f, 8.69681f, 0));
+            voidList.Add(new Vector3(-84.50606f, 8.540617f, 0));
+            voidList.Add(new Vector3(-78.96121f, 1.824329f, 0));
+            voidList.Add(new Vector3(-85.36511f, 2.605293f, 0));
+            voidList.Add(new Vector3(-75.83736f, 5.338666f, 0));
+            voidList.Add(new Vector3(-79.89837f, -3.017645f, 0));
+            voidList.Add(new Vector3(-79.89837f, -3.017645f, 0));
+            voidList.Add(new Vector3(-101.5311f, 7.759653f, 0));
+            voidList.Add(new Vector3(-96.92338f, 9.633965f, 0));
+            voidList.Add(new Vector3(-105.4359f, 10.18064f, 0));
+            voidList.Add(new Vector3(-101.2968f, 12.28924f, 0));
+            voidList.Add(new Vector3(-109.03f, 13.3f, 0));
+            voidList.Add(new Vector3(-106.6854f, 16.27216f, 0));
+            voidList.Add(new Vector3(-101.2968f, 15.72548f, 0));
+            voidList.Add(new Vector3(-103.0149f, 18.92743f, 0));
+            voidList.Add(new Vector3(-95.83003f, 12.75782f, 0));
+            voidList.Add(new Vector3(-89.8166f, 11.43018f, 0));
+            voidList.Add(new Vector3(-79.58598f, 7.60346f, 0));
+            voidList.Add(new Vector3(-67.48105f, 1.043366f, 0));
+            voidList.Add(new Vector3(-70.683f, -5.360537f, 0));
+            voidList.Add(new Vector3(-60.22f, -5.83f, 0));
+            voidList.Add(new Vector3(-55.77f, -4.11f, 0));
+            voidList.Add(new Vector3(-56.62566f, 0.4966908f, 0));
+            voidList.Add(new Vector3(-71.07348f, 6.510111f, 0));
+            voidList.Add(new Vector3(-95.04906f, 15.80358f, 0));
+            voidList.Add(new Vector3(-89.50423f, 14.78832f, 0));
+            voidList.Add(new Vector3(-84.89654f, 11.66447f, 0));
+            voidList.Add(new Vector3(-79.42979f, 10.88351f, 0));
+            voidList.Add(new Vector3(-73.96304f, 11.89876f, 0));
+            voidList.Add(new Vector3(-70.21442f, 9.712062f, 0));
+            voidList.Add(new Vector3(-62.95146f, 5.416761f, 0));
+            voidList.Add(new Vector3(-57.09423f, 4.16722f, 0));
+            voidList.Add(new Vector3(-52.33035f, -1.61191f, 0));
+            voidList.Add(new Vector3(-51.78368f, 2.058619f, 0));
+            voidList.Add(new Vector3(-46.70741f, 3.932931f, 0));
+            voidList.Add(new Vector3(-52.09607f, 5.494859f, 0));
+            voidList.Add(new Vector3(-57.64091f, 7.369171f, 0));
+            voidList.Add(new Vector3(-61.54572f, 10.25874f, 0));
+            voidList.Add(new Vector3(-65.99722f, 11.97686f, 0));
+            voidList.Add(new Vector3(-78.25835f, 13.61688f, 0));
+            voidList.Add(new Vector3(-83.647f, 14.31975f, 0));
+            voidList.Add(new Vector3(-90.83186f, 18.22456f, 0));
+            voidList.Add(new Vector3(-96.84528f, 19.08362f, 0));
+            voidList.Add(new Vector3(-98.95389f, 22.44177f, 0));
+            voidList.Add(new Vector3(-84.58415f, 17.5217f, 0));
+            voidList.Add(new Vector3(-78.57073f, 16.97502f, 0));
+            voidList.Add(new Vector3(-73.41637f, 15.56929f, 0));
+            voidList.Add(new Vector3(-69.90204f, 13.61688f, 0));
+            voidList.Add(new Vector3(-67.87153f, 16.97502f, 0));
+            voidList.Add(new Vector3(-63.65433f, 15.17881f, 0));
+            voidList.Add(new Vector3(-92.70618f, 21.34842f, 0));
+            voidList.Add(new Vector3(-94.73668f, 24.78466f, 0));
+            voidList.Add(new Vector3(-91.45663f, 27.28374f, 0));
+            voidList.Add(new Vector3(-88.87946f, 24.39418f, 0));
+            voidList.Add(new Vector3(-86.77085f, 20.64555f, 0));
+            voidList.Add(new Vector3(-81.06982f, 20.09888f, 0));
+            voidList.Add(new Vector3(-83.88129f, 23.06654f, 0));
+            voidList.Add(new Vector3(-85.44321f, 26.89326f, 0));
+            voidList.Add(new Vector3(-80.13266f, 25.25324f, 0));
+            voidList.Add(new Vector3(-78.80502f, 28.0647f, 0));
+            voidList.Add(new Vector3(-76.85262f, 22.51986f, 0));
+            voidList.Add(new Vector3(-74.9783f, 19.16172f, 0));
+            voidList.Add(new Vector3(-69.74584f, 20.02078f, 0));
+            voidList.Add(new Vector3(-71.54206f, 22.98844f, 0));
+            voidList.Add(new Vector3(-74.43163f, 25.79991f, 0));
+            voidList.Add(new Vector3(-70.14f, 27.36f, 0));
+            voidList.Add(new Vector3(-66.3877f, 23.8475f, 0));
+            voidList.Add(new Vector3(-64.35719f, 19.00553f, 0));
+            voidList.Add(new Vector3(-58.65616f, 13.0702f, 0));
+            voidList.Add(new Vector3(-55.06373f, 9.868255f, 0));
+            voidList.Add(new Vector3(-49.05031f, 8.150135f, 0));
+            voidList.Add(new Vector3(-44.75501f, 6.900593f, 0));
+            voidList.Add(new Vector3(-50.22176f, 11.66447f, 0));
+            voidList.Add(new Vector3(-54.20467f, 14.31975f, 0));
+            voidList.Add(new Vector3(-59.12474f, 16.58454f, 0));
+            voidList.Add(new Vector3(-62.40479f, 21.7389f, 0));
+            voidList.Add(new Vector3(-61.31144f, 25.09704f, 0));
+            voidList.Add(new Vector3(-58.65616f, 19.39601f, 0));
+            voidList.Add(new Vector3(-53.42371f, 17.20931f, 0));
+            voidList.Add(new Vector3(-48.89411f, 14.86642f, 0));
+            voidList.Add(new Vector3(-45.22358f, 10.18064f, 0));
+            voidList.Add(new Vector3(-56.85994f, 22.59796f, 0));
+            voidList.Add(new Vector3(-52.72084f, 20.02078f, 0));
+            voidList.Add(new Vector3(-48.19125f, 17.59979f, 0));
+            voidList.Add(new Vector3(-45.92645f, 12.83592f, 0));
+            voidList.Add(new Vector3(-51.15891f, 22.44177f, 0));
+            voidList.Add(new Vector3(-56.07898f, 25.33133f, 0));
+            voidList.Add(new Vector3(-65.52864f, 26.42468f, 0));
+            voidList.Add(new Vector3(-93.25285f, 4.323413f, 0));
+            voidList.Add(new Vector3(-96.14241f, 6.7444f, 0));
+            voidList.Add(new Vector3(-75.99355f, -0.7528496f, 0));
+            voidList.Add(new Vector3(-71.54206f, -1.455718f, 0));
+        }
     }
 
     public string[] Attacks { get; } =
@@ -52,74 +174,55 @@ public class Cordelia : Damageable, Boss
         "SpinDance", "KickDance", "StringDance", "SummonPuppets", "DetonatePuppets", "Rush", "Spotlight", "BladeFlourish", "PuppeteersGrasp"
     };
 
-    public void setPuppetAttack(int attack)
-    {
-        attackNum = attack;
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collision with " + collision.gameObject.name);
-        //Debug.Log(collision.gameObject.tag);
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Wall" && rushMode)
+        if (collision.gameObject.tag != "Clone")
         {
-            rushDirection = Vector3.Reflect(rushDirection.normalized, collision.contacts[0].normal);
+            if (GetComponent<BoxCollider2D>().IsTouching(collision.collider) && collision.gameObject.tag == "Wall")
+            {
+                transform.position = new Vector3(-75, 25);
+            }
+            if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Wall" && rushMode)
+            {
+                rushDirection = Vector3.Reflect(rushDirection.normalized, collision.contacts[0].normal);
+            }
         }
+
+
     }
 
     // Sets the dance to Spin.
     IEnumerator SpinDance()
     {
-        float speed = 2f;
-        var step = speed * Time.deltaTime;
-        bool follow = false;
-        
-
-        // runs on the global timer, so every 3 seconds Cordelia will rush the player while spining.
-
-        if (MathF.Floor(globalTime) % 3 == 0)
+        float length = 0f;
+        float endTime = 3f;
+        float moveSpeed = .1f;
+        bool rush = false;
+        //playerPos = PlayerController.instance.gameObject.transform.position;
+        while (length < endTime)
         {
-            // rush once halfway in the rotation.
-            transform.position = Vector3.MoveTowards(transform.position, playerPos, step * 15f);
-            follow = true;
-        }
-        //could add a delay in the update so Cordelia is not exactly circuling the player and has a chance to touch them.
-        else
-        {
-            if (isPuppet)
+            if (length > 2.3f)
             {
-                if (spinSet)
+                rush = true;
+            }
+            var movementVector = (playerPos - transform.position).normalized * moveSpeed;
+            transform.Translate(movementVector);
+            if (puppets.Count != 0)
+            {
+                for (int i = 0; i < puppetCount; i++)
                 {
-                    rotationSpeed = UnityEngine.Random.Range(1, 5);
-                    rotationSize = UnityEngine.Random.Range(6, 13);
-                    spinSet = false;
+                    if (puppets[i] != null)
+                    {
+                        StartCoroutine(puppets[i].GetComponent<puppetAttack>().SpinDance(rush));
+                    }
                 }
-                playerPos = PlayerController.instance.gameObject.transform.position;
-
-                float x = Mathf.Cos(Time.time * rotationSpeed) * rotationSize;
-                float y = Mathf.Sin(Time.time * rotationSpeed) * rotationSize;
-                transform.position = new Vector3(x, y);
-                transform.position = transform.position + playerPos;
-                follow = false;
             }
-            else
-            {
-                rotationSpeed = 3;
-                rotationSize = 8;
-                playerPos = PlayerController.instance.gameObject.transform.position;
-                    
-                float x = Mathf.Cos(Time.time * rotationSpeed) * rotationSize;
-                float y = Mathf.Sin(Time.time * rotationSpeed) * rotationSize;
-                transform.position = new Vector3(x, y);
-                transform.position = transform.position + playerPos;
-                follow = false;
-            }
-                
-            
+            length += Time.deltaTime;
+            yield return null;
         }
-        
-        
-        yield return null;
+
+
+        PhaseChange();
     }
 
     IEnumerator KickDance()
@@ -135,251 +238,314 @@ public class Cordelia : Damageable, Boss
 
     IEnumerator SummonPuppets()
     {
-        if (!isPuppet && puppets.Count == 0) 
+        bool alive = false;
+        if (puppets.Count == 0)
         {
-            // change to be in specific locations or circuling Cordelia
-            Vector3 bossPos = new Vector3(-75, 10, 0);
+            Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
             float health = 7f;
             float radius = 5f;
+            float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
             for (int i = 0; i < puppetCount; i++)
             {
-                GameObject puppet = Instantiate(puppetPreFab, bossPos, Quaternion.identity);
+                GameObject puppet = Instantiate(puppetPreFab, bossPos + (UnityEngine.Random.insideUnitCircle.normalized * radius), Quaternion.identity);
+                puppet.transform.Translate(new Vector3(0, puppet.transform.localScale.y / 2, 0));
+
                 puppets.Add(puppet);
                 puppet.GetComponent<Damageable>().MaxHealth = health;
-                StartCoroutine(puppet.GetComponent<Boss>().StartPhase());
-                bossPos = new Vector3(-74 + i, 11 + i, 0);
-                puppet.GetComponent<puppetAttack>().attack = attackNum;
+                puppet.GetComponent<Damageable>().CurrentHealth = health;
             }
         }
+        else
+        {
+            for (int i = 0; i < puppetCount; i++)
+            {
+                if (puppets[i] != null)
+                {
+                    alive = true;
+                }
+
+            }
+
+            if (!alive)
+            {
+                puppets.Clear();
+                Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
+                float health = 7f;
+                float radius = 5f;
+                float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+                for (int i = 0; i < puppetCount; i++)
+                {
+                    GameObject puppet = Instantiate(puppetPreFab, bossPos + (UnityEngine.Random.insideUnitCircle.normalized * radius), Quaternion.identity);
+                    puppet.transform.Translate(new Vector3(0, puppet.transform.localScale.y / 2, 0));
+
+                    puppets.Add(puppet);
+                    puppet.GetComponent<Damageable>().MaxHealth = health;
+                    puppet.GetComponent<Damageable>().CurrentHealth = health;
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(.8f);
         yield return null;
+        PhaseChange();
     }
 
     IEnumerator DetonatePuppets()
     {
-        if (!isPuppet)
+        for (int i = 0; i < puppets.Count; i++)
         {
-            for (int i = 0; i < puppets.Count; i++)
+            if (puppets[i] != null)
             {
-                if (puppets[i] != null)
-                {
-                    // explode animation
-                    // check if player is in range and do damage if they are.
-                    int damage = (int)MathF.Floor(puppets[i].GetComponent<Damageable>().MaxHealth);
-                    puppets[i].GetComponent<Damageable>().takeDamage(damage);
-                }
+                // explode animation
+                // check if player is in range and do damage if they are.
+                int damage = (int)MathF.Floor(puppets[i].GetComponent<Damageable>().MaxHealth);
+                puppets[i].GetComponent<Damageable>().takeDamage(damage);
             }
+        }
 
-            BossController.instance.MinionDie();
-        }
-        else
-        {
-            // or just put on a timer like spotlight
-            //cordelia uses other attack or stands back.
-        }
+        BossController.instance.MinionDie();
         yield return null;
     }
 
     IEnumerator Rush()
     {
-        rushMode = true;
-        float speed = .1f;
+        float length = 0f;
+        float endTime = 6f;
+        while (length < endTime)
+        {
+            rushMode = true;
+            float speed = .1f;
 
-        transform.Translate(rushDirection * speed);
-        yield return null;
+            transform.Translate(rushDirection * speed);
+            length += Time.deltaTime;
+            if (puppets.Count != 0)
+            {
+                for (int i = 0; i < puppetCount; i++)
+                {
+                    if (puppets[i] != null)
+                    {
+                        StartCoroutine(puppets[i].GetComponent<puppetAttack>().Rush());
+                    }
+                }
+            }
+            yield return null;
+        }
+        rushMode = false;
+        PhaseChange();
     }
 
     IEnumerator Spotlight()
     {
-        if (!isPuppet && !spotlightActive)
+        if (!spotlightActive)
         {
             dim = Instantiate(dimPreFab, transform);
             spotlightActive = true;
+            if (puppets.Count != 0)
+            {
+                for (int i = 0; i < puppetCount; i++)
+                {
+                    if (puppets[i] != null)
+                    {
+                        puppets[i].GetComponent<puppetAttack>().spotlight = true;
+                        StartCoroutine(puppets[i].GetComponent<puppetAttack>().Spotlight());
+                    }
+
+                }
+            }
             DimLights.instance.Appear();
         }
-        else if(!isPuppet && spotlightActive)
+        else if (spotlightActive)
         {
             spotlightActive = false;
+            if (puppets.Count != 0)
+            {
+                for (int i = 0; i < puppetCount; i++)
+                {
+                    if (puppets[i] != null)
+                    {
+                        puppets[i].GetComponent<puppetAttack>().spotlight = false;
+                    }
+                }
+            }
             DimLights.instance.TurnOff();
         }
         yield return null;
     }
-    
+
     IEnumerator BladeFlourish()
     {
-        playerPos = PlayerController.instance.transform.position - transform.position;
-        //Get the angle from the position
-        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-        if (MathF.Floor(globalTime) % 2 == 0)
+        // make puppets faster to be ahead of Cordelia
+        float length = 0f;
+        float endTime = 6f;
+        int followPattern = 1;
+        if (MathF.Floor(length) % 2 == 0)
         {
-            followPattern = UnityEngine.Random.Range(1, 4);
+            //followPattern = UnityEngine.Random.Range(1, 4);
         }
-        if (!isPuppet)
+        while (length < endTime)
         {
+            if (puppets.Count != 0)
+            {
+                for (int i = 0; i < puppetCount; i++)
+                {
+
+                    if (puppets[i] != null)
+                    {
+                        followPattern = UnityEngine.Random.Range(1, 4);
+                        StartCoroutine(puppets[i].GetComponent<puppetAttack>().BladeFlourish(followPattern));
+                    }
+                }
+            }
+
+            playerPos = PlayerController.instance.transform.position - transform.position;
+            //Get the angle from the position
+            float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
             float speed = 2f;
             var step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 2f);
 
+
+            if (bulletTime <= Time.time && MathF.Floor(globalTime) % 2 == 0)
+            {
+
+                for (int i = 0; i < 5; i++)
+                {
+                    var r2 = Quaternion.Euler(0, 0, playerAngle * Mathf.Rad2Deg + 90);
+
+                    GameObject bullet = Instantiate(bulletPreFab, new Vector3(
+                        transform.position.x + (transform.localScale.x / 5f * Mathf.Cos(playerAngle)),
+                        transform.position.y + (transform.localScale.y / 5f * Mathf.Sin(playerAngle)), 1), r2);
+
+                    bullet.transform.Rotate(0, 0, 290 - (i * 10));
+                    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                    rb.AddForce(bullet.transform.right * 13f, ForceMode2D.Impulse);
+                }
+                bulletTime = Time.time + bulletWait;
+                yield return null;
+            }
+            length += Time.deltaTime;
+            yield return null;
         }
 
-        else
-        {
-            
-            if(followPattern == 1)
-            {
-                float speed = UnityEngine.Random.Range(0.0f, 3.0f);
-                var step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 2f);
-            }
-            else if(followPattern == 2)
-            {
-                float speed = UnityEngine.Random.Range(0.0f, 5.0f);
-                var step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 3f);
-            }
-            else if(followPattern == 3)
-            {
-                float speed = UnityEngine.Random.Range(0.0f, 3.0f);
-                var step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * -2f);
-            }
-        }
-        if (bulletTime <= Time.time && MathF.Floor(globalTime) % 2 == 0)
-        {
+        yield return new WaitForSeconds(1f);
 
-            for (int i = 0; i < 5; i++)
-            {
-                var r2 = Quaternion.Euler(0, 0, playerAngle * Mathf.Rad2Deg + 90);
-
-                GameObject bullet = Instantiate(bulletPreFab, new Vector3(
-                    transform.position.x + (transform.localScale.x / 5f * Mathf.Cos(playerAngle)),
-                    transform.position.y + (transform.localScale.y / 5f * Mathf.Sin(playerAngle)), 1), r2);
-
-                bullet.transform.Rotate(0, 0, 290 - (i * 10));
-                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.right * 13f, ForceMode2D.Impulse);
-            }
-            bulletTime = Time.time + bulletWait;
-        }
-
-
-
-        yield return null;
+        PhaseChange();
     }
 
     IEnumerator PuppeteersGrasp()
     {
-        yield return null;
-    }
-    
+        playerPos = PlayerController.instance.transform.position;
+        voidList.Sort((v1, v2) => Vector3.Distance(v2, playerPos).CompareTo(Vector3.Distance(v1, playerPos)));
 
-    void Boss.PhaseChange()
-    {
-        phaseShifted = true;
-        attackSpeedModifier = 1.5;
-    }
-
-    IEnumerator Boss.StartPhase()
-    {
-        //Debug.Log(this.attackNum);
-        //StartCoroutine(BladeFlourish());
-        //StartCoroutine(Rush());
-        yield return null;
-    }
-
-    void Update()
-    {
-        
-        globalTime += Time.deltaTime;
-
-        float second = MathF.Floor(globalTime) % interval;
-
-        // sets Cordelia's attack if the time has counted down from 6
-        // lasts a second
-        //Debug.Log(second);
-        //Debug.Log(attackNum);
-        if (second == 0 && !isPuppet)
+        int voidAmount = 40; // actual is voidAmount/crowding
+        int crowding = 4;
+        float rate = .7f;
+        int spreadCount = 0;
+        Debug.Log(voidList.Count - 1 - voidAmount);
+        for (int i = voidList.Count-1; i > voidList.Count - voidAmount; i-=crowding)
         {
-            if (!isPuppet)
+            Debug.Log(i);
+            Debug.Log(i - voidAmount);
+            int j = (int)Math.Pow(-1, spreadCount);
+            if(j < 0)
             {
-                // put an action/idle here for the 1 second break
-                attackNum = UnityEngine.Random.Range(1, 5);
+                j = voidList.Count - i;
             }
-            spinSet = true;
+            else
+            {
+                j = i;
+            }
+            GameObject v = Instantiate(voidPreFab, voidList[j], Quaternion.identity);
+            spreadCount++;
+            yield return new WaitForSeconds(rate);
         }
 
-        // sets the puppets attack
-        if (!isPuppet)
+        PhaseChange();
+    }
+
+    private void setPuppetAttack()
+    {
+        if (puppets.Count != 0)
         {
-            for (int i = 0; i < puppets.Count; i++)
+            for (int i = 0; i < puppetCount; i++)
             {
-                // set up the method for interface- create new minionBoss interface?
                 if (puppets[i] != null)
                 {
-                    puppets[i].GetComponent<puppetAttack>().attack = attackNum;
+                    puppets[i].GetComponent<puppetAttack>().reset();
                 }
+
             }
         }
-        if (isPuppet)
-        {
-            attackNum = GetComponent<puppetAttack>().attack;
-        }
-        if (spotlightActive)
-        {
-            dim.transform.position = transform.position;
-        }
-        //Debug.Log(attackNum);
-        //runs the coroutine's while the counter is not 0
-        // coruntines run as if in update
-        if (second != 0)
-        {
-            //"SpinDance", "KickDance", "StringDance", "SummonPuppets", "DetonatePuppets", "Rush", "Spotlight", "BladeFlourish", "PuppeteersGrasp"
-            //attackNum = 3;
+    }
 
+    public void PhaseChange()
+    {
+
+        {
+            attackNum = UnityEngine.Random.Range(1, 9);
+            //attackNum = 8;
+            setPuppetAttack();
             switch (attackNum)
             {
                 case 1:
-                    interval = 12;
+                    playerPos = PlayerController.instance.gameObject.transform.position;
                     StartCoroutine(SpinDance());
                     break;
-                case 9:
-                    interval = 6;
+                case 2:
                     StartCoroutine(Rush());
                     break;
                 case 3:
-                    interval = 18;
                     StartCoroutine(BladeFlourish());
                     break;
                 case 4:
-                    interval = 6;
-                    StartCoroutine(SummonPuppets()); 
+                    StartCoroutine(SummonPuppets());
                     break;
                 case 5:
-                    interval = 3;
-                    StartCoroutine(DetonatePuppets()); 
+                    //StartCoroutine(DetonatePuppets());
+                    PhaseChange();
                     break;
                 case 6:
-                    interval = 3;
-                    StartCoroutine(KickDance());
+                    //StartCoroutine(KickDance());
+                    PhaseChange();
                     break;
                 case 7:
-                    interval = 3;
-                    StartCoroutine(StringDance());
+                    //StartCoroutine(StringDance());
+                    PhaseChange();
                     break;
                 case 8:
-                    interval = 3;
-                    StartCoroutine(PuppeteersGrasp()); 
+                    StartCoroutine(PuppeteersGrasp());
                     break;
                 default:
                     print("Incorrect Number.");
                     break;
             }
         }
+    }
+
+    public IEnumerator StartPhase()
+    {
+        Invulnerable = true;
+        yield return new WaitForSeconds(1f);
+        Invulnerable = false;
+
+        PhaseChange();
+    }
+
+    void Update()
+    {
+
+        globalTime += Time.deltaTime;
+        if (spotlightActive)
+        {
+            dim.transform.position = transform.position;
+        }
+        float second = MathF.Floor(globalTime) % interval;
         if (MathF.Floor(globalTime) % 15 == 0 && timeIndicator)
         {
             StartCoroutine(Spotlight());
             timeIndicator = false;
         }
-        else if(MathF.Floor(globalTime) % 15 != 0)
+        else if (MathF.Floor(globalTime) % 15 != 0)
         {
             timeIndicator = true;
         }
@@ -387,22 +553,20 @@ public class Cordelia : Damageable, Boss
 
     public override void Die()
     {
-        if (!isPuppet)
+        // kills any remaining puppets once Cordelia dies
+        foreach (var puppet in puppets)
         {
-            // kills any remaining puppets once Cordelia dies
-            foreach (var puppet in puppets)
+            if(puppet is not null) 
             {
-                if(puppet is not null) 
-                {
-                    var puppetHP = puppet.GetComponent<Damageable>();
-                    puppetHP?.takeDamage(puppetHP.MaxHealth);
-                }
+                var puppetHP = puppet.GetComponent<Damageable>();
+                puppetHP?.takeDamage(puppetHP.MaxHealth);
             }
-            
-            BossController.instance.BossDie(transform.position, transform.rotation);
         }
+            
+        BossController.instance.BossDie();
+
+        DimLights.instance.TurnOff();
         Destroy(gameObject);
     }
-    
 
 }

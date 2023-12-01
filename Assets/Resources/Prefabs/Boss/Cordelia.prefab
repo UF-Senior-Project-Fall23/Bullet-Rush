@@ -13,10 +13,11 @@ GameObject:
   - component: {fileID: -943205387874420973}
   - component: {fileID: -3894961986207175519}
   - component: {fileID: 2461266552785924667}
-  - component: {fileID: 3219754668129656164}
+  - component: {fileID: 2948728794782061392}
+  - component: {fileID: -4374923952027042967}
   m_Layer: 0
   m_Name: Cordelia
-  m_TagString: Enemy
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1183204077
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 578e582b01c5b684c9403359ec4a404e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -100,12 +101,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2a6f692f977c241bd2c8acaf4fd496, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  HPChange:
+    m_PersistentCalls:
+      m_Calls: []
   bulletPreFab: {fileID: 7198250052750651505, guid: 7dee2bc374dd7ca48af642f035054302, type: 3}
   puppetPreFab: {fileID: 7764645947890026743, guid: 290d0d0567c555348a313434335d0a99, type: 3}
   dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
+  voidPreFab: {fileID: 8026783831929155456, guid: f93a8b4bd9214624cafe11eb7e6422d6, type: 3}
   puppetCount: 4
-  isPuppet: 0
   attackNum: 4
+  voidList: []
 --- !u!70 &-3894961986207175519
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -168,16 +176,69 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &3219754668129656164
-MonoBehaviour:
+--- !u!61 &2948728794782061392
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945224095935049409}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9365ddac0c9b264439c96cf49901f91d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  a: 7
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.32, y: 0.32}
+    newSize: {x: 0.32, y: 0.32}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.01, y: 0.01}
+  m_EdgeRadius: 0
+--- !u!95 &-4374923952027042967
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945224095935049409}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b6f59bfee46d9df4ea7b16731e00034e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
