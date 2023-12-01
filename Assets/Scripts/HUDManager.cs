@@ -53,7 +53,7 @@ public class HUDManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        timeText.text = "Time Elapsed: " + Mathf.Floor(GameManager.gameTime).ToString();
+        timeText.text = "Time Elapsed: " + Mathf.Floor(GameManager.gameTime).ToString() + " s";
     }
 
     void UpdateHealthText(float current, float max)
