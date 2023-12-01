@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6d8fa96366850418c80c75608bf0dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseStats: {fileID: 11400000, guid: ef99fa3fffe987244a574f54c245436f, type: 2}
   startingPosition: {fileID: 0}
   player: {fileID: 0}
   radius: 2

@@ -14,6 +14,8 @@ public class Stat : ScriptableObject
 
     private void OnEnable()
     {
-        value = defaultValue;
+        ResetStat();
     }
+    
+    public void ResetStat() { value = defaultValue; }
 }

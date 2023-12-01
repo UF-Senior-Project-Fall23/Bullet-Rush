@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -392,7 +393,7 @@ public class Cordelia : Damageable, Boss
             // kills any remaining puppets once Cordelia dies
             foreach (var puppet in puppets)
             {
-                if(puppet is not null) 
+                if(puppet is not null && !puppet.IsDestroyed()) 
                 {
                     var puppetHP = puppet.GetComponent<Damageable>();
                     puppetHP?.takeDamage(puppetHP.MaxHealth);

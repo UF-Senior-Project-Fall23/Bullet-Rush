@@ -10,15 +10,8 @@ public class PlayerWeapon : MonoBehaviour
 
     public void pickupWeapon(GameObject weapon) 
     {
-        if(currWeapon != null)
-        {
-            currWeapon.tag = "Weapon";
-            m_weaponScript.player = null;
-            m_weaponScript.enabled = false;
-            currWeapon.transform.SetPositionAndRotation(m_weaponScript.startingPosition.position, m_weaponScript.startingPosition.rotation);
-            currWeapon.GetComponent<Collider2D>().enabled = true;
-            currWeapon = null;
-        }
+        if (currWeapon != null)
+            DropWeapon();
 
         weapon.tag = "CurrentWeapon";
         m_weaponScript = weapon.GetComponent<Weapon>();
@@ -26,6 +19,16 @@ public class PlayerWeapon : MonoBehaviour
         m_weaponScript.enabled = true;
         currWeapon = weapon;
         HUDManager.instance.weaponText.text = "Weapon: " + weapon.name;
+    }
+
+    public void DropWeapon()
+    {
+        currWeapon.tag = "Weapon";
+        m_weaponScript.player = null;
+        m_weaponScript.enabled = false;
+        currWeapon.transform.SetPositionAndRotation(m_weaponScript.startingPosition.position, m_weaponScript.startingPosition.rotation);
+        currWeapon.GetComponent<Collider2D>().enabled = true;
+        currWeapon = null;
     }
 
 }

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3176fcde73404a409bfd4e2a1ea6f9f, type: 3}
+  m_Name: Blade
+  m_EditorClassIdentifier: 
+  radius: 0.75
+  bulletForce: 20
+  bulletDelay: 0.5
+  bulletLifetime: 1
+  damage: 2
+  bulletPreFab: {fileID: 319021616187502277, guid: 0780f0103488e4c4faf926d01ff35f36, type: 3}
+  currentHeat: 0
+  heatPerShot: 5
+  maxHeat: 100
+  cooldownRate: 20

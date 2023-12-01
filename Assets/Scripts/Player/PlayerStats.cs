@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -30,5 +31,16 @@ public class PlayerStats : MonoBehaviour
     public void IncreaseStat(string stat, float value)
     {
         stats.Where(i => i.name == stat).FirstOrDefault().value *= (1+(value/100));
+    }
+
+    public void ResetStat(string stat)
+    {
+        stats.Where(i => i.name == stat).FirstOrDefault().ResetStat();
+    }
+
+    public void ResetAllStats()
+    {
+        foreach(var i in stats)
+            i.ResetStat();
     }
 }

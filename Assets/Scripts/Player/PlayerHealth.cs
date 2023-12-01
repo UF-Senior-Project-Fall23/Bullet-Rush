@@ -19,8 +19,23 @@ public class PlayerHealth : Damageable
 
     public override void Die()
     {
-        Destroy(gameObject);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GetComponent<PlayerController>().weapon.DropWeapon();
+        HUDManager.instance.ShowDeathScreen();
+        HUDManager.instance.transform.Find("PlayerHealthFrame")?.gameObject.SetActive(false);
+        FindObjectOfType<InterpPlayerAim>().gameObject.SetActive(false);
+        gameObject.SetActive(false);
+        BossController.instance.ForceBossDie();
+    }
+
+    public void Respawn()
+    {
+        gameObject.SetActive(true);
+        CurrentHealth = baseMaxHP;
+        HPChange.Invoke(CurrentHealth, baseMaxHP);
+        HUDManager.instance.HideDeathScreen();
+        HUDManager.instance.transform.Find("PlayerHealthFrame")?.gameObject.SetActive(true);
+        ((GameObject)SceneManager.GetActiveScene().GetRootGameObjects().GetValue(5)).SetActive(true);
+        GameManager.instance.GoToStart();
     }
 
     // Runs exclusively when the PlayerStats's Max HP manager changes.

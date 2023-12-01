@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PerkPickup : MonoBehaviour
 {
+    public GameObject sparkle;
     public Perk perk;
     public string title;
     public Vector3 offset;
@@ -36,6 +37,7 @@ public class PerkPickup : MonoBehaviour
             PerkManager.instance.onAddPerk.Invoke(perk);
             gameObject.GetComponent<Collider2D>().enabled = false;
             PerkManager.instance.DespawnPerks();
+            Portal.MakeBossPortal.Invoke();
         }
     }
 
@@ -53,6 +55,6 @@ public class PerkPickup : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Some cool particle effect
+        Instantiate(sparkle, transform.position, transform.rotation);
     }
 }
