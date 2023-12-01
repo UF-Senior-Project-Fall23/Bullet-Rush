@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f8e87f5541808cd44916cfec57536e73
+guid: 4a3be83706fdfc942b630e880f277f14
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -110,7 +110,91 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PuppetExplode_0
+      name: fullPuppet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c54559dcee80e284b81e42bc50625ace
+      internalID: -522932456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fullPuppet_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad467ad43a5017f48aa85067a4ad7d39
+      internalID: 441457435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fullPuppet_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59b2e20d5543daa41b19c6bd62344bca
+      internalID: 2056386727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fullPuppet_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9fcc6871881cbb4687ee67815682df7
+      internalID: -1887784216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fullPuppet_4
       rect:
         serializedVersion: 2
         x: 0
@@ -124,14 +208,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e9b47e036d3c54a4993972eaefa661cd
-      internalID: -1279284981
+      spriteID: aea5575eca19de34d9d2b6057090ffb3
+      internalID: 1963616488
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PuppetExplode_1
+      name: fullPuppet_5
       rect:
         serializedVersion: 2
         x: 32
@@ -145,14 +229,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f443fb32478bed24caf6f4039e8d0c1c
-      internalID: 883508242
+      spriteID: df208cd934fdb2148b0259b1b66f83b4
+      internalID: -1247518327
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PuppetExplode_2
+      name: fullPuppet_6
       rect:
         serializedVersion: 2
         x: 64
@@ -166,14 +250,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e3a7ec9058c4d68469be46715e4b1430
-      internalID: 2105812600
+      spriteID: 4c55511c82693d84e82dafa8dd3dfe7f
+      internalID: 1986788327
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PuppetExplode_3
+      name: fullPuppet_7
       rect:
         serializedVersion: 2
         x: 96
@@ -187,8 +271,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6562872cde06c404ebb67d982ab72f95
-      internalID: 1726349623
+      spriteID: 5c3d45361f2e612458b70580d6ace430
+      internalID: 397401180
       vertices: []
       indices: 
       edges: []
@@ -204,10 +288,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      PuppetExplode_0: -1279284981
-      PuppetExplode_1: 883508242
-      PuppetExplode_2: 2105812600
-      PuppetExplode_3: 1726349623
+      fullPuppet_0: -522932456
+      fullPuppet_1: 441457435
+      fullPuppet_2: 2056386727
+      fullPuppet_3: -1887784216
+      fullPuppet_4: 1963616488
+      fullPuppet_5: -1247518327
+      fullPuppet_6: 1986788327
+      fullPuppet_7: 397401180
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

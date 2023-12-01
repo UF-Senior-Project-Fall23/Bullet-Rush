@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f8e87f5541808cd44916cfec57536e73
+guid: 086d720268dae0540acc355ddb1df9b3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PuppetExplode_0
+      name: puppetWalk_0
       rect:
         serializedVersion: 2
         x: 0
@@ -124,14 +124,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e9b47e036d3c54a4993972eaefa661cd
-      internalID: -1279284981
+      spriteID: 974981e48b3d8264abbf0c802878bba4
+      internalID: 1492654437
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PuppetExplode_1
+      name: puppetWalk_1
       rect:
         serializedVersion: 2
         x: 32
@@ -145,14 +145,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f443fb32478bed24caf6f4039e8d0c1c
-      internalID: 883508242
+      spriteID: 20c25b5eeb9b6e046b37def2e1ae1c4d
+      internalID: -804619420
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PuppetExplode_2
+      name: puppetWalk_2
       rect:
         serializedVersion: 2
         x: 64
@@ -166,14 +166,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e3a7ec9058c4d68469be46715e4b1430
-      internalID: 2105812600
+      spriteID: 25ea5aebcea49c74aa7bf423b92ef66c
+      internalID: 166287823
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PuppetExplode_3
+      name: puppetWalk_3
       rect:
         serializedVersion: 2
         x: 96
@@ -187,8 +187,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6562872cde06c404ebb67d982ab72f95
-      internalID: 1726349623
+      spriteID: 7d6ec7bcfe4c0214ea0061b0ef7cd82d
+      internalID: -472392532
       vertices: []
       indices: 
       edges: []
@@ -204,10 +204,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      PuppetExplode_0: -1279284981
-      PuppetExplode_1: 883508242
-      PuppetExplode_2: 2105812600
-      PuppetExplode_3: 1726349623
+      puppetWalk_0: 1492654437
+      puppetWalk_1: -804619420
+      puppetWalk_2: 166287823
+      puppetWalk_3: -472392532
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

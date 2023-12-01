@@ -11,7 +11,7 @@ public class CordeliaBullet : MonoBehaviour
     {
         Debug.Log("Bullet hit " + collision.gameObject.name);
 
-        if (!collision.gameObject.CompareTag("Enemy") && !collision.gameObject.CompareTag("Bullet"))
+        if (!collision.gameObject.CompareTag("Boss") && !collision.gameObject.CompareTag("Bullet") && !collision.gameObject.CompareTag("Clone"))
         {
             Destroy(gameObject);
             m_alive = false;

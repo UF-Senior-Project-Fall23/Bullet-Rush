@@ -11,6 +11,7 @@ public class Clone : Damageable, puppetAttack
     public GameObject bulletPreFab;
     public GameObject dimPreFab;
     GameObject dim;
+    private Animator m_Animator;
 
     double attackSpeedModifier = 1;
     float globalTime = 0;
@@ -40,8 +41,8 @@ public class Clone : Damageable, puppetAttack
     void Start()
     {
         playerPos = PlayerController.instance.gameObject.transform.position;
-
-
+        m_Animator = GetComponent<Animator>();
+        m_Animator.SetTrigger("puppetWalk");
     }
 
     public void reset()
@@ -112,19 +113,19 @@ public class Clone : Damageable, puppetAttack
 
         if (followPattern == 1)
         {
-            float speed = UnityEngine.Random.Range(0.0f, 3.0f);
+            float speed = UnityEngine.Random.Range(1.0f, 5.0f);
             var step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 2f);
         }
         else if (followPattern == 2)
         {
-            float speed = UnityEngine.Random.Range(0.0f, 5.0f);
+            float speed = UnityEngine.Random.Range(1.0f, 8.0f);
             var step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 3f);
         }
         else if (followPattern == 3)
         {
-            float speed = UnityEngine.Random.Range(0.0f, 3.0f);
+            float speed = UnityEngine.Random.Range(1.0f, 5.0f);
             var step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * -2f);
         }
@@ -142,7 +143,7 @@ public class Clone : Damageable, puppetAttack
 
                 bullet.transform.Rotate(0, 0, 290 - (i * 10));
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.right * 13f, ForceMode2D.Impulse);
+                rb.AddForce(bullet.transform.right * .0015f, ForceMode2D.Impulse);
             }
             bulletTime = Time.time + bulletWait;
             yield return null;
@@ -155,6 +156,9 @@ public class Clone : Damageable, puppetAttack
 
     public IEnumerator DetonatePuppets()
     {
+        //yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        m_Animator.SetTrigger("Explode");
+        Die();
         yield return null;
     }
 

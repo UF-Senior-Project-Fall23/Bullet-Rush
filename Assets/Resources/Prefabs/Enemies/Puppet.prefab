@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8461969522309716461}
   - component: {fileID: -1010764644532094229}
   - component: {fileID: -4167771728942715207}
+  - component: {fileID: 4658138043728776655}
   m_Layer: 0
   m_Name: Puppet
   m_TagString: Clone
@@ -141,7 +142,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   a: 7
-  bulletPreFab: {fileID: 7198250052750651505, guid: 7dee2bc374dd7ca48af642f035054302, type: 3}
+  bulletPreFab: {fileID: 4778217174241415684, guid: 750620970cf81404da9ae5a77f01348c, type: 3}
   dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
 --- !u!50 &-4167771728942715207
 Rigidbody2D:
@@ -170,3 +171,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &4658138043728776655
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7764645947890026743}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3cec04ef107a43f49994b885ead4c859, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
