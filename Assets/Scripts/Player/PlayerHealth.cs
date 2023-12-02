@@ -22,7 +22,7 @@ public class PlayerHealth : Damageable
         GetComponent<PlayerController>().weapon.DropWeapon();
         HUDManager.instance.ShowDeathScreen();
         HUDManager.instance.transform.Find("PlayerHealthFrame")?.gameObject.SetActive(false);
-        FindObjectOfType<InterpPlayerAim>().gameObject.SetActive(false);
+        FindObjectOfType<InterpPlayerAim>().enabled = false;
         gameObject.SetActive(false);
         BossController.instance.ForceBossDie();
     }
@@ -34,7 +34,7 @@ public class PlayerHealth : Damageable
         HPChange.Invoke(CurrentHealth, baseMaxHP);
         HUDManager.instance.HideDeathScreen();
         HUDManager.instance.transform.Find("PlayerHealthFrame")?.gameObject.SetActive(true);
-        ((GameObject)SceneManager.GetActiveScene().GetRootGameObjects().GetValue(4)).SetActive(true);
+        FindObjectOfType<InterpPlayerAim>().enabled = true;
         GameManager.instance.GoToStart();
     }
 
