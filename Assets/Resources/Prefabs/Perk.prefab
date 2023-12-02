@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d37f581bb873d94fa526d174dbea291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sparkle: {fileID: 8869497260706207783, guid: e753eebf0a6e7a34eb9516ef2fe15634, type: 3}
   perk: {fileID: 0}
   title: 
-  description: 
   offset: {x: 0, y: 0, z: 0}

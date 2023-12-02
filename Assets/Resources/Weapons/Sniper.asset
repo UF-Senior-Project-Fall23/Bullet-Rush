@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3176fcde73404a409bfd4e2a1ea6f9f, type: 3}
+  m_Name: Sniper
+  m_EditorClassIdentifier: 
+  radius: 2
+  bulletForce: 50
+  bulletDelay: 1
+  bulletLifetime: 1
+  damage: 5
+  bulletPreFab: {fileID: 319021616187502277, guid: cf2b35f0efc248243a362918b92d7052, type: 3}
+  heatPerShot: 5
+  maxHeat: 100
+  cooldownRate: 20

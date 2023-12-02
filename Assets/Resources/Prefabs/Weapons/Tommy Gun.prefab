@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b29f8f22742bd409ca54e6432a3a85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseStats: {fileID: 11400000, guid: 7b3fe292ea4f33f41aa07b2593b62ada, type: 2}
   startingPosition: {fileID: 0}
   player: {fileID: 0}
   radius: 1.5
@@ -236,6 +237,7 @@ MonoBehaviour:
   currentHeat: 0
   heatPerShot: 5
   maxHeat: 100
+  cooldownRate: 20
 --- !u!4 &9021529055171853591 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8594331032011757144, guid: 9a7f9f0ae5a473649b941c149ac0ab2d, type: 3}

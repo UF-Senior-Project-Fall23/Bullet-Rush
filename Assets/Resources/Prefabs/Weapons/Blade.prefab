@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1452b44dbff567343a398b40004028ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseStats: {fileID: 11400000, guid: 28cdb4d7ebea6a64692951ce24e486be, type: 2}
   startingPosition: {fileID: 0}
   player: {fileID: 0}
   radius: 0.75
@@ -174,6 +175,7 @@ MonoBehaviour:
   currentHeat: 0
   heatPerShot: 5
   maxHeat: 100
+  cooldownRate: 20
 --- !u!95 &2944814925848372412
 Animator:
   serializedVersion: 5

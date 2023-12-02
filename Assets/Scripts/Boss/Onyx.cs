@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class Onyx : Damageable, Boss
 {
     float m_MaxBulletVelocity;
-    
+
     public float speed = 5.0f;
 
     private Animator m_Animator;
@@ -25,7 +25,7 @@ public class Onyx : Damageable, Boss
     private int difficulty = 0; //0 = easy, 1 = medium, 2 = hard
     private float difficultyMultiplier = 1f;
     private int level = 0;
-    
+
     private Rigidbody2D OnyxRB;
     public string[] Attacks { get; } =
     {
@@ -47,7 +47,7 @@ public class Onyx : Damageable, Boss
             if (gameManagerScript != null)
             {
                 // Now you can access the difficulty variable
-                difficulty = (int) gameManagerScript.getCurrentDifficulty();
+                difficulty = (int)gameManagerScript.getCurrentDifficulty();
                 level = gameManagerScript.getCurrentLevel();
                 Debug.Log("Difficulty: " + difficulty);
                 switch (difficulty)
@@ -568,12 +568,11 @@ public class Onyx : Damageable, Boss
 
         if (!m_Run)
         {
-            //int r = Random.Range(0, level + 3);
-            int randAttack = Random.Range(0, 5);
+            int randAttack = Random.Range(0, level + 2);
             switch (randAttack)
             {
                 case 0:
-                    StartCoroutine(Pistol_Blast());
+                    StartCoroutine(Grenade());
                     break;
                 case 1:
                     StartCoroutine(Dual_Danger());
@@ -588,7 +587,7 @@ public class Onyx : Damageable, Boss
                     StartCoroutine(HighExplosive());
                     break;
                 case 5:
-                    StartCoroutine(Grenade());
+                    StartCoroutine(Pistol_Blast());
                     break;
                 default:
                     break;

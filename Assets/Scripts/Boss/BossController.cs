@@ -78,10 +78,19 @@ public class BossController : MonoBehaviour
         FindObjectOfType<MusicManager>()?.LoadBossMusic(bossName);
     }
     
+    public void ForceBossDie()
+    {
+        BossHPBar.instance.SetHPBarHidden(true);
+        removeAllIndicators();
+        Destroy(currentBoss);
+        currentBossPrefab = null;
+        currentBoss = null;
+    }
+
     public void BossDie(Vector3 deathPos, Quaternion deathAng)
     {
         Debug.Log("Boss Died");
-        
+        removeAllIndicators();
         BossHPBar.instance.SetHPBarHidden(true);
 
         GameObject portal;
