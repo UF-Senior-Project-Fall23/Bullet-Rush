@@ -80,11 +80,7 @@ public class BossController : MonoBehaviour
     
     public void ForceBossDie()
     {
-        BossHPBar.instance.SetHPBarHidden(true);
-        removeAllIndicators();
-        Destroy(currentBoss);
-        currentBossPrefab = null;
-        currentBoss = null;
+        currentBoss.GetComponent<Damageable>().Die();
     }
 
     public void BossDie(Vector3 deathPos, Quaternion deathAng)
@@ -93,29 +89,31 @@ public class BossController : MonoBehaviour
         removeAllIndicators();
         BossHPBar.instance.SetHPBarHidden(true);
 
-        GameObject portal;
-        
-        if (currentBoss is null)
+        if (PlayerController.instance.health.CurrentHealth > 0)
         {
-            portal = Instantiate(portalPrefab, deathPos, deathAng);
+            GameObject portal;
+
+            if (currentBoss is null)
+            {
+                portal = Instantiate(portalPrefab, deathPos, deathAng);
+            }
+            else
+            {
+                portal = Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
+            }
+
+            Debug.LogWarning($"Current Level is {GameManager.instance.getCurrentLevel()}");
+
+            if (GameManager.instance.getCurrentLevel() == 3)
+            {
+                portal.GetComponent<Portal>().destination = "Start";
+                Debug.Log("You won, generating start portal!");
+            }
+            else
+            {
+                portal.GetComponent<Portal>().destination = "Loot Room";
+            }
         }
-        else
-        {
-            portal = Instantiate(portalPrefab, currentBoss.transform.position, currentBoss.transform.rotation);
-        }
-        
-        Debug.LogWarning($"Current Level is {GameManager.instance.getCurrentLevel()}");
-        
-        if (GameManager.instance.getCurrentLevel() == 3)
-        {
-            portal.GetComponent<Portal>().destination = "Start";
-            Debug.Log("You won, generating start portal!");
-        }
-        else
-        {
-            portal.GetComponent<Portal>().destination = "Loot Room"; 
-        }
-        
 
         currentBossPrefab = null;
         currentBoss = null;

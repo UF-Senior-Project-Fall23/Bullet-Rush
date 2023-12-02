@@ -8,6 +8,7 @@ public class PlayerHealth : Damageable
 
     void Awake()
     {
+        baseMaxHP = PlayerController.instance.stats.GetStat("Health").value;
         MaxHealth = baseMaxHP;
         CurrentHealth = baseMaxHP;
         
@@ -31,7 +32,6 @@ public class PlayerHealth : Damageable
     {
         gameObject.SetActive(true);
         CurrentHealth = baseMaxHP;
-        HPChange.Invoke(CurrentHealth, baseMaxHP);
         HUDManager.instance.HideDeathScreen();
         HUDManager.instance.transform.Find("PlayerHealthFrame")?.gameObject.SetActive(true);
         FindObjectOfType<InterpPlayerAim>().enabled = true;
@@ -59,7 +59,9 @@ public class PlayerHealth : Damageable
 
     void LootRoomHeal()
     {
-        CurrentHealth += Mathf.Round(CurrentHealth * 0.33f);
+        float increase = Mathf.Round(MaxHealth * (1.0f / (GameManager.instance.getCurrentDifficultyInt() + 3)));
+        Debug.Log($"Increase = {increase}");
+        CurrentHealth += increase;
     }
 
 }

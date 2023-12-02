@@ -29,6 +29,7 @@ public class StartRoom : MonoBehaviour
     public List<GameObject> difficultyButtons;
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         foreach (Transform child in transform)
         {
@@ -42,6 +43,7 @@ public class StartRoom : MonoBehaviour
                 difficultyButtons.Add(child.gameObject);
             }
         }
+        updateDifficultyButtonColors();
     }
 
     void Update()

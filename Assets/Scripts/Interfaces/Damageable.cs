@@ -10,7 +10,6 @@ public abstract class Damageable : MonoBehaviour
     private float _mMaxHP;
     private bool _mInvulnerable;
     
-
     public float MaxHealth
     {
         get => _mMaxHP;
