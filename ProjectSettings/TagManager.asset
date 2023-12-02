@@ -14,6 +14,7 @@ TagManager:
   - TutorialSquare
   - DifficultyButton
   - MusicManager
+  - Clone
   - CameraFollow
   layers:
   - Default
