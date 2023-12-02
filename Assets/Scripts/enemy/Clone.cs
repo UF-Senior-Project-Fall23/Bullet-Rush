@@ -42,13 +42,26 @@ public class Clone : Damageable, puppetAttack
     {
         playerPos = PlayerController.instance.gameObject.transform.position;
         m_Animator = GetComponent<Animator>();
-        m_Animator.SetTrigger("puppetWalk");
+        
     }
 
     public void reset()
     {
         spinSet = true;
         rush = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag != "Clone")
+        {
+            if (collision.gameObject.tag == "Player")
+            {
+                PlayerController.instance.GetComponent<Damageable>()?.takeDamage(1);
+            }
+        }
+
+
     }
 
     public IEnumerator Spotlight()
@@ -158,6 +171,7 @@ public class Clone : Damageable, puppetAttack
     {
         //yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         m_Animator.SetTrigger("Explode");
+        yield return new WaitForSeconds(1.5f);
         Die();
         yield return null;
     }

@@ -69,9 +69,10 @@ public class Hands : MonoBehaviour
         Destroy(handUp);
         handDown = Instantiate(handDownPreFab, transform.position, Quaternion.identity);
         length = 0f;
+        Vector3 playerPos = PlayerController.instance.transform.position;
         yield return new WaitForSeconds(.4f);
 
-        Vector3 playerPos = PlayerController.instance.transform.position;
+        //Vector3 playerPos = PlayerController.instance.transform.position;
         Vector3 direction = playerPos - handDown.transform.position;
         float angle = (Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg-90);
         float dist = 3f;

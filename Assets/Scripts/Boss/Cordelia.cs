@@ -12,7 +12,7 @@ public class Cordelia : Damageable, Boss
     public GameObject voidPreFab;
     public GameObject stringPreFab;
     GameObject dim;
-    public int puppetCount = 4;
+    int puppetCount = 2;
     public int attackNum = 4;
     private Animator m_Animator;
     private float m_DifficultyModifier;
@@ -39,7 +39,7 @@ public class Cordelia : Damageable, Boss
     int rotationSpeed = 3;
     int rotationSize = 8;
     int puppetRespawnTime = 4;
-
+    int diffAttack = 5;
     private float bulletTime = 0f;
     private float bulletWait = .3f;
     private Vector3 rushDirection = Vector3.up;
@@ -52,7 +52,13 @@ public class Cordelia : Damageable, Boss
     {
         m_DifficultyModifier = GameManager.instance.getCurrentDifficultyInt() * 0.5f + 1;
         m_LevelModifier = (GameManager.instance.getCurrentLevel() - 1) * 0.5f + 1;
-
+        if(m_LevelModifier > 1 || m_DifficultyModifier > 1)
+        {
+            diffAttack = 9;
+            puppetCount = 5;
+        }
+        Debug.Log(m_DifficultyModifier);
+        Debug.Log(m_LevelModifier);
         //StartCoroutine(SummonPuppets());
 
         cb = BossController.instance.currentBoss;
@@ -195,6 +201,10 @@ public class Cordelia : Damageable, Boss
             if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Wall" && rushMode)
             {
                 rushDirection = Vector3.Reflect(rushDirection.normalized, collision.contacts[0].normal);
+            }
+            if(collision.gameObject.tag == "Player")
+            {
+                PlayerController.instance.GetComponent<Damageable>()?.takeDamage(1);
             }
         }
 
@@ -367,7 +377,6 @@ public class Cordelia : Damageable, Boss
         }
 
         yield return new WaitForSeconds(.8f);
-        yield return null;
         PhaseChange();
     }
 
@@ -389,12 +398,10 @@ public class Cordelia : Damageable, Boss
                     
                     PlayerController.instance.GetComponent<Damageable>()?.takeDamage(4);
                 }
-                int damage = (int)MathF.Floor(puppets[i].GetComponent<Damageable>().MaxHealth);
-                puppets[i].GetComponent<Damageable>().takeDamage(damage);
             }
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         PhaseChange();
         
     }
@@ -512,7 +519,7 @@ public class Cordelia : Damageable, Boss
                     Debug.Log(bullet.transform.position);
                     bullet.transform.Rotate(0, 0, 290 - (i * 10));
                     Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                    rb.AddForce(bullet.transform.right * .0015f, ForceMode2D.Impulse);
+                    rb.AddForce(bullet.transform.right * .00125f, ForceMode2D.Impulse);
                 }
                 bulletTime = Time.time + bulletWait;
                 yield return null;
@@ -532,15 +539,15 @@ public class Cordelia : Damageable, Boss
         playerPos = PlayerController.instance.transform.position;
         voidList.Sort((v1, v2) => Vector3.Distance(v2, playerPos).CompareTo(Vector3.Distance(v1, playerPos)));
 
-        int voidAmount = 40; // actual is voidAmount/crowding
+        int voidAmount = 20; // actual is voidAmount/crowding
         int crowding = 4;
-        float rate = .7f;
+        float rate = 1f;
         int spreadCount = 0;
         Debug.Log(voidList.Count - 1 - voidAmount);
         for (int i = voidList.Count-1; i > voidList.Count - voidAmount; i-=crowding)
         {
-            Debug.Log(i);
-            Debug.Log(i - voidAmount);
+            //Debug.Log(i);
+            //Debug.Log(i - voidAmount);
             int j = (int)Math.Pow(-1, spreadCount);
             if(j < 0)
             {
@@ -582,7 +589,7 @@ public class Cordelia : Damageable, Boss
         // could make it so that only some attacks can't be twice in a row
         while (temp == attackNum) 
         {
-            attackNum = UnityEngine.Random.Range(1, 9);
+            attackNum = UnityEngine.Random.Range(1, diffAttack);
         }
         int puppetsLeft = puppetCount;
         
@@ -693,8 +700,7 @@ public class Cordelia : Damageable, Boss
         {
             if(puppet is not null) 
             {
-                var puppetHP = puppet.GetComponent<Damageable>();
-                puppetHP?.takeDamage(puppetHP.MaxHealth);
+                Destroy(puppet);
             }
         }
 
@@ -705,7 +711,6 @@ public class Cordelia : Damageable, Boss
                 Destroy(v);
             }
         }
-
         BossController.instance.BossDie();
 
         DimLights.instance.TurnOff();
