@@ -11,12 +11,16 @@ public class Bullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Bullet hit " + collision.gameObject.name);
-        if (!collision.gameObject.CompareTag("Bullet") && !collision.gameObject.CompareTag("Player"))
+        if (!collision.gameObject.CompareTag("Bullet") /*&& !collision.gameObject.CompareTag("Player")*/)
         {
             if (collision.GetComponent<Damageable>() != null)
+            {
                 collision.GetComponent<Damageable>().takeDamage(damage);
+            }
             else
+            {
                 collision.GetComponentInParent<Damageable>()?.takeDamage(damage);
+            }
 
             if (!IsPiercing)
                 Destroy(gameObject);
