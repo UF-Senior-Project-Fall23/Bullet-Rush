@@ -122,19 +122,40 @@ public class Blagthoroth : Damageable, Boss
         String fullarm = arm + (m_carcinized? "_Arm_Uncovered" : "_Arm");
 
         Color c = attackingArm.transform.Find("Blag_" + fullarm).GetComponent<SpriteRenderer>().color;
+
+        /*
         for (float green = 1f; green >= 0; green -= 0.02f)
         {
             c.r = green;
             c.b = green;
             attackingArm.transform.Find("Blag_" + fullarm).GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(.01f);
+            yield return new WaitForSeconds(telegraphDelay);
         }
         for (float green = 0f; green <= 1; green += 0.02f)
         {
             c.r = green;
             c.b = green;
             attackingArm.transform.Find("Blag_" + fullarm).GetComponent<SpriteRenderer>().color = c;
-            yield return new WaitForSeconds(.01f);
+            yield return new WaitForSeconds(telegraphDelay);
+        }
+        */
+        float telegraphDurationInSeconds = 0.8f ;
+        float speedMod = m_DifficultyModifier > 1 ? m_DifficultyModifier * 2 : 1;
+        float telegraphDelay = telegraphDurationInSeconds / (speedMod * 10);
+        
+        for (float green = 1f; green >= 0; green -= 0.2f)
+        {
+            c.r = green;
+            c.b = green;
+            attackingArm.transform.Find("Blag_" + fullarm).GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(telegraphDelay);
+        }
+        for (float green = 0f; green <= 1; green += 0.2f)
+        {
+            c.r = green;
+            c.b = green;
+            attackingArm.transform.Find("Blag_" + fullarm).GetComponent<SpriteRenderer>().color = c;
+            yield return new WaitForSeconds(telegraphDelay);
         }
         m_Animator.SetTrigger(arm);
         yield return new WaitUntil(() => m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Pinch " + arm));

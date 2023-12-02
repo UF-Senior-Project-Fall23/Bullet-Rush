@@ -33,10 +33,10 @@ public class PlayerMovement : MonoBehaviour
     private bool canDash = true;
     private bool isDashing;
     // private float dashingPower = 30f;
-    private float dashingPower = 60f;
-
-    private float dashingTime = 0.01f;
-    private float dashingCooldown = 1f;
+    [Header("Dashing")]
+    [SerializeField] private float dashingPower = 60f;
+    [SerializeField] private float dashingTime = 0.01f;
+    [SerializeField] private float dashingCooldown = 1f;
 
     public void Awake()
     {
