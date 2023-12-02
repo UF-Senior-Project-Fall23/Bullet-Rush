@@ -15,6 +15,7 @@ TagManager:
   - DifficultyButton
   - MusicManager
   - Clone
+  - CameraFollow
   layers:
   - Default
   - TransparentFX

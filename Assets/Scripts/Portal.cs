@@ -7,6 +7,7 @@ public class Portal : MonoBehaviour
 
     public string destination;
     public bool deleteOnUse = false;
+    public bool listening = false;
     
     public static UnityEvent EnterBossRoom = new();
     public static UnityEvent EnterLootRoom = new();
@@ -30,8 +31,11 @@ public class Portal : MonoBehaviour
         RoomType originalRoom = gameManager.roomType;
         RoomType newRoom;
 
-        if (name == "Portal to Next level")
+        if (name == "Portal to Next level" && !listening)
+        {
             MakeBossPortal.AddListener(SpawnBossPortal);
+            listening = true;
+        }
         
         switch (destination)
         {

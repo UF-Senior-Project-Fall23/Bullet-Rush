@@ -64,7 +64,7 @@ public class PerkManager : MonoBehaviour
         if(perk.type == PerkType.Weapon)
         {
             for(int i = 0; i < perk.amount; i++)
-                PlayerController.instance.weapon.currWeapon.GetComponent<Weapon>().ResetStat(perk.modifying[i]);
+                PlayerController.instance.weapon.currWeapon?.GetComponent<Weapon>().ResetStat(perk.modifying[i]);
         }
         else
         {
