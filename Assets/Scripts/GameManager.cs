@@ -169,7 +169,7 @@ public class GameManager : MonoBehaviour
         setLevel(0);
         PerkManager.instance.ResetHeldPerks();
         PerkManager.instance.ResetPerks();
-        MusicManager.instance.FadeCurrentInto("Start Area Theme", 0.5f);
+        MusicManager.instance?.FadeCurrentInto("Start Area Theme", 0.5f);
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)

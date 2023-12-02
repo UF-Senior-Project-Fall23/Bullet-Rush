@@ -34,7 +34,7 @@ public class PlayerHealth : Damageable
         HPChange.Invoke(CurrentHealth, baseMaxHP);
         HUDManager.instance.HideDeathScreen();
         HUDManager.instance.transform.Find("PlayerHealthFrame")?.gameObject.SetActive(true);
-        ((GameObject)SceneManager.GetActiveScene().GetRootGameObjects().GetValue(5)).SetActive(true);
+        ((GameObject)SceneManager.GetActiveScene().GetRootGameObjects().GetValue(4)).SetActive(true);
         GameManager.instance.GoToStart();
     }
 
