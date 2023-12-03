@@ -15,6 +15,7 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI weaponText;
     public TextMeshProUGUI heatText;
+    public FillableBar heatBar;
     public GameObject tooltip;
 
     GameObject DeathScreen;

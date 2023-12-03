@@ -50,7 +50,7 @@ public class Weapon : MonoBehaviour
 
     public void Update()
     {
-        HUDManager.instance.heatText.text = "Heat: " + currentHeat.ToString();
+        HUDManager.instance.heatBar.SetFill(currentHeat, maxHeat);
 
         if (player != null)
         {
