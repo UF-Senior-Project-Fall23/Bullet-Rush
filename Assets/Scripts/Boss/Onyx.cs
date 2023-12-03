@@ -21,8 +21,7 @@ public class Onyx : Damageable, Boss
     //coroutine variables. needed so they can be stopped on collision
     Coroutine jetChargeCoroutine;
     Coroutine runCoroutine;
-
-    private int difficulty = 0; //0 = easy, 1 = medium, 2 = hard
+    
     private float difficultyMultiplier = 1f;
     private int level = 0;
 
@@ -36,47 +35,12 @@ public class Onyx : Damageable, Boss
     {
         m_MaxBulletVelocity = 40f;
         m_Animator = GetComponent<Animator>();
-        GameObject gameManagerObject = GameObject.Find("GameManager");
         OnyxRB = GetComponent<Rigidbody2D>();
-
-        if (gameManagerObject != null)
-        {
-            // Try to get the GameManager component attached to the GameManager GameObject
-            GameManager gameManagerScript = gameManagerObject.GetComponent<GameManager>();
-
-            if (gameManagerScript != null)
-            {
-                // Now you can access the difficulty variable
-                difficulty = (int)gameManagerScript.getCurrentDifficulty();
-                level = gameManagerScript.getCurrentLevel();
-                Debug.Log("Difficulty: " + difficulty);
-                switch (difficulty)
-                {
-                    case 0:
-                        difficultyMultiplier = 1f;
-                        break;
-                    case 1:
-                        difficultyMultiplier = 1.5f;
-                        break;
-                    case 2:
-                        difficultyMultiplier = 2f;
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            else
-            {
-                Debug.LogError("GameManager component not found on GameManager GameObject.");
-            }
-        }
-        else
-        {
-            Debug.LogError("GameManager GameObject not found in the scene.");
-        }
-
+        
+        difficultyMultiplier = GameManager.instance.getDifficultyModifier();
+        level = GameManager.instance.getCurrentLevel();
     }
+    
     void PlayFireParticles()
     {
         fireParticlesL.Play();

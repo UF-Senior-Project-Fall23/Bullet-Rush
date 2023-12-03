@@ -152,6 +152,16 @@ public class GameManager : MonoBehaviour
         return ((int)difficulty);
     }
 
+    public float getDifficultyModifier()
+    {
+        return getCurrentDifficultyInt() * 0.5f + 1;
+    }
+
+    public float getLevelModifier()
+    {
+        return (getCurrentLevel() - 1) * 0.5f + 1;
+    }
+
     public Vector3 getStartAreaLocation()
     {
         return getWarpLocation("StartArea");

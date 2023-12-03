@@ -12,6 +12,7 @@ using Random = UnityEngine.Random;
 public class Blagthoroth : Damageable, Boss
 {
     public GameObject deathParticles;
+    [SerializeField] public float baseMaxHP;
 
     private Animator m_Animator;
     private float m_DifficultyModifier;
@@ -29,8 +30,8 @@ public class Blagthoroth : Damageable, Boss
     void Start()
     {
         m_Animator = GetComponent<Animator>();
-        m_DifficultyModifier = GameManager.instance.getCurrentDifficultyInt() * 0.5f + 1;
-        m_LevelModifier = (GameManager.instance.getCurrentLevel() - 1) * 0.5f + 1;
+        m_DifficultyModifier = GameManager.instance.getDifficultyModifier();
+        m_LevelModifier = GameManager.instance.getLevelModifier();
     }
 
     IEnumerator Firebolt(float countModifier, float speedModifier)

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: be31afdcb2f89d848b01390f5490296a
+guid: e82ea57a4859d2445ad5b7abfe8eef11
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -114,6 +114,48 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
+        y: 91
+        width: 158
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59523717214ecf444ae6d9a2ea0950c1
+      internalID: -1471788535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cordelia Bar
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 76
+        width: 158
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad212a1525a969e418249008ab0ecb56
+      internalID: 347914999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Onyx Bar
+      rect:
+        serializedVersion: 2
+        x: 1
         y: 61
         width: 158
         height: 13
@@ -124,14 +166,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d6dbc21c7e03d314cab2fcf4bc6ab921
-      internalID: 1205130937
+      spriteID: 5f24a3a69fb45704e966bec943c7423a
+      internalID: 1491279178
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cordelia Bar
+      name: Blagthoroth Bar
       rect:
         serializedVersion: 2
         x: 1
@@ -145,50 +187,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e29cb59651ec8e942a683ec4238a0c68
-      internalID: -884449741
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Onyx Bar
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 31
-        width: 158
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7ca08cb873e7fb44697fffd07b24a4a7
-      internalID: 779124885
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blagthoroth Bar
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 16
-        width: 158
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 54086ae3a6715ca4f9e55630db0853f6
-      internalID: -1841098739
+      spriteID: b5cd60776f5d2a64698cacf999e739b9
+      internalID: 1646955006
       vertices: []
       indices: 
       edges: []
@@ -198,7 +198,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 3
-        y: 3
+        y: 33
         width: 154
         height: 9
       alignment: 0
@@ -208,8 +208,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0cfa2b05aaa8d9e4e97c8bf83d478497
-      internalID: -1590181089
+      spriteID: 805a20f07d5af5246b64832598d2c650
+      internalID: 597377480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Heat Fill Bar
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 18
+        width: 154
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd89263d5442ab34f82adfeecc5b78e7
+      internalID: 1624681397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Heat Bar
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 158
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2ab067f9591fda42a495e5859c5d9f2
+      internalID: -839517985
       vertices: []
       indices: 
       edges: []
@@ -225,11 +267,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Blagthoroth Bar: -1841098739
-      Cordelia Bar: -884449741
-      Fill Bar: -1590181089
-      Onyx Bar: 779124885
-      Player Bar: 1205130937
+      Blagthoroth Bar: 1646955006
+      Cordelia Bar: 347914999
+      Fill Bar: 597377480
+      Heat Bar: -839517985
+      Heat Fill Bar: 1624681397
+      Onyx Bar: 1491279178
+      Player Bar: -1471788535
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
