@@ -107562,7 +107562,7 @@ MonoBehaviour:
   HPChange:
     m_PersistentCalls:
       m_Calls: []
-  baseMaxHP: 30
+  baseMaxHP: 20
 --- !u!114 &1992031069
 MonoBehaviour:
   m_ObjectHideFlags: 0
