@@ -107578,9 +107578,12 @@ MonoBehaviour:
   moveSmoothing: 0.05
   moveLimiter: 0.7
   runSpeed: 10
-  iFramesDuration: 0.3
+  iFramesDuration: 0.5
   numberOfFlashes: 3
   trail: {fileID: 1992031065}
+  dashingPower: 75
+  dashingTime: 0.03
+  dashingCooldown: 1
 --- !u!114 &1992031070
 MonoBehaviour:
   m_ObjectHideFlags: 0

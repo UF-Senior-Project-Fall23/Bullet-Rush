@@ -28,20 +28,20 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private TrailRenderer trail;
 
-    private SpriteRenderer spriteOpacity;
+    private SpriteRenderer spriteRenderer;
 
     private bool canDash = true;
     private bool isDashing;
     // private float dashingPower = 30f;
-    private float dashingPower = 60f;
-
-    private float dashingTime = 0.01f;
-    private float dashingCooldown = 1f;
+    [Header("Dashing")]
+    public float dashingPower = 60f;
+    public float dashingTime = 0.01f;
+    public float dashingCooldown = 1f;
 
     public void Awake()
     {
         m_body = GetComponent<Rigidbody2D>();
-        spriteOpacity = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -74,16 +74,18 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator Invulnerability()
     {
+        GetComponent<Damageable>().Invulnerable = true;
         Physics2D.IgnoreLayerCollision(7, 8, true);
         //invulnerability duration
         for (int i = 0; i < numberOfFlashes; i++)
         {
-            spriteOpacity.color = new Color(255, 255, 255, 0.5f);
+            spriteRenderer.color = new Color(255, 255, 255, 0.5f);
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
-            spriteOpacity.color = new Color(255, 255, 255, 255);
+            spriteRenderer.color = new Color(255, 255, 255, 255);
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
         Physics2D.IgnoreLayerCollision(7, 8, false);
+        GetComponent<Damageable>().Invulnerable = false;
     }
 
     private IEnumerator Dash()
@@ -108,5 +110,12 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
+    }
+
+    public void ResetMovement()
+    {
+        canDash = true;
+        isDashing = false;
+        spriteRenderer.color = new Color(255, 255, 255, 255);
     }
 }

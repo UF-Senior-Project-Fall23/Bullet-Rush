@@ -253,7 +253,9 @@ public class Blagthoroth : Damageable, Boss
                 indicator.transform.localScale = new Vector3(1, 20, 1);
                 indicator.transform.position += indicator.transform.up * 10;
             }
-            yield return new WaitForSeconds(.5f);
+            
+            yield return new WaitForSeconds(1.3f/speedModifier);
+            
             BossController.instance.removeAllIndicators();
             for (float i = Mathf.PI / 2; i <= 3 * Mathf.PI / 2; i += Mathf.PI / 12)
             {
@@ -264,7 +266,7 @@ public class Blagthoroth : Damageable, Boss
                 );
 
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.up * 20f * speedModifier, ForceMode2D.Impulse);
+                rb.AddForce(bullet.transform.up * 12f * speedModifier, ForceMode2D.Impulse);
             }
             for (float i = 13 * Mathf.PI / 24; i <= 37 * Mathf.PI / 24; i += Mathf.PI / 12)
             {
@@ -275,7 +277,9 @@ public class Blagthoroth : Damageable, Boss
                 indicator.transform.localScale = new Vector3(1, 20, 1);
                 indicator.transform.position += indicator.transform.up * 10;
             }
-            yield return new WaitForSeconds(.5f);
+            
+            yield return new WaitForSeconds(1.3f/speedModifier);
+            
             BossController.instance.removeAllIndicators();
             for (float i = 13 * Mathf.PI / 24; i <= 35 * Mathf.PI / 24; i += Mathf.PI / 12)
             {
@@ -286,7 +290,7 @@ public class Blagthoroth : Damageable, Boss
                 );
 
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.up * 20f * speedModifier, ForceMode2D.Impulse);
+                rb.AddForce(bullet.transform.up * 12f * speedModifier, ForceMode2D.Impulse);
             }
             yield return new WaitForSeconds(.5f);
         }

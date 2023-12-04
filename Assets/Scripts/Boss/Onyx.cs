@@ -586,10 +586,12 @@ public class Onyx : Damageable, Boss
     {
         if (collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Player")
         {
+            float damage = 2f;
             Debug.Log("onyx collision with wall or player");
             // Stop both coroutines on collision
             if (jetChargeCoroutine != null)
             {
+                damage = 4f;
                 StopCoroutine(jetChargeCoroutine);
                 m_Animator.SetTrigger("Run");
                 PhaseChange();
@@ -597,9 +599,15 @@ public class Onyx : Damageable, Boss
 
             if (runCoroutine != null)
             {
+                damage = 3f;
                 StopCoroutine(runCoroutine);
                 m_Animator.SetTrigger("Run");
                 PhaseChange();
+            }
+
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                collision.gameObject.GetComponent<Damageable>().takeDamage(damage);
             }
         }
 
