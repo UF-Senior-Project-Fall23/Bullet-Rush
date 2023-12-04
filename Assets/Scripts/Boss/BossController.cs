@@ -192,11 +192,11 @@ public class BossController : MonoBehaviour
         switch (name)
         {
             case "Cordelia":
-                return 60;
+                return 40;
             case "Blagthoroth":
-                return 100;
+                return 75;
             case "Onyx":
-                return 80;
+                return 60;
         }
 
         return 75;

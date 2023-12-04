@@ -59,7 +59,6 @@ public class HUDManager : MonoBehaviour
 
     void UpdateHealthText(float current, float max)
     {
-        Debug.LogWarning($"Setting HP Text to {current}/{max}");
         healthText.text = $"HP: {current}/{max}";
     }
 
