@@ -37,6 +37,7 @@ public class MusicManager : MonoBehaviour
     void Start()
     {
         currentTrack = FindSound("Title Theme");
+        currentTrack.source.volume = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
         Play(currentTrack);
     }
 
@@ -143,8 +144,12 @@ public class MusicManager : MonoBehaviour
 
     public void FadeOut(float fadeDuration)
     {
-        Debug.LogWarning("This is actually being called lol");
         StartCoroutine(FadeOut_Internal(currentTrack, fadeDuration));
+    }
+
+    public void FadeIn(float fadeDuration)
+    {
+        StartCoroutine(FadeIn_Internal(currentTrack, fadeDuration));
     }
 
     public void LoadBossMusic(string bossName)
