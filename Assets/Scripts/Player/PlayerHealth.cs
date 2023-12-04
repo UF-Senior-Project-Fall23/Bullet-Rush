@@ -60,7 +60,7 @@ public class PlayerHealth : Damageable
 
     void LootRoomHeal()
     {
-        CurrentHealth += Mathf.Round(CurrentHealth * 0.33f);
+        CurrentHealth += Mathf.Round(MaxHealth * 0.33f);
     }
 
 }
