@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-
+using Random = System.Random;
 
 public class PerkManager : MonoBehaviour
 {
@@ -122,7 +120,7 @@ public class PerkManager : MonoBehaviour
         
         var perksToShow = perks
             .Where(kv => !takenPerks.Contains(kv.Value))
-            .OrderBy(x => new System.Random().Next())
+            .OrderBy(x => new Random().Next())
             .Take(3).Select(kv => kv.Value).ToList();
 
         int i = 0;

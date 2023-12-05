@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Clone : Damageable, puppetAttack
 {
@@ -75,8 +75,8 @@ public class Clone : Damageable, puppetAttack
     {
         if (spinSet)
         {
-            rotationSpeed = UnityEngine.Random.Range(1.0f, 5.0f);
-            rotationSize = UnityEngine.Random.Range(4.0f, 8.0f);
+            rotationSpeed = Random.Range(1.0f, 5.0f);
+            rotationSize = Random.Range(4.0f, 8.0f);
             spinSet = false;
         }
         playerPos = BossController.instance.currentBoss.transform.position;
@@ -94,8 +94,8 @@ public class Clone : Damageable, puppetAttack
         float moveSpeed = .025f;
         if (spinSet)
         {
-            rotationSpeed = UnityEngine.Random.Range(1.0f, 5.0f);
-            rotationSize = UnityEngine.Random.Range(4.0f, 8.0f);
+            rotationSpeed = Random.Range(1.0f, 5.0f);
+            rotationSize = Random.Range(4.0f, 8.0f);
             spinSet = false;
         }
         if (!rush)
@@ -126,19 +126,19 @@ public class Clone : Damageable, puppetAttack
 
         if (followPattern == 1)
         {
-            float speed = UnityEngine.Random.Range(1.0f, 5.0f);
+            float speed = Random.Range(1.0f, 5.0f);
             var step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 2f);
         }
         else if (followPattern == 2)
         {
-            float speed = UnityEngine.Random.Range(1.0f, 8.0f);
+            float speed = Random.Range(1.0f, 8.0f);
             var step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 3f);
         }
         else if (followPattern == 3)
         {
-            float speed = UnityEngine.Random.Range(1.0f, 5.0f);
+            float speed = Random.Range(1.0f, 5.0f);
             var step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * -2f);
         }

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Random = UnityEngine.Random;
 
 public class Cordelia : Damageable, Boss
 {
@@ -259,7 +259,7 @@ public class Cordelia : Damageable, Boss
             float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
             for (int i = 0; i < puppetCount; i++)
             {
-                GameObject puppet = Instantiate(puppetPreFab, bossPos + (UnityEngine.Random.insideUnitCircle.normalized * radius), Quaternion.identity);
+                GameObject puppet = Instantiate(puppetPreFab, bossPos + (Random.insideUnitCircle.normalized * radius), Quaternion.identity);
                 puppet.transform.Translate(new Vector3(0, puppet.transform.localScale.y / 2, 0));
 
                 puppets.Add(puppet);
@@ -287,7 +287,7 @@ public class Cordelia : Damageable, Boss
                 float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
                 for (int i = 0; i < puppetCount; i++)
                 {
-                    GameObject puppet = Instantiate(puppetPreFab, bossPos + (UnityEngine.Random.insideUnitCircle.normalized * radius), Quaternion.identity);
+                    GameObject puppet = Instantiate(puppetPreFab, bossPos + (Random.insideUnitCircle.normalized * radius), Quaternion.identity);
                     puppet.transform.Translate(new Vector3(0, puppet.transform.localScale.y / 2, 0));
 
                     puppets.Add(puppet);
@@ -413,7 +413,7 @@ public class Cordelia : Damageable, Boss
 
                     if (puppets[i] != null)
                     {
-                        followPattern = UnityEngine.Random.Range(1, 4);
+                        followPattern = Random.Range(1, 4);
                         StartCoroutine(puppets[i].GetComponent<puppetAttack>().BladeFlourish(followPattern));
                     }
                 }
@@ -510,7 +510,7 @@ public class Cordelia : Damageable, Boss
         // could make it so that only some attacks can't be twice in a row
         while (temp == attackNum) 
         {
-            attackNum = UnityEngine.Random.Range(1, diffAttack);
+            attackNum = Random.Range(1, diffAttack);
         }
         int puppetsLeft = puppetCount;
         

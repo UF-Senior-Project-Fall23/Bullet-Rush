@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// Makes Blag'thoroth's claws deal contact damage.
 public class BlagClaw : MonoBehaviour
 {
     public int Damage;

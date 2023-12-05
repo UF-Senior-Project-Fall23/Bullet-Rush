@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -102,7 +100,7 @@ public class Weapon : MonoBehaviour
             isFlipped = true;
 
         //Flips the weapon if the mouse is behind the player
-        transform.Rotate(new Vector3(System.Convert.ToInt16(isFlipped) * 180, 0, 0));
+        transform.Rotate(new Vector3(Convert.ToInt16(isFlipped) * 180, 0, 0));
     }
 
     public virtual IEnumerator Shoot()

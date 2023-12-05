@@ -1,5 +1,5 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -64,7 +64,7 @@ public class blade : Weapon {
             isFlipped = true;
 
         //Flips the weapon if the mouse is behind the player
-        transform.Rotate(new Vector3(System.Convert.ToInt16(isFlipped) * 180, 0, 0));
+        transform.Rotate(new Vector3(Convert.ToInt16(isFlipped) * 180, 0, 0));
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
