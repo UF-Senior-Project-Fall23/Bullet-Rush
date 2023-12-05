@@ -18,7 +18,6 @@ MonoBehaviour:
   bulletLifetime: 1
   damage: 2
   bulletPreFab: {fileID: 319021616187502277, guid: 0780f0103488e4c4faf926d01ff35f36, type: 3}
-  currentHeat: 0
-  heatPerShot: 5
+  heatPerShot: 10
   maxHeat: 100
   cooldownRate: 20

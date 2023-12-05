@@ -39,6 +39,7 @@ public class Perk : ScriptableObject
 
 }
 
+# if UNITY_EDITOR
 [CustomEditor(typeof(Perk))]
 public class PerkEditor : Editor
 {
@@ -152,3 +153,5 @@ public class PerkEditor : Editor
         }
     }
 }
+
+# endif

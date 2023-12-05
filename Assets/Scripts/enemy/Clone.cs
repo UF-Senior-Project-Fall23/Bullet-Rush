@@ -34,7 +34,7 @@ public class Clone : Damageable, puppetAttack
     float rotationSize = 8;
 
     private float bulletTime = 0f;
-    private float bulletWait = .7f;
+    private float bulletWait = 1.5f;
     private Vector3 rushDirection = Vector3.up;
 
 
@@ -145,18 +145,22 @@ public class Clone : Damageable, puppetAttack
 
         if (bulletTime <= Time.time && MathF.Floor(globalTime) % 2 == 0)
         {
-
-            for (int i = 0; i < 5; i++)
+            int numKnives = GameManager.instance.getCurrentDifficultyInt() + 3;
+            float angleShift = 50f / numKnives;
+            for (int i = 0; i < numKnives; i++)
             {
                 var r2 = Quaternion.Euler(0, 0, playerAngle * Mathf.Rad2Deg + 90);
 
+                var localScale = transform.localScale;
+                var position = transform.position; 
                 GameObject bullet = Instantiate(bulletPreFab, new Vector3(
-                    transform.position.x + (transform.localScale.x / 5f * Mathf.Cos(playerAngle)),
-                    transform.position.y + (transform.localScale.y / 5f * Mathf.Sin(playerAngle)), 1), r2);
+                    position.x + (localScale.x / 5f * Mathf.Cos(playerAngle)),
+                    position.y + (localScale.y / 5f * Mathf.Sin(playerAngle)),
+                    1), r2);
 
-                bullet.transform.Rotate(0, 0, 290 - (i * 10));
+                bullet.transform.Rotate(0, 0, 290 - (i * angleShift));
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.right * .0015f, ForceMode2D.Impulse);
+                rb.AddForce(bullet.transform.right * .0008f, ForceMode2D.Impulse);
             }
             bulletTime = Time.time + bulletWait;
             yield return null;

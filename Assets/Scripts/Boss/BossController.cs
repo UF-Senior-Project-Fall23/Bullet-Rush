@@ -60,7 +60,8 @@ public class BossController : MonoBehaviour
     public void SummonBoss(Vector3 pos, float health)
     {
         currentBoss = Instantiate(currentBossPrefab, pos, Quaternion.identity);
-        
+
+        health *= GameManager.instance.getDifficultyModifier();
         currentBoss.GetComponent<Damageable>().MaxHealth = health;
         currentBoss.GetComponent<Damageable>().CurrentHealth = health;
         
@@ -183,6 +184,21 @@ public class BossController : MonoBehaviour
     {
         string boss = runBosses[index];
         LoadBoss(boss);
-        SummonBoss(currentBossPrefab.transform.position, 50); // TODO: Make HP automatically adjust based on the boss
+        SummonBoss(currentBossPrefab.transform.position, GetBossHP(boss));
+    }
+
+    private float GetBossHP(string name)
+    {
+        switch (name)
+        {
+            case "Cordelia":
+                return 40;
+            case "Blagthoroth":
+                return 75;
+            case "Onyx":
+                return 60;
+        }
+
+        return 75;
     }
 }

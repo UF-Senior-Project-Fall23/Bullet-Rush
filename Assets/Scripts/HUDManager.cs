@@ -15,6 +15,7 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI weaponText;
     public TextMeshProUGUI heatText;
+    public FillableBar heatBar;
     public GameObject tooltip;
 
     GameObject DeathScreen;
@@ -58,7 +59,6 @@ public class HUDManager : MonoBehaviour
 
     void UpdateHealthText(float current, float max)
     {
-        Debug.LogWarning($"Setting HP Text to {current}/{max}");
         healthText.text = $"HP: {current}/{max}";
     }
 
