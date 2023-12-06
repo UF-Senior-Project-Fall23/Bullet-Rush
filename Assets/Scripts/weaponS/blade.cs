@@ -28,7 +28,7 @@ public class blade : Weapon {
     {
         GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, 180));
         bullet.GetComponent<Bullet>().damage = damage;
-        Destroy(bullet, .25f);
+        Destroy(bullet, .30f);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
         //Fire the slash
