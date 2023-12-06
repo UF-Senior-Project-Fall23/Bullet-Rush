@@ -143,4 +143,12 @@ public class EvilCube : Damageable, Boss
         StopAllCoroutines();
         StartCoroutine(Death());
     }
+
+    public void ForceDeath()
+    {
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        StopAllCoroutines();
+        BossController.instance.BossDie();
+        Destroy(gameObject);
+    }
 }

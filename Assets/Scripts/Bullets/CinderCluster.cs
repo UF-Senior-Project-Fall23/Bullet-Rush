@@ -16,6 +16,7 @@ public class CinderCluster : MonoBehaviour
 
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
+            Destroy(bullet, 2.0f);
         }
     }
 }

@@ -643,4 +643,28 @@ public class Cordelia : Damageable, Boss
         Destroy(gameObject);
     }
 
+    public void ForceDeath()
+    {
+        // kills any remaining puppets and gloves once Cordelia dies
+        foreach (var puppet in puppets)
+        {
+            if (puppet is not null)
+            {
+                Destroy(puppet);
+            }
+        }
+
+        foreach (var v in gloves)
+        {
+            if (v is not null)
+            {
+                Destroy(v);
+            }
+        }
+        BossController.instance.BossDie();
+
+        DimLights.instance.TurnOff();
+        Destroy(gameObject);
+    }
+
 }
