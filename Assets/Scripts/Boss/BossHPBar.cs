@@ -1,10 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Handles the boss HP bar at the top of the screen.
 public class BossHPBar : MonoBehaviour
 {
     public static BossHPBar instance;
@@ -17,6 +15,7 @@ public class BossHPBar : MonoBehaviour
     public Sprite OnyxFrame;
     public Sprite DefaultFrame;
 
+    // Sets up singleton instance.
     public void Start()
     {
         if (instance is null)
@@ -29,6 +28,7 @@ public class BossHPBar : MonoBehaviour
         }
     }
 
+    // Picks the frame sprite and full name based on the boss ID.
     public void SetFrame(string bossName)
     {
         Image img = bossBarFrame.GetComponent<Image>();
@@ -56,6 +56,7 @@ public class BossHPBar : MonoBehaviour
         bossBarName.text = $"« {fancyName} »";
     }
 
+    // Displays the boss HP bar and links it to the boss.
     public void Setup(GameObject boss)
     {
         Damageable bossHP = boss.GetComponent<Damageable>();
@@ -72,12 +73,14 @@ public class BossHPBar : MonoBehaviour
         }
     }
 
+    // Updates the Boss HP bar when its health changes.
     void UpdateHPBar(float current, float max)
     {
         //Debug.LogWarning($"Setting boss bar fill to {current}/{max}");
         bossBarFill.SetFill(current, max);
     }
 
+    // Hides or Shows the HP bar.
     public void SetHPBarHidden(bool hidden)
     {
         bossBarFrame.gameObject.SetActive(!hidden);

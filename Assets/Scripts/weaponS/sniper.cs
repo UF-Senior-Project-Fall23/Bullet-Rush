@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEngine;
-
+// Represents the sniper weapon. No overrides needed as it works off of the base Weapon class.
 public class sniper : Weapon 
 {
 

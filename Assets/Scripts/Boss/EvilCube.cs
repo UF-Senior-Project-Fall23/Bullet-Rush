@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+// TODO: Clean this code up/Remove it.
+// Basic AI for a debug boss that is unused in the final product.
 public class EvilCube : Damageable, Boss
 {
     public GameObject bulletPreFab;
@@ -142,5 +142,13 @@ public class EvilCube : Damageable, Boss
         gameObject.GetComponent<Collider2D>().enabled = false;
         StopAllCoroutines();
         StartCoroutine(Death());
+    }
+
+    public void ForceDeath()
+    {
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        StopAllCoroutines();
+        BossController.instance.BossDie();
+        Destroy(gameObject);
     }
 }

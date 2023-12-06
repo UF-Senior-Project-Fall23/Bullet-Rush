@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
+// Represents the statistics a weapon can hold. Used for scripting in the editor.
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapon")]
 public class WeaponStats : ScriptableObject
 {

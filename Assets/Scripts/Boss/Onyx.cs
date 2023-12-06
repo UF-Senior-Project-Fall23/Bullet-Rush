@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
+// Handles the boss code for Onyx
 public class Onyx : Damageable, Boss
 {
     float m_MaxBulletVelocity;
@@ -31,6 +30,7 @@ public class Onyx : Damageable, Boss
         "Pistol_Blast", "Dual_Danger", "Summon", "Machine_Assault", "High_Explosive", "Smoke_Screen", "Tetra_Takedown", "Jet_Charge", "Radial_Fire"
     };
 
+    // Sets up Onyx variables and difficulty
     void Start()
     {
         m_MaxBulletVelocity = 40f;
@@ -41,16 +41,21 @@ public class Onyx : Damageable, Boss
         level = GameManager.instance.getCurrentLevel();
     }
     
+    // Displays jet engine fire particles.
     void PlayFireParticles()
     {
         fireParticlesL.Play();
         fireParticlesR.Play();
     }
+    
+    // Stops jet engine fire particles.
     void StopFireParticles()
     {
         fireParticlesL.Stop();
         fireParticlesR.Stop();
     }
+    
+    // Aims a pistol blast at the player and shoots them a few times.
     IEnumerator Pistol_Blast()
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
@@ -61,6 +66,7 @@ public class Onyx : Damageable, Boss
         //Get the angle from the position
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
         // Check for the 8 directions
+        // TODO: Clean this up into a nice function as similar code is used elsewhere.
         if (playerAngle >= (-1 * Mathf.PI / 8) && playerAngle < (Mathf.PI / 8))
         {
             m_Animator.SetTrigger("Pistol Blast");
@@ -163,6 +169,7 @@ public class Onyx : Damageable, Boss
         PhaseChange();
     }
 
+    // Determines whether a bullet is in a trajectory that will collide with the boss.
     bool BulletWillHitBoss(Vector3 bulletPosition)
     {
         // Perform a raycast from the boss's position to the bullet's position
@@ -188,6 +195,8 @@ public class Onyx : Damageable, Boss
         Debug.Log("No ouch");
         return false;
     }
+    
+    // Shoots the player in a wide area using some dual shotguns.
     IEnumerator Dual_Danger()
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
@@ -290,6 +299,7 @@ public class Onyx : Damageable, Boss
         PhaseChange();
     }
 
+    // Causes a large radial attack of bullets to strike out from Onyx
     IEnumerator Machine_Assault()
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
@@ -346,6 +356,7 @@ public class Onyx : Damageable, Boss
     }
 
 
+    // Causes Onyx to shoot forward propelled by a jet engine, dealing high contact damage.
     public IEnumerator JetCharge()
     {
         //charge in the direction of player
@@ -400,6 +411,7 @@ public class Onyx : Damageable, Boss
         PhaseChange();
     }
 
+    // Throws several projectiles that burst into smaller projectiles.
     public IEnumerator HighExplosive()
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
@@ -448,6 +460,7 @@ public class Onyx : Damageable, Boss
         PhaseChange();
     }
 
+    // Prepares to drop several explosives on the player, indicating where they'll all drop before all exploding simultaneously.
     public IEnumerator Grenade()
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
@@ -485,6 +498,7 @@ public class Onyx : Damageable, Boss
     }
 
 
+    // Causes Onyx to run around, dealing contact damage.
     public IEnumerator Run()
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
@@ -514,6 +528,7 @@ public class Onyx : Damageable, Boss
 
     }
 
+    // Handles Onyx dying, with a small death animation.
     IEnumerator Death()
     {
         Color c = GetComponentInChildren<SpriteRenderer>().color;
@@ -527,6 +542,7 @@ public class Onyx : Damageable, Boss
         Destroy(gameObject);
     }
 
+    // Dispatches Onyx's attacks.
     public void PhaseChange()
     {
 
@@ -566,6 +582,7 @@ public class Onyx : Damageable, Boss
         }
     }
 
+    // Startup code.
     public IEnumerator StartPhase()
     {
         Invulnerable = true;
@@ -575,6 +592,7 @@ public class Onyx : Damageable, Boss
         PhaseChange();
     }
 
+    // Handlex Onyx dying.
     public override void Die()
     {
         Invulnerable = true;
@@ -582,6 +600,14 @@ public class Onyx : Damageable, Boss
         StartCoroutine(Death());
     }
 
+    public void ForceDeath()
+    {
+        StopAllCoroutines();
+        BossController.instance.BossDie();
+        Destroy(gameObject);
+    }
+
+    // Handles contact damage, varies based on which mode Onyx is in.
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Player")

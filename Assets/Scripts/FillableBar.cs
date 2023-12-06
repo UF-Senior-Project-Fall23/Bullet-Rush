@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Represents a bar with an adjustable fill, such as HP or heat.
 public class FillableBar : MonoBehaviour
 {
     private Image barImage; // Automatically added, this script should be attached to a UI Image object.
@@ -11,6 +12,8 @@ public class FillableBar : MonoBehaviour
     void Awake()
     {
         barImage = GetComponent<Image>();
+        
+        // Add bar to a global dictionary for easy access.
         AllBars[name] = GetComponent<FillableBar>();
     }
 
