@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
+// Represents the player's health pool and handles health-related logic.
 public class PlayerHealth : Damageable
 {
     public float baseMaxHP;
@@ -12,6 +11,7 @@ public class PlayerHealth : Damageable
     private float lastFlashTime;
     private float invulTime;
 
+    // Sets max HP to base values, creates listeners for HP.
     void Awake()
     {
         MaxHealth = baseMaxHP;
@@ -25,6 +25,7 @@ public class PlayerHealth : Damageable
         Portal.EnterLootRoom.AddListener(LootRoomHeal);
     }
 
+    // Flashes the player if they're invulnerable.
     void Update()
     {
         if (Invulnerable)
@@ -33,6 +34,7 @@ public class PlayerHealth : Damageable
         }
     }
 
+    // Handles the player dying, showing the death screen.
     public override void Die()
     {
         GetComponent<PlayerController>().weapon.DropWeapon();
@@ -43,6 +45,7 @@ public class PlayerHealth : Damageable
         BossController.instance.ForceBossDie();
     }
 
+    // Sends the player to the start and resets their perks and other stats.
     public void Respawn()
     {
         gameObject.SetActive(true);
@@ -64,27 +67,32 @@ public class PlayerHealth : Damageable
         CurrentHealth += MaxHealth - oldMaxHP; // Heal or damage based on HP change.
     }
 
+    // Adjust the HP bar above the player.
     public void UpdateHPBar(float current, float max)
     {
         Debug.LogWarning($"Setting Player HP Bar to {current}/{max}");
         FillableBar.AllBars["Player"].SetFill(current, max);
     }
 
+    // Adjust the player's Health in the Stats module.
     void UpdateHealthStat(float current, float max)
     {
         PlayerController.instance.stats.SetStat("Health", max);
     }
 
+    // Heals the player when entering a loot room.
     void LootRoomHeal()
     {
         CurrentHealth += Mathf.Round(MaxHealth * 0.33f);
     }
 
+    // Grants IFrames when the player takes damage.
     void DamageInvFrames(float damage)
     {
         SetInvulFrames(0.4f);
     }
 
+    // Grants IFrames to the player. Sets up variables to handle the flashing animation.
     public void SetInvulFrames(float seconds)
     {
         Invulnerable = true;
@@ -98,6 +106,7 @@ public class PlayerHealth : Damageable
         invulTime = lastFlashTime + seconds;
     }
 
+    // Makes the player flash back and forth in opacity while they have IFrames.
     void InvulFlashHandler()
     {
         if (Time.time - lastFlashTime >= timeBetweenFlashes)

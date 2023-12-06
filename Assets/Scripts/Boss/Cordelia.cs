@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-
+// Handles the code for the Cordelia boss.
 public class Cordelia : Damageable, Boss
 {
     public GameObject bulletPreFab;
@@ -48,9 +50,10 @@ public class Cordelia : Damageable, Boss
     private List<GameObject> gloves = new ();
     private static List<Vector3> voidList = new(127);
 
+    // Sets up a bunch of quasi-random points around Cordelia's arena where the Puppeteer's Grasp holes can spawn.
+    // Terrible, horrible, no good, very bad code. TODO: Make this dynamically pick a location in Cordelia's arena mesh
     static Cordelia()
     {
-        // Terrible, horrible, no good, very bad code. TODO: Make this dynamically pick a location in Cordelia's arena mesh
         void addVoid(float x, float y)
             {
                 voidList.Add(new Vector3(x,y,0f));
@@ -79,6 +82,7 @@ public class Cordelia : Damageable, Boss
         addVoid(-76.0f, -0.8f); addVoid(-71.5f, -1.5f); 
     }
     
+    // Initializes Cordelia
     void Start()
     {
         m_DifficultyModifier = GameManager.instance.getDifficultyModifier();
@@ -111,6 +115,7 @@ public class Cordelia : Damageable, Boss
         "SpinDance", "KickDance", "StringDance", "SummonPuppets", "DetonatePuppets", "Rush", "Spotlight", "BladeFlourish", "PuppeteersGrasp"
     };
 
+    // Deals contact damage to the player and bounces off of walls.
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag != "Clone")
@@ -132,7 +137,7 @@ public class Cordelia : Damageable, Boss
 
     }
 
-    // Sets the dance to Spin.
+    // Sets the dance to Spin, moving Cordelia toward the player and causing her puppets to spin around the player.
     IEnumerator SpinDance()
     {
         Debug.Log("SpinDance");
@@ -140,7 +145,7 @@ public class Cordelia : Damageable, Boss
         float endTime = 3f;
         float moveSpeed = .1f;
         bool rush = false;
-        //playerPos = PlayerController.instance.gameObject.transform.position;
+
         while (length < endTime)
         {
             if (length > 2.3f)
@@ -167,12 +172,14 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // TODO: Implement
     IEnumerator KickDance()
     {
         Debug.Log("KickDance");
         yield return null;
     }
 
+    // TODO: Implement
     IEnumerator StringDance()
     {
         Debug.Log("StringDance");
@@ -245,21 +252,37 @@ public class Cordelia : Damageable, Boss
         yield return null;
     }
 
+    // Summons smaller puppet minions to help Cordelia, with their own AI
     IEnumerator SummonPuppets()
     {
         Debug.Log("SummonPuppets");
         puppetRespawnTime = 4;
         puppetSpawn = true;
         bool alive = false;
+        bool doSpawn = false;
+        bool clearPuppets = false;
+        
+        // Only spawn if no puppets are alive.
         if (puppets.Count == 0)
         {
+            doSpawn = true;
+        }
+        else if (puppets.Count(s => s != null) == 0)
+        {
+            doSpawn = true;
+            clearPuppets = true;
+        }
+
+        if (doSpawn)
+        {
+            if (clearPuppets) puppets.Clear();
             Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
             float health = 7f;
             float radius = 5f;
             float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
             for (int i = 0; i < puppetCount; i++)
             {
-                GameObject puppet = Instantiate(puppetPreFab, bossPos + (UnityEngine.Random.insideUnitCircle.normalized * radius), Quaternion.identity);
+                GameObject puppet = Instantiate(puppetPreFab, bossPos + (Random.insideUnitCircle.normalized * radius), Quaternion.identity);
                 puppet.transform.Translate(new Vector3(0, puppet.transform.localScale.y / 2, 0));
 
                 puppets.Add(puppet);
@@ -267,40 +290,12 @@ public class Cordelia : Damageable, Boss
                 puppet.GetComponent<Damageable>().CurrentHealth = health;
             }
         }
-        else
-        {
-            for (int i = 0; i < puppetCount; i++)
-            {
-                if (puppets[i] != null)
-                {
-                    alive = true;
-                }
-
-            }
-
-            if (!alive)
-            {
-                puppets.Clear();
-                Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
-                float health = 7f;
-                float radius = 5f;
-                float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-                for (int i = 0; i < puppetCount; i++)
-                {
-                    GameObject puppet = Instantiate(puppetPreFab, bossPos + (UnityEngine.Random.insideUnitCircle.normalized * radius), Quaternion.identity);
-                    puppet.transform.Translate(new Vector3(0, puppet.transform.localScale.y / 2, 0));
-
-                    puppets.Add(puppet);
-                    puppet.GetComponent<Damageable>().MaxHealth = health;
-                    puppet.GetComponent<Damageable>().CurrentHealth = health;
-                }
-            }
-        }
 
         yield return new WaitForSeconds(.8f);
         PhaseChange();
     }
 
+    // Makes Cordelia's puppets blow up, dealing damage nearby.
     IEnumerator DetonatePuppets()
     {
         Debug.Log("DetonatePuppets");
@@ -327,6 +322,7 @@ public class Cordelia : Damageable, Boss
         
     }
 
+    // Makes Cordelia and her puppets rush toward the player rapidly, dealing contact damage.
     IEnumerator Rush()
     {
         Debug.Log("Rush");
@@ -355,6 +351,7 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // Makes the map be covered in darkness aside from two spotlights at the locations of Cordelia and the player.
     IEnumerator Spotlight()
     {
         if (!spotlightActive)
@@ -393,6 +390,7 @@ public class Cordelia : Damageable, Boss
         yield return null;
     }
 
+    // Shoots a barrage of knife projectiles at the player in an arc formation.
     IEnumerator BladeFlourish()
     {
         Debug.Log("BladeFlourish");
@@ -413,7 +411,7 @@ public class Cordelia : Damageable, Boss
 
                     if (puppets[i] != null)
                     {
-                        followPattern = UnityEngine.Random.Range(1, 4);
+                        followPattern = Random.Range(1, 4);
                         StartCoroutine(puppets[i].GetComponent<puppetAttack>().BladeFlourish(followPattern));
                     }
                 }
@@ -454,6 +452,7 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // Spawns void holes around the map. Standing near them causes the gloves in them to try and attack the player.
     IEnumerator PuppeteersGrasp()
     {
         Debug.Log("PuppeteersGrasp");
@@ -487,6 +486,7 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // Reset puppet minion attacks.
     private void setPuppetAttack()
     {
         if (puppets.Count != 0)
@@ -502,6 +502,7 @@ public class Cordelia : Damageable, Boss
         }
     }
 
+    // Determines which attacks to use.
     public void PhaseChange()
     {
 
@@ -510,7 +511,7 @@ public class Cordelia : Damageable, Boss
         // could make it so that only some attacks can't be twice in a row
         while (temp == attackNum) 
         {
-            attackNum = UnityEngine.Random.Range(1, diffAttack);
+            attackNum = Random.Range(1, diffAttack);
         }
         int puppetsLeft = puppetCount;
         
@@ -594,10 +595,13 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // Called repeatedly.
     void Update()
     {
 
         globalTime += Time.deltaTime;
+        
+        // Handles the duration of the spotlight.
         if (spotlightActive)
         {
             dim.transform.position = transform.position;
@@ -614,9 +618,10 @@ public class Cordelia : Damageable, Boss
         }
     }
 
+    // Handles Cordelia dying and cleans up summons
     public override void Die()
     {
-        // kills any remaining puppets once Cordelia dies
+        // kills any remaining puppets and gloves once Cordelia dies
         foreach (var puppet in puppets)
         {
             if(puppet is not null) 

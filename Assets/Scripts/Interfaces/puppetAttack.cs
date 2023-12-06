@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+// Outlines the attacks available for Cordelia's puppets
 public interface puppetAttack
 {
     public bool spotlight { get; set; }

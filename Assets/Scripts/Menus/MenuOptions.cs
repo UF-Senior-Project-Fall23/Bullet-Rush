@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Manages the options menu in the main menu.
 public class MenuOptions : MonoBehaviour
 {
     [SerializeField] private Slider musicSlider;
@@ -12,6 +11,7 @@ public class MenuOptions : MonoBehaviour
     [SerializeField] private MusicManager musicManager;
     [SerializeField] private AudioManager audioManager;
     
+    // Adds listeners to every setting and links them to their PlayerPrefs value.
     void Start()
     {
         musicSlider.onValueChanged.AddListener(value =>
@@ -37,6 +37,7 @@ public class MenuOptions : MonoBehaviour
         
     }
     
+    // Makes the displays for the settings show as their internal values.
     public void UpdateSettings()
     {
         musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
