@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -12,9 +14,11 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI weaponText;
     public TextMeshProUGUI heatText;
     public FillableBar heatBar;
-    public GameObject tooltip;
+    public GameObject tooltipPrefab;
+    public GameObject tooltipCanvas;
 
     GameObject DeathScreen;
+    List<GameObject> tooltips;
 
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI difficultyText;
@@ -76,17 +80,18 @@ public class HUDManager : MonoBehaviour
     }
 
     // Utility to display a tooltip with a title and description somewhere. Used for weapons and perks.
-    public void ShowTooltip(string title, string description, Vector3 pos)
+    public GameObject CreateTooltip(string title, string description, Vector3 pos)
     {
+        GameObject tooltip = Instantiate(tooltipPrefab, tooltipCanvas.transform);
         tooltip.transform.Find("Title").GetComponent<TextMeshProUGUI>().text = title;
         tooltip.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = description;
         tooltip.transform.position = pos;
-        tooltip.SetActive(true);
+        return tooltip;
     }
 
-    public void HideTooltip()
+    public void HideTooltip(GameObject tooltip)
     {
-        tooltip.SetActive(false);
+        Destroy(tooltip);
     }
 
     public void ShowDeathScreen()

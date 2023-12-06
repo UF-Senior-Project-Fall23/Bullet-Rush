@@ -9,6 +9,7 @@ public class PerkPickup : MonoBehaviour
     public Vector3 offset;
 
     private float startY;
+    GameObject m_CurrentTooltip;
 
     public void Start()
     {
@@ -26,7 +27,7 @@ public class PerkPickup : MonoBehaviour
     // Show the perk description as a tooltip when nearby.
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        HUDManager.instance.ShowTooltip(title, perk.description, transform.position + offset);
+        m_CurrentTooltip = HUDManager.instance.CreateTooltip(title, perk.description, transform.position + offset);
     }
 
     // Pick up the perk when you press Q near it.
@@ -44,7 +45,7 @@ public class PerkPickup : MonoBehaviour
     // Hide tooltip when moving away.
     private void OnTriggerExit2D(Collider2D collision)
     {
-        HUDManager.instance.HideTooltip();
+        HUDManager.instance.HideTooltip(m_CurrentTooltip);
     }
 
     // Sets the type of the perk pickup.
