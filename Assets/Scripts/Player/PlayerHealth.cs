@@ -14,6 +14,7 @@ public class PlayerHealth : Damageable
     // Sets max HP to base values, creates listeners for HP.
     void Awake()
     {
+        baseMaxHP = PlayerController.instance.stats.GetStat("Health").value;
         MaxHealth = baseMaxHP;
         CurrentHealth = baseMaxHP;
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -83,7 +84,9 @@ public class PlayerHealth : Damageable
     // Heals the player when entering a loot room.
     void LootRoomHeal()
     {
-        CurrentHealth += Mathf.Round(MaxHealth * 0.33f);
+        float increase = Mathf.Round(MaxHealth * (1.0f / (GameManager.instance.getCurrentDifficultyInt() + 3)));
+        Debug.Log($"Increase = {increase}");
+        CurrentHealth += increase;
     }
 
     // Grants IFrames when the player takes damage.

@@ -9,7 +9,6 @@ public abstract class Damageable : MonoBehaviour
     private float _mMaxHP;
     private bool _mInvulnerable;
     
-
     // Adjusts the maximum health of the entity.
     public float MaxHealth
     {

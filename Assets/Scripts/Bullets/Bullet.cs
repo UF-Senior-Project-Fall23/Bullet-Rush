@@ -5,7 +5,7 @@ public class Bullet : MonoBehaviour
 {
     public float damage;
     public bool IsPiercing = false;
-    bool m_alive = true;
+    //bool m_alive = true;
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
 
             if (!IsPiercing)
                 Destroy(gameObject);
-            m_alive = false;
+            //m_alive = false;
         }
         
     }

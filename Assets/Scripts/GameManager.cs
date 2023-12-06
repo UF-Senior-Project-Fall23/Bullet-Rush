@@ -205,6 +205,7 @@ public class GameManager : MonoBehaviour
         setLevel(0);
         PerkManager.instance.ResetHeldPerks();
         PerkManager.instance.ResetPerks();
+        PlayerController.instance.health.CurrentHealth = PlayerController.instance.health.baseMaxHP;
         MusicManager.instance?.FadeCurrentInto("Start Area Theme", 0.5f);
     }
 

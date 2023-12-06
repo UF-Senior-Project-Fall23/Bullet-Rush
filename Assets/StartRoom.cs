@@ -32,6 +32,7 @@ public class StartRoom : MonoBehaviour
     
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         
         // Add colliders to lists
@@ -47,6 +48,7 @@ public class StartRoom : MonoBehaviour
                 difficultyButtons.Add(child.gameObject);
             }
         }
+        updateDifficultyButtonColors();
     }
 
     void Update()
