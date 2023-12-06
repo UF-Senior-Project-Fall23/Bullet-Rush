@@ -85,8 +85,6 @@ public class Cordelia : Damageable, Boss
         m_DifficultyModifier = GameManager.instance.getDifficultyModifier();
         m_LevelModifier = GameManager.instance.getLevelModifier();
         m_Animator = GetComponent<Animator>();
-        Debug.Log(m_DifficultyModifier);
-        Debug.Log(m_LevelModifier);
         if(m_DifficultyModifier == 1.5)
         {
             diffAttack = 7;
@@ -97,8 +95,8 @@ public class Cordelia : Damageable, Boss
             diffAttack = 8;
             puppetCount = 5;
         }
-        Debug.Log(m_DifficultyModifier);
-        Debug.Log(m_LevelModifier);
+        //Debug.Log(m_DifficultyModifier);
+        //Debug.Log(m_LevelModifier);
         //StartCoroutine(SummonPuppets());
 
         cb = BossController.instance.currentBoss;
@@ -490,7 +488,6 @@ public class Cordelia : Damageable, Boss
             yield return new WaitForSeconds(rate);
         }
         summoningDone = true;
-        Debug.Log("END");
     }
 
     private void setPuppetAttack()
@@ -515,9 +512,7 @@ public class Cordelia : Damageable, Boss
     }
     public void PhaseChange()
     {
-        Debug.Log("start of phase");
         StartCoroutine(PhaseWait());
-        Debug.Log("after phase wait");
         int temp = attackNum;
         // could make it so that only some attacks can't be twice in a row
         int diffAttackMod = 0;
@@ -529,7 +524,6 @@ public class Cordelia : Damageable, Boss
         {
 
             attackNum = UnityEngine.Random.Range(1, diffAttack - diffAttackMod);
-            Debug.Log(attackNum);
         }
         int puppetsLeft = puppetCount;
         
@@ -557,7 +551,6 @@ public class Cordelia : Damageable, Boss
         
         if(puppetRespawnTime == 0)
         {
-            Debug.Log("Whut");
             attackNum = 4;
         }
         //attackNum = 3;
