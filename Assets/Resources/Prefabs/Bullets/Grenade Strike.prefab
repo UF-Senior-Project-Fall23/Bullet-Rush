@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2636639762047519831, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
+      propertyPath: IsExplosion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6992979119922663772, guid: 52e87bb4b53f50c48a1e02940e50e9d8, type: 3}
       propertyPath: m_Radius
       value: 1
@@ -128,8 +132,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1451688987
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_RenderMode: 4
   m_MeshDistribution: 0

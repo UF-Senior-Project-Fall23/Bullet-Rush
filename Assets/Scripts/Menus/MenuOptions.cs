@@ -40,8 +40,8 @@ public class MenuOptions : MonoBehaviour
     // Makes the displays for the settings show as their internal values.
     public void UpdateSettings()
     {
-        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
-        sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 0.8f);
+        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
+        sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 0.5f);
         fullscreenToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("Fullscreen", 1));
     }
     

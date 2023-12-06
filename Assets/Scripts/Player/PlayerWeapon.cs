@@ -25,6 +25,7 @@ public class PlayerWeapon : MonoBehaviour
     {
         currWeapon.tag = "Weapon";
         m_weaponScript.player = null;
+        m_weaponScript.currentHeat = 0f;
         m_weaponScript.enabled = false;
         currWeapon.transform.SetPositionAndRotation(m_weaponScript.startingPosition.position, m_weaponScript.startingPosition.rotation);
         currWeapon.GetComponent<Collider2D>().enabled = true;
