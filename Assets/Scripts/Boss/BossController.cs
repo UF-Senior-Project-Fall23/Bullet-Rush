@@ -82,7 +82,7 @@ public class BossController : MonoBehaviour
     // Kills the current boss
     public void ForceBossDie()
     {
-        currentBoss.GetComponent<Damageable>().Die();
+        currentBoss.GetComponent<Boss>().ForceDeath();
     }
     
     // Handles the death of the current boss and spawns the portal to the next area
@@ -92,7 +92,7 @@ public class BossController : MonoBehaviour
         removeAllIndicators();
         BossHPBar.instance.SetHPBarHidden(true);
 
-        if (PlayerController.instance.health.CurrentHealth > 0)
+        if (PlayerController.instance.health.CurrentHealth > 0 && GameManager.instance.getCurrentLevel() != 0)
         {
             GameObject portal;
 

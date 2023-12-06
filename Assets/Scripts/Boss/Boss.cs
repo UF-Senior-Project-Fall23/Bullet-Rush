@@ -12,4 +12,6 @@ public interface Boss
     /// Used by the boss controller, runs the startup code for the boss.
     IEnumerator StartPhase();
 
+    void ForceDeath();
+
 }

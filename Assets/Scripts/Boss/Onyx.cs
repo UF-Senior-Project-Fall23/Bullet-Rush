@@ -600,6 +600,13 @@ public class Onyx : Damageable, Boss
         StartCoroutine(Death());
     }
 
+    public void ForceDeath()
+    {
+        StopAllCoroutines();
+        BossController.instance.BossDie();
+        Destroy(gameObject);
+    }
+
     // Handles contact damage, varies based on which mode Onyx is in.
     void OnCollisionEnter2D(Collision2D collision)
     {

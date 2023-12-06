@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
                 collision.GetComponentInParent<Damageable>()?.takeDamage(damage);
             }
 
-            if (!IsPiercing)
+            if (!IsPiercing || collision.gameObject.layer == LayerMask.NameToLayer("Background"))
                 Destroy(gameObject);
             //m_alive = false;
         }
