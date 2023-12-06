@@ -1,17 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
-using UnityEngine.Rendering;
-using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 
+/// Handles the code for Blag'thoroth
 public class Blagthoroth : Damageable, Boss
 {
     public GameObject deathParticles;
+    [SerializeField] public float baseMaxHP;
 
     private Animator m_Animator;
     private float m_DifficultyModifier;
@@ -29,10 +27,11 @@ public class Blagthoroth : Damageable, Boss
     void Start()
     {
         m_Animator = GetComponent<Animator>();
-        m_DifficultyModifier = GameManager.instance.getCurrentDifficultyInt() * 0.5f + 1;
-        m_LevelModifier = (GameManager.instance.getCurrentLevel() - 1) * 0.5f + 1;
+        m_DifficultyModifier = GameManager.instance.getDifficultyModifier();
+        m_LevelModifier = GameManager.instance.getLevelModifier();
     }
-
+    
+    /// Aims several bolts of fire at the player then fires them simultaneously.
     IEnumerator Firebolt(float countModifier, float speedModifier)
     {
         List<GameObject> indicators = new();
@@ -75,7 +74,8 @@ public class Blagthoroth : Damageable, Boss
         yield return new WaitForSeconds(1f);
         PhaseChange();
     }
-
+    
+    /// Spawns a ball of flame aimed at the player that bursts into smaller bullets on impact.
     IEnumerator Cinder_Cluster(float shardModifier, float speedModifier)
     {
         GameObject bulletPreFab = GameManager.instance.getBulletPrefab("Cinder Cluster");
@@ -112,6 +112,7 @@ public class Blagthoroth : Damageable, Boss
         PhaseChange();
     }
 
+    /// Makes one of Blag's claws flash green then do a large sweep over the map.
     IEnumerator Pinch()
     {
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
@@ -142,7 +143,8 @@ public class Blagthoroth : Damageable, Boss
         m_Animator.SetTrigger("Finish Attack");
         PhaseChange();
     }
-
+    
+    /// Makes Blag enter his second phase, where he sheds his armor and becomes more powerful.
     IEnumerator Carcinization()
     {
         //Getting every single gameobject of the boss :(
@@ -207,7 +209,8 @@ public class Blagthoroth : Damageable, Boss
         yield return new WaitUntil(() => m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"));
         PhaseChange();
     }
-
+    
+    /// Spawns an explosion at the player after a brief delay.
     IEnumerator Flame_Strike(float speedModifier, float sizeModifier)
     {
         float basesize = 4 * sizeModifier;
@@ -238,7 +241,8 @@ public class Blagthoroth : Damageable, Boss
         yield return new WaitForSeconds(.25f);
         PhaseChange();
     }
-
+    
+    /// Shoots a circle of spaced out flames around Blag a few times. 
     IEnumerator Radial_Blast(float speedModifier)
     {
         foreach(var _ in Enumerable.Range(0, 1))
@@ -252,7 +256,9 @@ public class Blagthoroth : Damageable, Boss
                 indicator.transform.localScale = new Vector3(1, 20, 1);
                 indicator.transform.position += indicator.transform.up * 10;
             }
-            yield return new WaitForSeconds(.5f);
+            
+            yield return new WaitForSeconds(1.3f/speedModifier);
+            
             BossController.instance.removeAllIndicators();
             for (float i = Mathf.PI / 2; i <= 3 * Mathf.PI / 2; i += Mathf.PI / 12)
             {
@@ -263,7 +269,7 @@ public class Blagthoroth : Damageable, Boss
                 );
 
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.up * 20f * speedModifier, ForceMode2D.Impulse);
+                rb.AddForce(bullet.transform.up * 12f * speedModifier, ForceMode2D.Impulse);
             }
             for (float i = 13 * Mathf.PI / 24; i <= 37 * Mathf.PI / 24; i += Mathf.PI / 12)
             {
@@ -274,7 +280,9 @@ public class Blagthoroth : Damageable, Boss
                 indicator.transform.localScale = new Vector3(1, 20, 1);
                 indicator.transform.position += indicator.transform.up * 10;
             }
-            yield return new WaitForSeconds(.5f);
+            
+            yield return new WaitForSeconds(1.3f/speedModifier);
+            
             BossController.instance.removeAllIndicators();
             for (float i = 13 * Mathf.PI / 24; i <= 35 * Mathf.PI / 24; i += Mathf.PI / 12)
             {
@@ -285,13 +293,14 @@ public class Blagthoroth : Damageable, Boss
                 );
 
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.up * 20f * speedModifier, ForceMode2D.Impulse);
+                rb.AddForce(bullet.transform.up * 12f * speedModifier, ForceMode2D.Impulse);
             }
             yield return new WaitForSeconds(.5f);
         }
         PhaseChange();
     }
-
+    
+    /// Does the death animation and kills Blag.
     IEnumerator Death()
     {
         m_Animator.SetTrigger("Death");
@@ -327,7 +336,8 @@ public class Blagthoroth : Damageable, Boss
         BossController.instance.BossDie();
         Destroy(gameObject);
     }
-
+    
+    /// Coordinates the different attacks that Blag can do.
     public void PhaseChange()
     {
         if (CurrentHealth <= MaxHealth / 2 && !m_carcinized)

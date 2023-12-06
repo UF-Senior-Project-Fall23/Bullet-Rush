@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-
+// Handles the code for the Cordelia boss.
 public class Cordelia : Damageable, Boss
 {
     public GameObject bulletPreFab;
@@ -46,12 +48,45 @@ public class Cordelia : Damageable, Boss
 
     private List<GameObject> puppets = new();
     private List<GameObject> gloves = new ();
-    private List<Vector3> voidList = new();
+    private static List<Vector3> voidList = new(127);
 
+    // Sets up a bunch of quasi-random points around Cordelia's arena where the Puppeteer's Grasp holes can spawn.
+    // Terrible, horrible, no good, very bad code. TODO: Make this dynamically pick a location in Cordelia's arena mesh
+    static Cordelia()
+    {
+        void addVoid(float x, float y)
+            {
+                voidList.Add(new Vector3(x,y,0f));
+            }
+        addVoid(-82.5f, -0.7f); addVoid(-74.7f, -3.5f); addVoid(-67.1f, -3.0f); addVoid(-73.2f, 1.8f); addVoid(-81.9f, 4.9f); 
+        addVoid(-88.6f, 5.7f); addVoid(-74.7f, 8.9f); addVoid(-65.8f, 8.4f); addVoid(-67.9f, 4.1f); addVoid(-61.4f, 2.0f); 
+        addVoid(-62.2f, -2.0f); addVoid(-65.4f, -6.0f); addVoid(-88.3f, 0.1f); addVoid(-93.0f, 1.4f); addVoid(-98.1f, 4.2f); 
+        addVoid(-91.9f, 8.7f); addVoid(-84.5f, 8.5f); addVoid(-79.0f, 1.8f); addVoid(-85.4f, 2.6f); addVoid(-75.8f, 5.3f); 
+        addVoid(-79.9f, -3.0f); addVoid(-79.9f, -3.0f); addVoid(-101.5f, 7.8f); addVoid(-96.9f, 9.6f); addVoid(-105.4f, 10.2f); 
+        addVoid(-101.3f, 12.3f); addVoid(-109.0f, 13.3f); addVoid(-106.7f, 16.3f); addVoid(-101.3f, 15.7f); addVoid(-103.0f, 18.9f); 
+        addVoid(-95.8f, 12.8f); addVoid(-89.8f, 11.4f); addVoid(-79.6f, 7.6f); addVoid(-67.5f, 1.0f); addVoid(-70.7f, -5.4f); 
+        addVoid(-60.2f, -5.8f); addVoid(-55.8f, -4.1f); addVoid(-56.6f, 0.5f); addVoid(-71.1f, 6.5f); addVoid(-95.0f, 15.8f); 
+        addVoid(-89.5f, 14.8f); addVoid(-84.9f, 11.7f); addVoid(-79.4f, 10.9f); addVoid(-74.0f, 11.9f); addVoid(-70.2f, 9.7f); 
+        addVoid(-63.0f, 5.4f); addVoid(-57.1f, 4.2f); addVoid(-52.3f, -1.6f); addVoid(-51.8f, 2.1f); addVoid(-46.7f, 3.9f); 
+        addVoid(-52.1f, 5.5f); addVoid(-57.6f, 7.4f); addVoid(-61.5f, 10.3f); addVoid(-66.0f, 12.0f); addVoid(-78.3f, 13.6f); 
+        addVoid(-83.6f, 14.3f); addVoid(-90.8f, 18.2f); addVoid(-96.8f, 19.1f); addVoid(-99.0f, 22.4f); addVoid(-84.6f, 17.5f); 
+        addVoid(-78.6f, 17.0f); addVoid(-73.4f, 15.6f); addVoid(-69.9f, 13.6f); addVoid(-67.9f, 17.0f); addVoid(-63.7f, 15.2f); 
+        addVoid(-92.7f, 21.3f); addVoid(-94.7f, 24.8f); addVoid(-91.5f, 27.3f); addVoid(-88.9f, 24.4f); addVoid(-86.8f, 20.6f); 
+        addVoid(-81.1f, 20.1f); addVoid(-83.9f, 23.1f); addVoid(-85.4f, 26.9f); addVoid(-80.1f, 25.3f); addVoid(-78.8f, 28.1f); 
+        addVoid(-76.9f, 22.5f); addVoid(-75.0f, 19.2f); addVoid(-69.7f, 20.0f); addVoid(-71.5f, 23.0f); addVoid(-74.4f, 25.8f); 
+        addVoid(-70.1f, 27.4f); addVoid(-66.4f, 23.8f); addVoid(-64.4f, 19.0f); addVoid(-58.7f, 13.1f); addVoid(-55.1f, 9.9f); 
+        addVoid(-49.1f, 8.2f); addVoid(-44.8f, 6.9f); addVoid(-50.2f, 11.7f); addVoid(-54.2f, 14.3f); addVoid(-59.1f, 16.6f); 
+        addVoid(-62.4f, 21.7f); addVoid(-61.3f, 25.1f); addVoid(-58.7f, 19.4f); addVoid(-53.4f, 17.2f); addVoid(-48.9f, 14.9f); 
+        addVoid(-45.2f, 10.2f); addVoid(-56.9f, 22.6f); addVoid(-52.7f, 20.0f); addVoid(-48.2f, 17.6f); addVoid(-45.9f, 12.8f); 
+        addVoid(-51.2f, 22.4f); addVoid(-56.1f, 25.3f); addVoid(-65.5f, 26.4f); addVoid(-93.3f, 4.3f); addVoid(-96.1f, 6.7f); 
+        addVoid(-76.0f, -0.8f); addVoid(-71.5f, -1.5f); 
+    }
+    
+    // Initializes Cordelia
     void Start()
     {
-        m_DifficultyModifier = GameManager.instance.getCurrentDifficultyInt() * 0.5f + 1;
-        m_LevelModifier = (GameManager.instance.getCurrentLevel() - 1) * 0.5f + 1;
+        m_DifficultyModifier = GameManager.instance.getDifficultyModifier();
+        m_LevelModifier = GameManager.instance.getLevelModifier();
         if(m_LevelModifier > 1 || m_DifficultyModifier > 1)
         {
             diffAttack = 9;
@@ -73,116 +108,6 @@ public class Cordelia : Damageable, Boss
                 StartCoroutine(puppets[i].GetComponent<puppetAttack>().Spotlight());
             }
         }
-
-        {
-            voidList.Add(new Vector3(-82.47555f, -0.6747541f, 0));
-            voidList.Add(new Vector3(-74.66592f, -3.49f, 0));
-            voidList.Add(new Vector3(-67.09f, -3.02f, 0));
-            voidList.Add(new Vector3(-73.18208f, 1.824329f, 0));
-            voidList.Add(new Vector3(-81.92888f, 4.948183f, 0));
-            voidList.Add(new Vector3(-88.56707f, 5.651052f, 0));
-            voidList.Add(new Vector3(-74.74401f, 8.853002f, 0));
-            voidList.Add(new Vector3(-65.76293f, 8.384424f, 0));
-            voidList.Add(new Vector3(-67.87153f, 4.089124f, 0));
-            voidList.Add(new Vector3(-61.38953f, 1.980522f, 0));
-            voidList.Add(new Vector3(-62.17f, -2f, 0));
-            voidList.Add(new Vector3(-65.37244f, -5.985308f, 0));
-            voidList.Add(new Vector3(-88.25468f, 0.1062098f, 0));
-            voidList.Add(new Vector3(-93.0f, 1.36f, 0));
-            voidList.Add(new Vector3(-98.09f, 4.25f, 0));
-            voidList.Add(new Vector3(-91.92521f, 8.69681f, 0));
-            voidList.Add(new Vector3(-84.50606f, 8.540617f, 0));
-            voidList.Add(new Vector3(-78.96121f, 1.824329f, 0));
-            voidList.Add(new Vector3(-85.36511f, 2.605293f, 0));
-            voidList.Add(new Vector3(-75.83736f, 5.338666f, 0));
-            voidList.Add(new Vector3(-79.89837f, -3.017645f, 0));
-            voidList.Add(new Vector3(-79.89837f, -3.017645f, 0));
-            voidList.Add(new Vector3(-101.5311f, 7.759653f, 0));
-            voidList.Add(new Vector3(-96.92338f, 9.633965f, 0));
-            voidList.Add(new Vector3(-105.4359f, 10.18064f, 0));
-            voidList.Add(new Vector3(-101.2968f, 12.28924f, 0));
-            voidList.Add(new Vector3(-109.03f, 13.3f, 0));
-            voidList.Add(new Vector3(-106.6854f, 16.27216f, 0));
-            voidList.Add(new Vector3(-101.2968f, 15.72548f, 0));
-            voidList.Add(new Vector3(-103.0149f, 18.92743f, 0));
-            voidList.Add(new Vector3(-95.83003f, 12.75782f, 0));
-            voidList.Add(new Vector3(-89.8166f, 11.43018f, 0));
-            voidList.Add(new Vector3(-79.58598f, 7.60346f, 0));
-            voidList.Add(new Vector3(-67.48105f, 1.043366f, 0));
-            voidList.Add(new Vector3(-70.683f, -5.360537f, 0));
-            voidList.Add(new Vector3(-60.22f, -5.83f, 0));
-            voidList.Add(new Vector3(-55.77f, -4.11f, 0));
-            voidList.Add(new Vector3(-56.62566f, 0.4966908f, 0));
-            voidList.Add(new Vector3(-71.07348f, 6.510111f, 0));
-            voidList.Add(new Vector3(-95.04906f, 15.80358f, 0));
-            voidList.Add(new Vector3(-89.50423f, 14.78832f, 0));
-            voidList.Add(new Vector3(-84.89654f, 11.66447f, 0));
-            voidList.Add(new Vector3(-79.42979f, 10.88351f, 0));
-            voidList.Add(new Vector3(-73.96304f, 11.89876f, 0));
-            voidList.Add(new Vector3(-70.21442f, 9.712062f, 0));
-            voidList.Add(new Vector3(-62.95146f, 5.416761f, 0));
-            voidList.Add(new Vector3(-57.09423f, 4.16722f, 0));
-            voidList.Add(new Vector3(-52.33035f, -1.61191f, 0));
-            voidList.Add(new Vector3(-51.78368f, 2.058619f, 0));
-            voidList.Add(new Vector3(-46.70741f, 3.932931f, 0));
-            voidList.Add(new Vector3(-52.09607f, 5.494859f, 0));
-            voidList.Add(new Vector3(-57.64091f, 7.369171f, 0));
-            voidList.Add(new Vector3(-61.54572f, 10.25874f, 0));
-            voidList.Add(new Vector3(-65.99722f, 11.97686f, 0));
-            voidList.Add(new Vector3(-78.25835f, 13.61688f, 0));
-            voidList.Add(new Vector3(-83.647f, 14.31975f, 0));
-            voidList.Add(new Vector3(-90.83186f, 18.22456f, 0));
-            voidList.Add(new Vector3(-96.84528f, 19.08362f, 0));
-            voidList.Add(new Vector3(-98.95389f, 22.44177f, 0));
-            voidList.Add(new Vector3(-84.58415f, 17.5217f, 0));
-            voidList.Add(new Vector3(-78.57073f, 16.97502f, 0));
-            voidList.Add(new Vector3(-73.41637f, 15.56929f, 0));
-            voidList.Add(new Vector3(-69.90204f, 13.61688f, 0));
-            voidList.Add(new Vector3(-67.87153f, 16.97502f, 0));
-            voidList.Add(new Vector3(-63.65433f, 15.17881f, 0));
-            voidList.Add(new Vector3(-92.70618f, 21.34842f, 0));
-            voidList.Add(new Vector3(-94.73668f, 24.78466f, 0));
-            voidList.Add(new Vector3(-91.45663f, 27.28374f, 0));
-            voidList.Add(new Vector3(-88.87946f, 24.39418f, 0));
-            voidList.Add(new Vector3(-86.77085f, 20.64555f, 0));
-            voidList.Add(new Vector3(-81.06982f, 20.09888f, 0));
-            voidList.Add(new Vector3(-83.88129f, 23.06654f, 0));
-            voidList.Add(new Vector3(-85.44321f, 26.89326f, 0));
-            voidList.Add(new Vector3(-80.13266f, 25.25324f, 0));
-            voidList.Add(new Vector3(-78.80502f, 28.0647f, 0));
-            voidList.Add(new Vector3(-76.85262f, 22.51986f, 0));
-            voidList.Add(new Vector3(-74.9783f, 19.16172f, 0));
-            voidList.Add(new Vector3(-69.74584f, 20.02078f, 0));
-            voidList.Add(new Vector3(-71.54206f, 22.98844f, 0));
-            voidList.Add(new Vector3(-74.43163f, 25.79991f, 0));
-            voidList.Add(new Vector3(-70.14f, 27.36f, 0));
-            voidList.Add(new Vector3(-66.3877f, 23.8475f, 0));
-            voidList.Add(new Vector3(-64.35719f, 19.00553f, 0));
-            voidList.Add(new Vector3(-58.65616f, 13.0702f, 0));
-            voidList.Add(new Vector3(-55.06373f, 9.868255f, 0));
-            voidList.Add(new Vector3(-49.05031f, 8.150135f, 0));
-            voidList.Add(new Vector3(-44.75501f, 6.900593f, 0));
-            voidList.Add(new Vector3(-50.22176f, 11.66447f, 0));
-            voidList.Add(new Vector3(-54.20467f, 14.31975f, 0));
-            voidList.Add(new Vector3(-59.12474f, 16.58454f, 0));
-            voidList.Add(new Vector3(-62.40479f, 21.7389f, 0));
-            voidList.Add(new Vector3(-61.31144f, 25.09704f, 0));
-            voidList.Add(new Vector3(-58.65616f, 19.39601f, 0));
-            voidList.Add(new Vector3(-53.42371f, 17.20931f, 0));
-            voidList.Add(new Vector3(-48.89411f, 14.86642f, 0));
-            voidList.Add(new Vector3(-45.22358f, 10.18064f, 0));
-            voidList.Add(new Vector3(-56.85994f, 22.59796f, 0));
-            voidList.Add(new Vector3(-52.72084f, 20.02078f, 0));
-            voidList.Add(new Vector3(-48.19125f, 17.59979f, 0));
-            voidList.Add(new Vector3(-45.92645f, 12.83592f, 0));
-            voidList.Add(new Vector3(-51.15891f, 22.44177f, 0));
-            voidList.Add(new Vector3(-56.07898f, 25.33133f, 0));
-            voidList.Add(new Vector3(-65.52864f, 26.42468f, 0));
-            voidList.Add(new Vector3(-93.25285f, 4.323413f, 0));
-            voidList.Add(new Vector3(-96.14241f, 6.7444f, 0));
-            voidList.Add(new Vector3(-75.99355f, -0.7528496f, 0));
-            voidList.Add(new Vector3(-71.54206f, -1.455718f, 0));
-        }
     }
 
     public string[] Attacks { get; } =
@@ -190,6 +115,7 @@ public class Cordelia : Damageable, Boss
         "SpinDance", "KickDance", "StringDance", "SummonPuppets", "DetonatePuppets", "Rush", "Spotlight", "BladeFlourish", "PuppeteersGrasp"
     };
 
+    // Deals contact damage to the player and bounces off of walls.
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag != "Clone")
@@ -211,7 +137,7 @@ public class Cordelia : Damageable, Boss
 
     }
 
-    // Sets the dance to Spin.
+    // Sets the dance to Spin, moving Cordelia toward the player and causing her puppets to spin around the player.
     IEnumerator SpinDance()
     {
         Debug.Log("SpinDance");
@@ -219,7 +145,7 @@ public class Cordelia : Damageable, Boss
         float endTime = 3f;
         float moveSpeed = .1f;
         bool rush = false;
-        //playerPos = PlayerController.instance.gameObject.transform.position;
+
         while (length < endTime)
         {
             if (length > 2.3f)
@@ -246,12 +172,14 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // TODO: Implement
     IEnumerator KickDance()
     {
         Debug.Log("KickDance");
         yield return null;
     }
 
+    // TODO: Implement
     IEnumerator StringDance()
     {
         Debug.Log("StringDance");
@@ -324,21 +252,37 @@ public class Cordelia : Damageable, Boss
         yield return null;
     }
 
+    // Summons smaller puppet minions to help Cordelia, with their own AI
     IEnumerator SummonPuppets()
     {
         Debug.Log("SummonPuppets");
         puppetRespawnTime = 4;
         puppetSpawn = true;
         bool alive = false;
+        bool doSpawn = false;
+        bool clearPuppets = false;
+        
+        // Only spawn if no puppets are alive.
         if (puppets.Count == 0)
         {
+            doSpawn = true;
+        }
+        else if (puppets.Count(s => s != null) == 0)
+        {
+            doSpawn = true;
+            clearPuppets = true;
+        }
+
+        if (doSpawn)
+        {
+            if (clearPuppets) puppets.Clear();
             Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
             float health = 7f;
             float radius = 5f;
             float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
             for (int i = 0; i < puppetCount; i++)
             {
-                GameObject puppet = Instantiate(puppetPreFab, bossPos + (UnityEngine.Random.insideUnitCircle.normalized * radius), Quaternion.identity);
+                GameObject puppet = Instantiate(puppetPreFab, bossPos + (Random.insideUnitCircle.normalized * radius), Quaternion.identity);
                 puppet.transform.Translate(new Vector3(0, puppet.transform.localScale.y / 2, 0));
 
                 puppets.Add(puppet);
@@ -346,40 +290,12 @@ public class Cordelia : Damageable, Boss
                 puppet.GetComponent<Damageable>().CurrentHealth = health;
             }
         }
-        else
-        {
-            for (int i = 0; i < puppetCount; i++)
-            {
-                if (puppets[i] != null)
-                {
-                    alive = true;
-                }
-
-            }
-
-            if (!alive)
-            {
-                puppets.Clear();
-                Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
-                float health = 7f;
-                float radius = 5f;
-                float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-                for (int i = 0; i < puppetCount; i++)
-                {
-                    GameObject puppet = Instantiate(puppetPreFab, bossPos + (UnityEngine.Random.insideUnitCircle.normalized * radius), Quaternion.identity);
-                    puppet.transform.Translate(new Vector3(0, puppet.transform.localScale.y / 2, 0));
-
-                    puppets.Add(puppet);
-                    puppet.GetComponent<Damageable>().MaxHealth = health;
-                    puppet.GetComponent<Damageable>().CurrentHealth = health;
-                }
-            }
-        }
 
         yield return new WaitForSeconds(.8f);
         PhaseChange();
     }
 
+    // Makes Cordelia's puppets blow up, dealing damage nearby.
     IEnumerator DetonatePuppets()
     {
         Debug.Log("DetonatePuppets");
@@ -406,6 +322,7 @@ public class Cordelia : Damageable, Boss
         
     }
 
+    // Makes Cordelia and her puppets rush toward the player rapidly, dealing contact damage.
     IEnumerator Rush()
     {
         Debug.Log("Rush");
@@ -434,6 +351,7 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // Makes the map be covered in darkness aside from two spotlights at the locations of Cordelia and the player.
     IEnumerator Spotlight()
     {
         if (!spotlightActive)
@@ -472,6 +390,7 @@ public class Cordelia : Damageable, Boss
         yield return null;
     }
 
+    // Shoots a barrage of knife projectiles at the player in an arc formation.
     IEnumerator BladeFlourish()
     {
         Debug.Log("BladeFlourish");
@@ -492,7 +411,7 @@ public class Cordelia : Damageable, Boss
 
                     if (puppets[i] != null)
                     {
-                        followPattern = UnityEngine.Random.Range(1, 4);
+                        followPattern = Random.Range(1, 4);
                         StartCoroutine(puppets[i].GetComponent<puppetAttack>().BladeFlourish(followPattern));
                     }
                 }
@@ -533,6 +452,7 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // Spawns void holes around the map. Standing near them causes the gloves in them to try and attack the player.
     IEnumerator PuppeteersGrasp()
     {
         Debug.Log("PuppeteersGrasp");
@@ -566,6 +486,7 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // Reset puppet minion attacks.
     private void setPuppetAttack()
     {
         if (puppets.Count != 0)
@@ -581,6 +502,7 @@ public class Cordelia : Damageable, Boss
         }
     }
 
+    // Determines which attacks to use.
     public void PhaseChange()
     {
 
@@ -589,7 +511,7 @@ public class Cordelia : Damageable, Boss
         // could make it so that only some attacks can't be twice in a row
         while (temp == attackNum) 
         {
-            attackNum = UnityEngine.Random.Range(1, diffAttack);
+            attackNum = Random.Range(1, diffAttack);
         }
         int puppetsLeft = puppetCount;
         
@@ -673,10 +595,13 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
+    // Called repeatedly.
     void Update()
     {
 
         globalTime += Time.deltaTime;
+        
+        // Handles the duration of the spotlight.
         if (spotlightActive)
         {
             dim.transform.position = transform.position;
@@ -693,9 +618,10 @@ public class Cordelia : Damageable, Boss
         }
     }
 
+    // Handles Cordelia dying and cleans up summons
     public override void Die()
     {
-        // kills any remaining puppets once Cordelia dies
+        // kills any remaining puppets and gloves once Cordelia dies
         foreach (var puppet in puppets)
         {
             if(puppet is not null) 

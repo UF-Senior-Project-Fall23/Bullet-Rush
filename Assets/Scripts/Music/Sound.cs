@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 
-[System.Serializable]
+// Represents a sound that can be played by the Audio or Music managers.
+[Serializable]
 public class Sound
 {
     public string name;

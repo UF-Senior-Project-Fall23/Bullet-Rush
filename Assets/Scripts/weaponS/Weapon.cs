@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
+// Represents a weapon.
 public class Weapon : MonoBehaviour
 {
     public WeaponStats baseStats;
@@ -48,10 +47,13 @@ public class Weapon : MonoBehaviour
         ResetStats();
     }
 
+    // Called once per frame
     public void Update()
     {
-        HUDManager.instance.heatText.text = "Heat: " + currentHeat.ToString();
+        // Adjust the heat bar based on current heat.
+        HUDManager.instance.heatBar.SetFill(currentHeat, maxHeat);
 
+        // Rotate the weapon
         if (player != null)
         {
             UpdateWeaponPos();
@@ -67,10 +69,12 @@ public class Weapon : MonoBehaviour
             }
         }
 
+        // Shoot the weapon when you click
         if (!isShooting && Input.GetButton("Fire1") && !isOverheated) {
             StartCoroutine(Shoot());
         }
 
+        // Reduce heat over time.
         if (!isShooting)
         {
             currentHeat -= cooldownRate * Time.deltaTime;
@@ -78,6 +82,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    // Rotates the weapon around the player based on their aim.
     public virtual void UpdateWeaponPos()
     {
         //Gets the mouse position
@@ -102,7 +107,7 @@ public class Weapon : MonoBehaviour
             isFlipped = true;
 
         //Flips the weapon if the mouse is behind the player
-        transform.Rotate(new Vector3(System.Convert.ToInt16(isFlipped) * 180, 0, 0));
+        transform.Rotate(new Vector3(Convert.ToInt16(isFlipped) * 180, 0, 0));
     }
 
     public virtual IEnumerator Shoot()

@@ -1,11 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+using Random = System.Random;
 
+// Manages the loading, spawning, generation, and killing of bosses.
 public class BossController : MonoBehaviour
 {
     public static BossController instance;
@@ -57,10 +55,12 @@ public class BossController : MonoBehaviour
             player = PlayerController.instance.gameObject;
     }
 
+    // Instantiates the boss and sets up its basic attributes
     public void SummonBoss(Vector3 pos, float health)
     {
         currentBoss = Instantiate(currentBossPrefab, pos, Quaternion.identity);
-        
+
+        health *= GameManager.instance.getDifficultyModifier();
         currentBoss.GetComponent<Damageable>().MaxHealth = health;
         currentBoss.GetComponent<Damageable>().CurrentHealth = health;
         
@@ -68,6 +68,7 @@ public class BossController : MonoBehaviour
         StartCoroutine(currentBoss.GetComponent<Boss>().StartPhase());
     }
 
+    // Sets up the boss internally and plays music
     public void LoadBoss(string bossName)
     {
         Debug.Log("Loading Boss: " + bossName);
@@ -78,11 +79,13 @@ public class BossController : MonoBehaviour
         FindObjectOfType<MusicManager>()?.LoadBossMusic(bossName);
     }
     
+    // Kills the current boss
     public void ForceBossDie()
     {
         currentBoss.GetComponent<Damageable>().Die();
     }
-
+    
+    // Handles the death of the current boss and spawns the portal to the next area
     public void BossDie(Vector3 deathPos, Quaternion deathAng)
     {
         Debug.Log("Boss Died");
@@ -119,34 +122,28 @@ public class BossController : MonoBehaviour
         currentBoss = null;
     }
 
+    // Wrapper for BossDie(Transform,Rotation) which uses the current boss's transform by default.
     public void BossDie()
     {
         BossDie(currentBoss.transform.position, currentBoss.transform.rotation);
     }
 
-    public void MinionDie()
-    {
-        Debug.Log("Minion Died");
-        currentBossPrefab = null;
-        currentBoss = null;
-
-        removeAllIndicators();
-
-        indicators.Clear();
-    }
-
+    // Removes all boss indicators/telegraphs.
     public void removeAllIndicators()
     {
         foreach (var i in indicators)
             Destroy(i);
     }
 
+    // Spawns an indicator at the specified position.
     public GameObject Indicate(Vector3 position, Quaternion rotation)
     {
         GameObject indicator = Instantiate(indicatorPrefab, position, rotation);
         indicators.Add(indicator);
         return indicator;
     }
+    
+    // Spawns a circle indicator at the specified position.
     public GameObject IndicateCircle(Vector3 position, Quaternion rotation)
     {
         GameObject indicator = Instantiate(CircleIndicatorPrefab, position, rotation);
@@ -162,25 +159,44 @@ public class BossController : MonoBehaviour
         return (Vector2)playerPos + Vector2.ClampMagnitude(PlayerController.instance.GetComponent<Rigidbody2D>().velocity, strength);
     }
 
+    // Removes the given indicator from the tracking list then destroys it.
     public void RemoveIndicator(GameObject indicator)
     {
         indicators.Remove(indicator);
         Destroy(indicator);
     }
 
+    // Randomly picks 3 bosses, sets the level to 0, and resets the player's perks.
     public void GenerateRun()
     {
-        runBosses = bossPrefabs.Keys.OrderBy(x => new System.Random().Next()).Take(3).ToList();
+        runBosses = bossPrefabs.Keys.OrderBy(x => new Random().Next()).Take(3).ToList();
         GameManager.instance.setLevel(0);
         PerkManager.instance.ResetPerks();
         
         Debug.Log($"Generated new run. Bosses: {string.Join(", ", runBosses)}");
     }
 
+    // Loads and summons the boss at the given level.
     public void StartBoss(int index)
     {
         string boss = runBosses[index];
         LoadBoss(boss);
-        SummonBoss(currentBossPrefab.transform.position, 50); // TODO: Make HP automatically adjust based on the boss
+        SummonBoss(currentBossPrefab.transform.position, GetBossHP(boss));
+    }
+
+    // Returns the base, unmodified maximum health for the given boss.
+    private float GetBossHP(string name)
+    {
+        switch (name)
+        {
+            case "Cordelia":
+                return 40;
+            case "Blagthoroth":
+                return 75;
+            case "Onyx":
+                return 60;
+        }
+
+        return 75;
     }
 }

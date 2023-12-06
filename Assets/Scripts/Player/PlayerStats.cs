@@ -1,12 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
+// Represents statistics held by the player.
+// Mostly adjusted through the inspector.
 public class PlayerStats : MonoBehaviour
 {
+    // Set in the inspector, defines the stats the player can hold and which can be modified by perks.
     [SerializeField]
     private List<Stat> stats = new List<Stat>();
 
@@ -28,6 +29,7 @@ public class PlayerStats : MonoBehaviour
         stats.Where(i => i.name == stat).FirstOrDefault().value = value;
     }
 
+    // Increases a stat by a percentage.
     public void IncreaseStat(string stat, float value)
     {
         stats.Where(i => i.name == stat).FirstOrDefault().value *= (1+(value/100));

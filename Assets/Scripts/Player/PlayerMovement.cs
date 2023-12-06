@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Handles the player movement mechanics.
 public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D m_body;
@@ -28,22 +28,23 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private TrailRenderer trail;
 
-    private SpriteRenderer spriteOpacity;
+    private SpriteRenderer spriteRenderer;
 
     private bool canDash = true;
     private bool isDashing;
     // private float dashingPower = 30f;
-    private float dashingPower = 60f;
-
-    private float dashingTime = 0.01f;
-    private float dashingCooldown = 1f;
+    [Header("Dashing")]
+    public float dashingPower = 60f;
+    public float dashingTime = 0.01f;
+    public float dashingCooldown = 1f;
 
     public void Awake()
     {
         m_body = GetComponent<Rigidbody2D>();
-        spriteOpacity = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    // Detects when the player dashes.
     void Update()
     {
         //In order to not have the player do any other movements if it is currently dashing we need to add this code block
@@ -54,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Dash());
     }
 
+    // Moves the player with basic WASD or joystick input.
     void FixedUpdate()
     {
         m_horizontal = Input.GetAxisRaw("Horizontal");
@@ -72,25 +74,13 @@ public class PlayerMovement : MonoBehaviour
         m_body.velocity = Vector3.SmoothDamp(m_body.velocity, targetVelocity, ref m_zero, moveSmoothing);
     }
 
-    private IEnumerator Invulnerability()
-    {
-        Physics2D.IgnoreLayerCollision(7, 8, true);
-        //invulnerability duration
-        for (int i = 0; i < numberOfFlashes; i++)
-        {
-            spriteOpacity.color = new Color(255, 255, 255, 0.5f);
-            yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
-            spriteOpacity.color = new Color(255, 255, 255, 255);
-            yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
-        }
-        Physics2D.IgnoreLayerCollision(7, 8, false);
-    }
 
+    // Causes the player to dash forward, becoming briefly invincible.
     private IEnumerator Dash()
     {
         canDash = false;
         isDashing = true;
-        StartCoroutine(Invulnerability());
+        PlayerController.instance.health.SetInvulFrames(iFramesDuration);
         float originalGravity = m_body.gravityScale;
         m_body.gravityScale = 0f;
         m_horizontal = Input.GetAxisRaw("Horizontal");
@@ -108,5 +98,13 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
+    }
+
+    // Resets whether the player can dash and their opacity.
+    public void ResetMovement()
+    {
+        canDash = true;
+        isDashing = false;
+        spriteRenderer.color = new Color(255, 255, 255, 255);
     }
 }

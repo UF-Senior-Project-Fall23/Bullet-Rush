@@ -3,6 +3,7 @@ using System.Collections;
 using JetBrains.Annotations;
 using UnityEngine;
 
+// Handles the music playing.
 public class MusicManager : MonoBehaviour
 {
     public Sound[] sounds;
@@ -10,6 +11,7 @@ public class MusicManager : MonoBehaviour
 
     [HideInInspector] public Sound currentTrack;
 
+    // Set up singleton instance.
     void Awake()
     {
         if (instance == null)
@@ -23,6 +25,7 @@ public class MusicManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
+        // Load each track from the inspector into an AudioSource component that can be played.
         foreach (Sound sound in sounds)
         {
             sound.source = gameObject.AddComponent<AudioSource>();
@@ -34,17 +37,21 @@ public class MusicManager : MonoBehaviour
         }
     }
 
+    // Play title theme on game startup.
     void Start()
     {
         currentTrack = FindSound("Title Theme");
+        currentTrack.source.volume = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
         Play(currentTrack);
     }
 
+    // Find a sound by name.
     Sound FindSound(string name)
     {
         return Array.Find(sounds, s => s.name == name);
     }
 
+    // Play a sound instantly by name.
     void Play(string name)
     {
         Debug.Log("Trying to play via name " + name);
@@ -58,6 +65,7 @@ public class MusicManager : MonoBehaviour
         s.source.Play();
     }
 
+    // Play a sound instantly by value.
     void Play(Sound sound)
     {
         Debug.Log("Trying to play via sound " + sound?.name);
@@ -121,6 +129,7 @@ public class MusicManager : MonoBehaviour
         src.volume = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
     }
 
+    // INTERNAL: Smoothly fades out the first sound then fades in the second sound
     private IEnumerator FadeOutThenPlay_Internal(Sound oldSound, Sound newSound, float fadeDuration)
     {
         yield return StartCoroutine(FadeOut_Internal(oldSound, fadeDuration));
@@ -129,6 +138,7 @@ public class MusicManager : MonoBehaviour
         currentTrack = newSound;
         Play(newSound);
     }
+    
     // Smoothly fades out the current sound then instantly starts the given sound.
     public void FadeOutThenPlay(string to, float fadeDuration)
     {
@@ -141,12 +151,19 @@ public class MusicManager : MonoBehaviour
         StartCoroutine(FadeOutThenIn_Internal(currentTrack, FindSound(to), fadeDuration));
     }
 
+    // Fades out the current sound
     public void FadeOut(float fadeDuration)
     {
-        Debug.LogWarning("This is actually being called lol");
         StartCoroutine(FadeOut_Internal(currentTrack, fadeDuration));
     }
 
+    // Fades in the current music track
+    public void FadeIn(float fadeDuration)
+    {
+        StartCoroutine(FadeIn_Internal(currentTrack, fadeDuration));
+    }
+
+    // Plays the music for a given boss.
     public void LoadBossMusic(string bossName)
     {
         string toPlay;
