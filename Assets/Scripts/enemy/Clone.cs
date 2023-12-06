@@ -40,6 +40,8 @@ public class Clone : Damageable, puppetAttack
 
     void Start()
     {
+        //m_DifficultyModifier = GameManager.instance.getDifficultyModifier();
+        //m_LevelModifier = GameManager.instance.getLevelModifier();
         playerPos = PlayerController.instance.gameObject.transform.position;
         m_Animator = GetComponent<Animator>();
         
@@ -119,6 +121,7 @@ public class Clone : Damageable, puppetAttack
 
     public IEnumerator BladeFlourish(int followPattern)
     {
+        //if(m)
         playerPos = PlayerController.instance.transform.position - transform.position;
         //Get the angle from the position
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
