@@ -113,7 +113,7 @@ MonoBehaviour:
   puppetPreFab: {fileID: 7764645947890026743, guid: 290d0d0567c555348a313434335d0a99, type: 3}
   dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
   voidPreFab: {fileID: 8026783831929155456, guid: f93a8b4bd9214624cafe11eb7e6422d6, type: 3}
-  stringPreFab: {fileID: 4930068019576248167, guid: 596ec6950ab3178468e043a6d1dc5ea5, type: 3}
+  kickPreFab: {fileID: 2372805354271246499, guid: 388cc7a6744f41b4b848f0cfa9cdcc06, type: 3}
   attackNum: 4
 --- !u!70 &-3894961986207175519
 CapsuleCollider2D:
@@ -367,6 +367,30 @@ MonoBehaviour:
     - m_Name: Entry_1
       m_Hash: 0
       m_Sprite: {fileID: -110923080, guid: 08cef840ca58ff347a68ca1fbd1604a1, type: 3}
+  - m_Name: Kick
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: Entry
+      m_Hash: 0
+      m_Sprite: {fileID: -1576094295, guid: ca10142745cce4b4694e62ab46e2f94b, type: 3}
+    - m_Name: Entry_0
+      m_Hash: 0
+      m_Sprite: {fileID: -1266240324, guid: ca10142745cce4b4694e62ab46e2f94b, type: 3}
+    - m_Name: Entry_1
+      m_Hash: 0
+      m_Sprite: {fileID: -324994972, guid: ca10142745cce4b4694e62ab46e2f94b, type: 3}
+    - m_Name: Entry_2
+      m_Hash: 0
+      m_Sprite: {fileID: -1239878782, guid: ca10142745cce4b4694e62ab46e2f94b, type: 3}
+    - m_Name: Entry_3
+      m_Hash: 0
+      m_Sprite: {fileID: 645586947, guid: ca10142745cce4b4694e62ab46e2f94b, type: 3}
+    - m_Name: Entry_4
+      m_Hash: 0
+      m_Sprite: {fileID: 1082551303, guid: ca10142745cce4b4694e62ab46e2f94b, type: 3}
+    - m_Name: Entry_5
+      m_Hash: 0
+      m_Sprite: {fileID: -873810602, guid: ca10142745cce4b4694e62ab46e2f94b, type: 3}
   m_SpriteLibraryAsset: {fileID: 0}
 --- !u!114 &-2709342799163199546
 MonoBehaviour:
