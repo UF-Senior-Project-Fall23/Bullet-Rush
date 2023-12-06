@@ -1,12 +1,14 @@
 using System;
 using UnityEngine;
 
+// Manages sound effects being played.
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
     public Sound[] currentlyPlaying;
     public static AudioManager instance;
     
+    // Set up singleton instance
     void Awake()
     {
         if (instance == null)
@@ -20,6 +22,7 @@ public class AudioManager : MonoBehaviour
         
         DontDestroyOnLoad(gameObject);
         
+        // Load each sound from the inspector into an AudioSource component that can be played.
         foreach (Sound sound in sounds)
         {
             var s = gameObject.AddComponent<AudioSource>();
@@ -32,11 +35,13 @@ public class AudioManager : MonoBehaviour
         
     }
 
+    // Get a sound by name.
     Sound FindSound(string name)
     {
         return Array.Find(sounds, s => s.name == name);
     }
     
+    // Plays a given sound.
     void Play(string name)
     {
         Sound s = FindSound(name);

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+// Handles the code for Cordelia's puppet minions.
 public class Clone : Damageable, puppetAttack
 {
     public int a = 7;
@@ -51,6 +52,7 @@ public class Clone : Damageable, puppetAttack
         rush = false;
     }
 
+    // Contact damage
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag != "Clone")
@@ -71,6 +73,7 @@ public class Clone : Damageable, puppetAttack
         yield return null;
     }
 
+    // Makes puppets rush toward the player
     public IEnumerator Rush()
     {
         if (spinSet)
@@ -89,6 +92,7 @@ public class Clone : Damageable, puppetAttack
         yield return null;
     }
 
+    // Makes puppets spin around the player, blocking movement and bullets, and positioning for a Rush attack.
     public IEnumerator SpinDance(bool rush)
     {
         float moveSpeed = .025f;
@@ -117,6 +121,7 @@ public class Clone : Damageable, puppetAttack
         yield return null;
     }
 
+    // Puppets throw a small, slow barrage of knives at the player.
     public IEnumerator BladeFlourish(int followPattern)
     {
         playerPos = PlayerController.instance.transform.position - transform.position;
@@ -171,6 +176,7 @@ public class Clone : Damageable, puppetAttack
         yield return null;
     }
 
+    // Animation for puppets exploding. Damage is handled on the Cordelia.cs script.
     public IEnumerator DetonatePuppets()
     {
         //yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);

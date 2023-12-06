@@ -1,15 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
-
+// Handles generating and displaying the Starting Area
 public class StartRoom : MonoBehaviour
 {
     public TextMeshProUGUI tutorialText;
     private GameObject player;
     private GameManager gameManager;
+    
+    // Sprites/Objects for the WASD display in the start area.
     public Image wImage;
     public Image aImage;
     public Image sImage;
@@ -23,13 +24,17 @@ public class StartRoom : MonoBehaviour
     public Sprite graySImageSprite;
     public Sprite grayDImageSprite;
 
-
-    // Start is called before the first frame update
+    // List of trigger colliders for different tutorial messages
     public List<GameObject> tutorialSquares;
+    
+    // List of colliders for difficulty buttons
     public List<GameObject> difficultyButtons;
+    
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        
+        // Add colliders to lists
         foreach (Transform child in transform)
         {
             if (child.gameObject.CompareTag("TutorialSquare"))
@@ -52,7 +57,7 @@ public class StartRoom : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //check for trigger on tutorial message areas
+        // Adjusts the tutorial message shown based on where the player is standing.
         if (IsPlayerInsideSquare(player.transform.position, tutorialSquares[0]))
         {
             tutorialText.text = "Press Q while next to your weapon of choice.";
@@ -78,7 +83,9 @@ public class StartRoom : MonoBehaviour
             tutorialText.text = "";
             disableImages();
         }
-        //check for trigger on difficulty buttons
+        
+        
+        // Sets the difficulty based on which button the player is standing on.
         if (IsPlayerOnButton(player.transform.position, difficultyButtons[0]))
         {
             gameManager.setDifficulty(Difficulty.Easy);
@@ -96,6 +103,7 @@ public class StartRoom : MonoBehaviour
         }
     }
 
+    // Checks if the player is within the bounds of a tutorial collider.
     bool IsPlayerInsideSquare(Vector3 playerPosition, GameObject square)
     {
         BoxCollider2D squareCollider = square.GetComponent<BoxCollider2D>();
@@ -110,6 +118,7 @@ public class StartRoom : MonoBehaviour
         }
     }
 
+    // Checks if the player is within the bounds of a difficulty button.
     bool IsPlayerOnButton(Vector3 playerPosition, GameObject button)
     {
         BoxCollider2D buttonCollider = button.GetComponent<BoxCollider2D>();
@@ -128,6 +137,7 @@ public class StartRoom : MonoBehaviour
         }
     }
 
+    // Hides the WASD display.
     void disableImages()
     {
         wImage.enabled = false;
@@ -140,6 +150,8 @@ public class StartRoom : MonoBehaviour
         sImage.sprite = graySImageSprite;
         dImage.sprite = grayDImageSprite;
     }
+    
+    // Shows the WASD display.
     void enableImages()
     {
         wImage.enabled = true;
@@ -147,23 +159,25 @@ public class StartRoom : MonoBehaviour
         sImage.enabled = true;
         dImage.enabled = true;
     }
+    
+    // Makes the WADS display change color based on which keys are pressed.
     void changeColorOnKeyPress()
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            wImage.sprite = greenWImageSprite; // You can specify the green sprite you want to use.
+            wImage.sprite = greenWImageSprite;
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            aImage.sprite = greenAImageSprite; // You can specify the green sprite you want to use.
+            aImage.sprite = greenAImageSprite;
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            sImage.sprite = greenSImageSprite; // You can specify the green sprite you want to use.
+            sImage.sprite = greenSImageSprite;
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            dImage.sprite = greenDImageSprite; // You can specify the green sprite you want to use.
+            dImage.sprite = greenDImageSprite;
         }
 
         if (Input.GetKeyUp(KeyCode.W))
@@ -184,6 +198,8 @@ public class StartRoom : MonoBehaviour
         }
     }
 
+    // Changes the color of the difficulty buttons on the ground.
+    // TODO: Cache all of the renderers and colors, and make it so it only updates the necessary stuff.
     void updateDifficultyButtonColors()
     {
 

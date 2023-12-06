@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Controls basic logic for the light dim effect during Cordelia's fight.
 public class DimLights : MonoBehaviour
 {
     public static DimLights instance;

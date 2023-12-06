@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// Represents the aiming crosshair of the player.
+// TODO: Implement this?
 public class Crosshair : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;

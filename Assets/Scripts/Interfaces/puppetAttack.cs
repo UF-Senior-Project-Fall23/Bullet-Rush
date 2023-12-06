@@ -1,5 +1,6 @@
 using System.Collections;
 
+// Outlines the attacks available for Cordelia's puppets
 public interface puppetAttack
 {
     public bool spotlight { get; set; }

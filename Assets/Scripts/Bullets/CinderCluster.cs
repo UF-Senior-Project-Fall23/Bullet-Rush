@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Represents a projectile that bursts into smaller projectiles after exploding. Used for Onyx and Blag'thoroth.
 public class CinderCluster : MonoBehaviour
 {
     public int ShardCount = 8;

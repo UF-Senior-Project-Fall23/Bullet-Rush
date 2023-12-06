@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// Code for a deprecated enemy
+// TODO: Remove?
 public class SlimeMovement : MonoBehaviour
 {
     [SerializeField] private GameObject target;

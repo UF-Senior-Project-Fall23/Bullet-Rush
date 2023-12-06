@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Represents the statistics a weapon can hold. Used for scripting in the editor.
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapon")]
 public class WeaponStats : ScriptableObject
 {

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+// Handles the code for the gloves in Cordelia's Puppeteer's Grasp attack.
 public class Hands : MonoBehaviour
 {
     public static Hands instance;
@@ -16,6 +17,7 @@ public class Hands : MonoBehaviour
     GameObject voidArt;
     GameObject voidMask;
 
+    // Instantiates basic animation data.
     void Start()
     {
         myCollider = GetComponent<Collider2D>();
@@ -35,6 +37,7 @@ public class Hands : MonoBehaviour
     }
 
 
+    // Makes the hand rise up from the void.
     public IEnumerator HandRaise()
     {
         float length = 0f;
@@ -59,6 +62,7 @@ public class Hands : MonoBehaviour
 
     }
 
+    // Makes the hand strike down and attack where the player was, then destroys itself.
     public IEnumerator Hit()
     {
         float length = 0f;
@@ -96,6 +100,7 @@ public class Hands : MonoBehaviour
 
     }
 
+    // Detects when the player is nearby and starts an attack.
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -105,6 +110,7 @@ public class Hands : MonoBehaviour
         }
     }
 
+    // Cleans up animation data
     public void OnDestroy()
     {
         if(handDown != null)

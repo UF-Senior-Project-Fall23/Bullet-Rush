@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Represents the player.
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
@@ -9,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public PlayerMovement movement;
     public PlayerWeapon weapon;
 
+    // Set up submodules and singleton instance.
     private void Awake()
     {
         if (instance == null)

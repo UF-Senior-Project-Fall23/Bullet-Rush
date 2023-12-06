@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
+// Represents a weapon.
 public class Weapon : MonoBehaviour
 {
     public WeaponStats baseStats;
@@ -46,10 +47,13 @@ public class Weapon : MonoBehaviour
         ResetStats();
     }
 
+    // Called once per frame
     public void Update()
     {
+        // Adjust the heat bar based on current heat.
         HUDManager.instance.heatBar.SetFill(currentHeat, maxHeat);
 
+        // Rotate the weapon
         if (player != null)
         {
             UpdateWeaponPos();
@@ -65,10 +69,12 @@ public class Weapon : MonoBehaviour
             }
         }
 
+        // Shoot the weapon when you click
         if (!isShooting && Input.GetButton("Fire1") && !isOverheated) {
             StartCoroutine(Shoot());
         }
 
+        // Reduce heat over time.
         if (!isShooting)
         {
             currentHeat -= cooldownRate * Time.deltaTime;
@@ -76,6 +82,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    // Rotates the weapon around the player based on their aim.
     public virtual void UpdateWeaponPos()
     {
         //Gets the mouse position

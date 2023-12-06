@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Handles Cordelia's Puppeteer's Grasp damage.
 public class gloveHit : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D collision)

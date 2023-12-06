@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Represents a bullet shot by Cordelia, which avoids hitting summons.
 public class CordeliaBullet : MonoBehaviour
 {
     public int damage;

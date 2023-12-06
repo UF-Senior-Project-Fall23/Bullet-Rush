@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Basic code for making bullets deal damage to things.
 public class Bullet : MonoBehaviour
 {
     public float damage;

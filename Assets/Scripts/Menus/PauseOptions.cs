@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 // TODO: Figure out a way to merge this with the MenuOptions.cs script so it's not just redundant code
 // This version is needed because the MusicManager and AudioManager object don't exist in the AlphaTest scene.
+// See MenuOptions.cs for details on what everything does.
 public class PauseOptions : MonoBehaviour
 {
     [SerializeField] private Slider musicSlider;

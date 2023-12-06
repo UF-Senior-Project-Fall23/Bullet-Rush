@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// Represents a sound that can be played by the Audio or Music managers.
 [Serializable]
 public class Sound
 {

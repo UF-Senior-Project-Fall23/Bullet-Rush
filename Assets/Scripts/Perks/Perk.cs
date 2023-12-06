@@ -3,12 +3,14 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+// Represents what a perk modifies.
 public enum PerkType
 {
     Weapon,
     Player
 }
 
+// Represents a perk that changes your stats.
 [CreateAssetMenu(fileName = "New Perk", menuName = "Perk")]
 public class Perk : ScriptableObject
 {
@@ -35,6 +37,7 @@ public class Perk : ScriptableObject
 
 }
 
+// Editor code that allows you to create and modify perks in the inspector.
 # if UNITY_EDITOR
 [CustomEditor(typeof(Perk))]
 public class PerkEditor : Editor

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+// Represents a portal that when entered loads a new area.
 public class Portal : MonoBehaviour
 {
 
@@ -8,18 +9,22 @@ public class Portal : MonoBehaviour
     public bool deleteOnUse = false;
     public bool listening = false;
     
+    // Events for detecting when a specific room is entered.
     public static UnityEvent EnterBossRoom = new();
     public static UnityEvent EnterLootRoom = new();
     public static UnityEvent EnterStartRoom = new();
+    
+    // Called when a portal to the next boss is generated in a loot room.
     public static UnityEvent MakeBossPortal = new();
+    
+    // Detects when a room changes, with the inputs being the origin type and the destination type.
     public static UnityEvent<RoomType, RoomType> ChangeRoom = new();
 
+    // Portal entering logic
     private void OnCollisionEnter2D(Collision2D playerCollision)
     {
 
         if (!playerCollision.gameObject.CompareTag("Player")) return;
-        
-        //Debug.LogWarning("Attempting player collision");
         
         var gameManager = GameManager.instance;
         if (gameManager is null) return;
@@ -27,15 +32,18 @@ public class Portal : MonoBehaviour
         var bossManager = BossController.instance;
         if (bossManager is null) return;
 
+        // Stored for ChangeRoom purposes
         RoomType originalRoom = gameManager.roomType;
         RoomType newRoom;
 
+        // Only add this listener once
         if (name == "Portal to Next level" && !listening)
         {
             MakeBossPortal.AddListener(SpawnBossPortal);
             listening = true;
         }
         
+        // Determine where you're going and run the associated code
         switch (destination)
         {
             case "Loot Room":
@@ -64,7 +72,7 @@ public class Portal : MonoBehaviour
                 Debug.Log("Initialize & Teleport To Next Level");
                 EnterBossRoom.Invoke();
                 
-                // Initialization code, the rest is just the boss case but again (C# is bad and doesn't have fallthrough)
+                // Initialization code, the rest is just the "Boss" case but again (C# is bad and doesn't have fallthrough)
                 bossManager.GenerateRun();
 
                 bossManager.StartBoss(gameManager.getCurrentLevel());
