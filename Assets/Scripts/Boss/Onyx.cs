@@ -14,6 +14,8 @@ public class Onyx : Damageable, Boss
     public ParticleSystem fireParticlesR;
     public ParticleSystem fireParticlesL;
     private bool m_Run = false;
+    private bool isJetCharging = false;
+    private bool reverseRunDirection = false;
     private bool isCoroutineRunning = false;
 
     bool m_invulnerable = false;
@@ -39,6 +41,7 @@ public class Onyx : Damageable, Boss
         OnyxRB = GetComponent<Rigidbody2D>();
 
         difficultyMultiplier = GameManager.instance.getDifficultyModifier();
+        Debug.Log("difficulty multiplier " + difficultyMultiplier);
         level = GameManager.instance.getCurrentLevel();
     }
 
@@ -175,9 +178,8 @@ public class Onyx : Damageable, Boss
             }
         }
         m_Animator.SetTrigger("Run");
-        isCoroutineRunning = false;
-        m_Run = true;
-        PhaseChange();
+
+        ;
     }
 
     // Determines whether a bullet is in a trajectory that will collide with the boss.
@@ -308,9 +310,7 @@ public class Onyx : Damageable, Boss
             }
         }
         m_Animator.SetTrigger("Run");
-        isCoroutineRunning = false;
-        m_Run = true;
-        PhaseChange();
+
     }
 
     // Causes a large radial attack of bullets to strike out from Onyx
@@ -362,9 +362,7 @@ public class Onyx : Damageable, Boss
             yield return new WaitForSeconds(.05f / difficultyMultiplier);
         }
         m_Animator.SetTrigger("Run");
-        isCoroutineRunning = false;
-        m_Run = true;
-        PhaseChange();
+
     }
 
 
@@ -418,9 +416,7 @@ public class Onyx : Damageable, Boss
             yield return new WaitForSeconds(.3f);
         }
         m_Animator.SetTrigger("Run");
-        isCoroutineRunning = false;
-        m_Run = true;
-        PhaseChange();
+
     }
 
     // Prepares to drop several explosives on the player, indicating where they'll all drop before all exploding simultaneously.
@@ -458,9 +454,7 @@ public class Onyx : Damageable, Boss
         }
         yield return new WaitForSeconds(.25f);
         m_Animator.SetTrigger("Run");
-        isCoroutineRunning = false;
-        m_Run = true;
-        PhaseChange();
+
     }
 
     public IEnumerator JetCharge()
@@ -516,9 +510,7 @@ public class Onyx : Damageable, Boss
         m_invulnerable = false;
         m_Animator.SetTrigger("Run");
         yield return new WaitUntil(() => m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Run"));
-        isCoroutineRunning = false;
-        m_Run = true;
-        PhaseChange();
+
     }
 
     // Causes Onyx to run around, dealing contact damage.
@@ -529,12 +521,14 @@ public class Onyx : Damageable, Boss
 
         m_Animator.SetTrigger("Run");
         float timer = 0f;
-        float duration = 3 / .5f * difficultyMultiplier; // duration gets shorter the harder the difficulty
-                                                         // Keep moving towards the player for the specified duration
+
+        float duration = 5 / difficultyMultiplier; // duration gets shorter the harder the difficulty
+                                                   // Keep moving towards the player for the specified duration
+        Debug.Log("Running duration = " + duration);
         while (timer < duration)
         {
             Vector3 directionToPlayer = PlayerController.instance.transform.position - transform.position;
-            Vector3 moveDirection = directionToPlayer.normalized;
+            Vector3 moveDirection = reverseRunDirection ? -directionToPlayer.normalized : directionToPlayer.normalized;
             float distanceToMove = speed * Time.deltaTime;
 
             transform.Translate(moveDirection * distanceToMove, Space.World);
@@ -542,9 +536,7 @@ public class Onyx : Damageable, Boss
             timer += Time.deltaTime;
             yield return null;
         }
-        isCoroutineRunning = false;
-        m_Run = false;
-        PhaseChange();
+
     }
 
     // Handles Onyx dying, with a small death animation.
@@ -560,6 +552,31 @@ public class Onyx : Damageable, Boss
         BossController.instance.BossDie();
         Destroy(gameObject);
     }
+
+    IEnumerator DriveAttacks()
+    {
+        while (true)
+        {
+            if (!isCoroutineRunning)
+            {
+                isCoroutineRunning = true;
+
+                if (!m_Run)
+                {
+                    int randAttack = Random.Range(0, level + 3);
+                    Debug.Log("Phase Change: Attacking");
+                    StartCoroutine(StartAttackCoroutine(randAttack));
+                }
+                else
+                {
+                    Debug.Log("Phase Change: Running");
+                    StartCoroutine(StartRunCoroutine());
+                }
+            }
+            yield return null;
+        }
+    }
+
 
     // Dispatches Onyx's attacks.
     public void PhaseChange()
@@ -584,6 +601,8 @@ public class Onyx : Damageable, Boss
 
     private IEnumerator StartAttackCoroutine(int randAttack)
     {
+        isCoroutineRunning = true;
+        m_Run = false;
         switch (randAttack)
         {
             case 0:
@@ -596,8 +615,10 @@ public class Onyx : Damageable, Boss
                 yield return StartCoroutine(Machine_Assault());
                 break;
             case 3:
+                isJetCharging = true;
                 jetChargeCoroutine = StartCoroutine(JetCharge());
                 yield return jetChargeCoroutine;
+                isJetCharging = false;
                 break;
             case 4:
                 yield return StartCoroutine(HighExplosive());
@@ -615,10 +636,13 @@ public class Onyx : Damageable, Boss
 
     private IEnumerator StartRunCoroutine()
     {
+        reverseRunDirection = false;
+        isCoroutineRunning = true;
+        m_Run = true;
         runCoroutine = StartCoroutine(Run());
         yield return runCoroutine;
         isCoroutineRunning = false;
-        m_Run = true;
+        m_Run = false;
     }
 
     // Startup code.
@@ -628,7 +652,7 @@ public class Onyx : Damageable, Boss
         yield return new WaitForSeconds(1f);
         Invulnerable = false;
 
-        PhaseChange();
+        StartCoroutine(DriveAttacks());
     }
 
     // Handlex Onyx dying.
@@ -655,7 +679,7 @@ public class Onyx : Damageable, Boss
             float damage = 2f;
             Debug.Log("onyx collision with wall or player");
             // Stop both coroutines on collision
-            if (jetChargeCoroutine != null)
+            if (isJetCharging)
             {
                 damage = 3f;
                 Debug.Log("STOP jetCharge");
@@ -663,18 +687,18 @@ public class Onyx : Damageable, Boss
                 isCoroutineRunning = false;
                 m_Run = true;
                 m_Animator.SetTrigger("Run");
-                PhaseChange();
+
             }
 
             if (m_Run)
             {
-                damage = 10f;
-                Debug.Log("STOP Run");
-                StopCoroutine(runCoroutine);
-                isCoroutineRunning = false;
-                m_Run = false;
-                //StartCoroutine(StartCollisionCooldown());
-                PhaseChange();
+                reverseRunDirection = !reverseRunDirection;
+                // damage = 10f;
+                // Debug.Log("STOP Run");
+                // StopCoroutine(runCoroutine);
+                // isCoroutineRunning = false;
+                // m_Run = false;
+
             }
 
             if (collision.gameObject.CompareTag("Player"))
