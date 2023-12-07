@@ -15,7 +15,9 @@ public class Cordelia : Damageable, Boss
     public GameObject dimPreFab;
     public GameObject voidPreFab;
     public GameObject kickPreFab;
+    public GameObject shieldPreFab;
     GameObject dim;
+    GameObject shield;
     int puppetCount = 2;
     public int attackNum = 4;
     private Animator m_Animator;
@@ -105,6 +107,7 @@ public class Cordelia : Damageable, Boss
             puppetCount = 4;
         }
         puppetCount = puppetCount + (int)(m_LevelModifier * 2) - 2;
+        puppetRespawnTime = 7 - 2 * (int)m_LevelModifier - 2;
         cb = BossController.instance.currentBoss;
         playerPos = PlayerController.instance.gameObject.transform.position;
         dim = Instantiate(dimPreFab, transform);
@@ -152,9 +155,11 @@ public class Cordelia : Damageable, Boss
     public void puppetDies()
     {
         puppetsAlive--;
+        Debug.Log(puppetsAlive);
         if(puppetsAlive == 0)
         {
             GetComponent<Damageable>().Invulnerable = false;
+            Destroy(shield);
         }
     }
     // Sets the dance to Spin.
@@ -192,7 +197,7 @@ public class Cordelia : Damageable, Boss
         PhaseChange();
     }
 
-    // TODO: Implement
+
     IEnumerator KickDance()
     {
         GameObject kick;
@@ -274,9 +279,8 @@ public class Cordelia : Damageable, Boss
     // Summons smaller puppet minions to help Cordelia, with their own AI
     IEnumerator SummonPuppets()
     {
-        GetComponent<Damageable>().Invulnerable = true;
+        
         Debug.Log("SummonPuppets");
-        puppetRespawnTime = 4;
         puppetSpawn = true;
         puppetsAlive = puppetCount;
         bool alive = false;
@@ -296,6 +300,10 @@ public class Cordelia : Damageable, Boss
 
         if (doSpawn)
         {
+            Debug.Log("spawningngng");
+            GetComponent<Damageable>().Invulnerable = true;
+            shield = Instantiate(shieldPreFab, transform.position, Quaternion.identity);
+            
             if (clearPuppets) puppets.Clear();
             Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
             float health = 7f;
@@ -347,7 +355,7 @@ public class Cordelia : Damageable, Boss
         float length = 0f;
         float endTime = 6f;
         float bulletLength = 0f;
-        float bulletFreq = .5f;
+        float bulletFreq = .8f;
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         m_Animator.SetTrigger("Spin");
         yield return new WaitForSeconds(1f);
@@ -603,6 +611,30 @@ public class Cordelia : Damageable, Boss
     }
     public void PhaseChange()
     {
+        if (puppets.Count != 0)
+        {
+            bool dead = true; ;
+            for (int i = 0; i < puppetCount; i++)
+            {
+                if (puppets[i] != null)
+                {
+                    dead = false;
+                }
+
+            }
+            if (dead)
+            {
+                if (GetComponent<Damageable>().Invulnerable)
+                {
+                    GetComponent<Damageable>().Invulnerable = false;
+                    if(shield != null)
+                    {
+                        Destroy(shield);
+                    }
+                }
+            }
+            
+        }
         StartCoroutine(PhaseWait());
         int temp = attackNum;
         // could make it so that only some attacks can't be twice in a row
@@ -616,35 +648,6 @@ public class Cordelia : Damageable, Boss
 
             attackNum = UnityEngine.Random.Range(1, diffAttack - diffAttackMod);
         }
-        int puppetsLeft = puppetCount;
-        
-        if (puppetSpawn)
-        {
-            foreach (var puppet in puppets)
-            {
-                if (puppet == null)
-                {
-                    puppetsLeft--;
-                }
-            }
-            if(puppetsLeft == 0)
-            {
-                puppetRespawnTime--;
-            }
-        }
-        else
-        {
-            if (puppetsLeft == 0)
-            {
-                puppetRespawnTime--;
-            }
-        }
-        
-        if(puppetRespawnTime == 0)
-        {
-            attackNum = 4;
-        }
-        //attackNum = 3;
         setPuppetAttack();
         
         switch (attackNum)
@@ -704,6 +707,10 @@ public class Cordelia : Damageable, Boss
         if (spotlightActive)
         {
             dim.transform.position = transform.position;
+        }
+        if (GetComponent<Damageable>().Invulnerable)
+        {
+            shield.transform.position = transform.position;
         }
         float second = MathF.Floor(globalTime) % interval;
         if (MathF.Floor(globalTime) % 15 == 0 && timeIndicator)

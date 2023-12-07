@@ -42,7 +42,7 @@ public class CordeliaBullet : MonoBehaviour
         
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         m_Animator.SetTrigger("Break");
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(.25f);
         Destroy(gameObject);
     }
 
