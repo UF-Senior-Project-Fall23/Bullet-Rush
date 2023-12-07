@@ -119,6 +119,8 @@ MonoBehaviour:
     type: 3}
   kickPreFab: {fileID: 2372805354271246499, guid: 388cc7a6744f41b4b848f0cfa9cdcc06,
     type: 3}
+  shieldPreFab: {fileID: 4952624605343987486, guid: a1835f4afbf07764382e1ae8b477e05a,
+    type: 3}
   attackNum: 4
 --- !u!70 &-3894961986207175519
 CapsuleCollider2D:
