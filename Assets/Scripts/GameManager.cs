@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public UnityEvent LevelChanged;
     public int currentLevel = 0;
+    public int winstreak;
 
     public RoomType roomType;
     
