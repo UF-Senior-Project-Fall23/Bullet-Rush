@@ -16,6 +16,7 @@ public class HUDManager : MonoBehaviour
     public FillableBar heatBar;
     public GameObject tooltipPrefab;
     public GameObject tooltipCanvas;
+    public TextMeshProUGUI winstreakText;
 
     GameObject DeathScreen;
     List<GameObject> tooltips;
@@ -97,6 +98,7 @@ public class HUDManager : MonoBehaviour
     public void ShowDeathScreen()
     {
         DeathScreen.SetActive(true);
+        winstreakText.text = $"Win Streak: {GameManager.instance.winstreak}";
     }
 
     public void HideDeathScreen()

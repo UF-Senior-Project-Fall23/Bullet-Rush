@@ -7,7 +7,8 @@ public class Portal : MonoBehaviour
 
     public string destination;
     public bool deleteOnUse = false;
-    public bool listening = false;
+    bool listening = false;
+    public bool isVictoryPortal;
     
     // Events for detecting when a specific room is entered.
     public static UnityEvent EnterBossRoom = new();
@@ -97,6 +98,11 @@ public class Portal : MonoBehaviour
                 
         }
 
+        if (isVictoryPortal)
+        {
+            GameManager.instance.winstreak++;
+        }
+        
         if (newRoom != RoomType.Error)
         {
             gameManager.roomType = newRoom;

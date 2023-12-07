@@ -2057,7 +2057,7 @@ GameObject:
   - component: {fileID: 529515047}
   - component: {fileID: 529515046}
   m_Layer: 31
-  m_Name: Score
+  m_Name: Winstreak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2102,7 +2102,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Score: 0'
+  m_text: 'Winstreak: ???'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2136,8 +2136,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -2145,7 +2145,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -11050,6 +11050,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   currentLevel: 0
+  winstreak: 0
   roomType: 0
 --- !u!4 &988185471
 Transform:
@@ -12027,7 +12028,7 @@ GameObject:
   - component: {fileID: 1129577781}
   - component: {fileID: 1129577780}
   m_Layer: 31
-  m_Name: Title Screen Button
+  m_Name: Quit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12096,7 +12097,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1129577781}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2056583318}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1129577781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12725,7 +12738,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Title Screen
+  m_text: Quit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12768,7 +12781,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -111248,6 +111261,7 @@ MonoBehaviour:
   heatBar: {fileID: 2104188304}
   tooltipPrefab: {fileID: 2813252452313110597, guid: cd372c3fc0c115741b09057e22d7c2a0, type: 3}
   tooltipCanvas: {fileID: 2107511436}
+  winstreakText: {fileID: 529515046}
   levelText: {fileID: 2107216192}
   difficultyText: {fileID: 1076527007}
 --- !u!114 &2056583318
@@ -111821,7 +111835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destination: Initialize
   deleteOnUse: 0
-  listening: 0
+  isVictoryPortal: 0
 --- !u!4 &1299414662976053414
 Transform:
   m_ObjectHideFlags: 0
