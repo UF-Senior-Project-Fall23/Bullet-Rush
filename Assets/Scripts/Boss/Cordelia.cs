@@ -746,5 +746,36 @@ public class Cordelia : Damageable, Boss
         BossController.instance.BossDie();
         Destroy(gameObject);
     }
+    
+    public override void Die()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Death());
+    }
+    
+    public void ForceDeath()
+    {
+        StopAllCoroutines();
+        
+        DimLights.instance.TurnOff();
+        foreach (var puppet in puppets)
+        {
+            if (puppet is not null)
+            {
+                Destroy(puppet);
+            }
+        }
+
+        foreach (var v in gloves)
+        {
+            if (v is not null)
+            {
+                Destroy(v);
+            }
+        }
+        
+        BossController.instance.BossDie();
+        Destroy(gameObject);
+    }
 
 }
