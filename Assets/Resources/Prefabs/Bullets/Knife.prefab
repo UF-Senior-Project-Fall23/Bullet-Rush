@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 5006840402725126189}
   - component: {fileID: 3493321389684328895}
   - component: {fileID: 4431057103948867935}
+  - component: {fileID: 5179943275457362970}
+  - component: {fileID: -6099530097685581527}
+  - component: {fileID: -4305701380502326945}
   m_Layer: 0
   m_Name: Knife
   m_TagString: Bullet
@@ -76,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 1451688987
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a44771116ed14d04282128712783caac, type: 3}
+  m_Sprite: {fileID: 977242103, guid: d5552838fc7198441871e7d33ee8a4a6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -172,3 +175,81 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.28, y: 0.08}
   m_EdgeRadius: 0
+--- !u!114 &5179943275457362970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4778217174241415684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29cff538c195c249b69c6f2236de67b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library:
+  - m_Name: Fal
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: Entry
+      m_Hash: 0
+      m_Sprite: {fileID: 977242103, guid: d5552838fc7198441871e7d33ee8a4a6, type: 3}
+    - m_Name: Entry_0
+      m_Hash: 0
+      m_Sprite: {fileID: 977027012, guid: d5552838fc7198441871e7d33ee8a4a6, type: 3}
+    - m_Name: Entry_1
+      m_Hash: 0
+      m_Sprite: {fileID: 448768205, guid: d5552838fc7198441871e7d33ee8a4a6, type: 3}
+    - m_Name: Entry_2
+      m_Hash: 0
+      m_Sprite: {fileID: 1259100460, guid: d5552838fc7198441871e7d33ee8a4a6, type: 3}
+  - m_Name: Break
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: Entry
+      m_Hash: 0
+      m_Sprite: {fileID: -102173346, guid: d5552838fc7198441871e7d33ee8a4a6, type: 3}
+    - m_Name: Entry_0
+      m_Hash: 0
+      m_Sprite: {fileID: -1364646326, guid: d5552838fc7198441871e7d33ee8a4a6, type: 3}
+    - m_Name: Entry_1
+      m_Hash: 0
+      m_Sprite: {fileID: -903782563, guid: d5552838fc7198441871e7d33ee8a4a6, type: 3}
+  m_SpriteLibraryAsset: {fileID: 0}
+--- !u!114 &-6099530097685581527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4778217174241415684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CategoryHash: 0
+  m_labelHash: 0
+  m_SpriteKey: 0
+  m_SpriteHash: 0
+--- !u!95 &-4305701380502326945
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4778217174241415684}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c026e317b1176f24f903da8d22c632bd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
