@@ -77,9 +77,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1183204077
+  m_SortingLayerID: 0
   m_SortingLayer: 5
-  m_SortingOrder: 3
+  m_SortingOrder: 50
   m_Sprite: {fileID: 21300000, guid: 0de7c38156e5a534b85da3ac60eecff2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -109,11 +109,16 @@ MonoBehaviour:
   HPChange:
     m_PersistentCalls:
       m_Calls: []
-  bulletPreFab: {fileID: 4778217174241415684, guid: 750620970cf81404da9ae5a77f01348c, type: 3}
-  puppetPreFab: {fileID: 7764645947890026743, guid: 290d0d0567c555348a313434335d0a99, type: 3}
-  dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
-  voidPreFab: {fileID: 8026783831929155456, guid: f93a8b4bd9214624cafe11eb7e6422d6, type: 3}
-  kickPreFab: {fileID: 2372805354271246499, guid: 388cc7a6744f41b4b848f0cfa9cdcc06, type: 3}
+  bulletPreFab: {fileID: 4778217174241415684, guid: 750620970cf81404da9ae5a77f01348c,
+    type: 3}
+  puppetPreFab: {fileID: 7764645947890026743, guid: 290d0d0567c555348a313434335d0a99,
+    type: 3}
+  dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c,
+    type: 3}
+  voidPreFab: {fileID: 8026783831929155456, guid: f93a8b4bd9214624cafe11eb7e6422d6,
+    type: 3}
+  kickPreFab: {fileID: 2372805354271246499, guid: 388cc7a6744f41b4b848f0cfa9cdcc06,
+    type: 3}
   attackNum: 4
 --- !u!70 &-3894961986207175519
 CapsuleCollider2D:

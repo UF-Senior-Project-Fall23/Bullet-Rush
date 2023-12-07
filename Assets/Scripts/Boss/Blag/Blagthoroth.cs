@@ -247,75 +247,100 @@ public class Blagthoroth : Damageable, Boss
     /// Shoots a circle of spaced out flames around Blag a few times. 
     IEnumerator Radial_Blast(float speedModifier)
     {
-        foreach(var _ in Enumerable.Range(0, 1))
+        //How many bullets should be fired
+        //NOTE: One spread will have one less or one more
+        float blastcount = 10;
+
+        //Angle in radians between bullets
+        float blastCountScaled = (Mathf.PI / (blastcount));
+
+        //Starting angle in radians
+        float startingAngle = (Mathf.PI / 2) + (blastCountScaled/2);
+
+        //Ending angle in radians
+        float endingAngle = 3 * startingAngle - blastCountScaled;
+
+        //Creates the indicators for the attack
+        for (float i = startingAngle; i <= endingAngle; i += blastCountScaled)
         {
-            for (float i = Mathf.PI / 2; i <= 3 * Mathf.PI / 2; i += Mathf.PI / 12)
-            {
-                var indicator = BossController.instance.Indicate(
-                    new Vector3(transform.position.x, transform.position.y, 1),
-                    Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
-                );
-                indicator.transform.localScale = new Vector3(1, 20, 1);
-                indicator.transform.position += indicator.transform.up * 10;
-            }
-            
-            yield return new WaitForSeconds(1.3f/speedModifier);
-            
-            BossController.instance.removeAllIndicators();
-            for (float i = Mathf.PI / 2; i <= 3 * Mathf.PI / 2; i += Mathf.PI / 12)
-            {
-                GameObject bullet = Instantiate(
-                    GameManager.instance.getBulletPrefab("Radial Blast"),
-                    transform.position,
-                    Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
-                );
-
-                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.up * 12f * speedModifier, ForceMode2D.Impulse);
-            }
-            for (float i = 13 * Mathf.PI / 24; i <= 37 * Mathf.PI / 24; i += Mathf.PI / 12)
-            {
-                var indicator = BossController.instance.Indicate(
-                    new Vector3(transform.position.x, transform.position.y, 1),
-                    Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
-                );
-                indicator.transform.localScale = new Vector3(1, 20, 1);
-                indicator.transform.position += indicator.transform.up * 10;
-            }
-            
-            yield return new WaitForSeconds(1.3f/speedModifier);
-            
-            BossController.instance.removeAllIndicators();
-            for (float i = 13 * Mathf.PI / 24; i <= 35 * Mathf.PI / 24; i += Mathf.PI / 12)
-            {
-                GameObject bullet = Instantiate(
-                    GameManager.instance.getBulletPrefab("Radial Blast"),
-                    transform.position,
-                    Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
-                );
-
-                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                rb.AddForce(bullet.transform.up * 12f * speedModifier, ForceMode2D.Impulse);
-            }
-            yield return new WaitForSeconds(.5f);
+            var indicator = BossController.instance.Indicate(
+                new Vector3(transform.position.x, transform.position.y, 1),
+                Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
+            );
+            indicator.transform.localScale = new Vector3(1, 20, 1);
+            indicator.transform.position += indicator.transform.up * 10;
         }
+        
+        //Breathing time
+        yield return new WaitForSeconds(1.3f/speedModifier);
+        
+        //Remove indicators and fire bullets
+        BossController.instance.removeAllIndicators();
+        for (float i = startingAngle; i <= endingAngle; i += blastCountScaled)
+        {
+            GameObject bullet = Instantiate(
+                GameManager.instance.getBulletPrefab("Radial Blast"),
+                transform.position,
+                Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
+            );
+
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.AddForce(bullet.transform.up * 12f * speedModifier, ForceMode2D.Impulse);
+        }
+
+        //Angle offset in radians of the attack
+        float offset = blastCountScaled / 2;
+
+        //Create indicators for the next wave with the correct offset
+        for (float i = startingAngle + offset; i <= endingAngle - offset; i += blastCountScaled)
+        {
+            var indicator = BossController.instance.Indicate(
+                new Vector3(transform.position.x, transform.position.y, 1),
+                Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
+            );
+            indicator.transform.localScale = new Vector3(1, 20, 1);
+            indicator.transform.position += indicator.transform.up * 10;
+        }
+        
+        //Breathing time
+        yield return new WaitForSeconds(1.3f/speedModifier);
+
+        //Remove indicators for the next wave and fire the bullets
+        BossController.instance.removeAllIndicators();
+        for (float i = startingAngle + offset; i <= endingAngle - offset; i += blastCountScaled)
+        {
+            GameObject bullet = Instantiate(
+                GameManager.instance.getBulletPrefab("Radial Blast"),
+                transform.position,
+                Quaternion.Euler(0, 0, i * Mathf.Rad2Deg)
+            );
+
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.AddForce(bullet.transform.up * 12f * speedModifier, ForceMode2D.Impulse);
+        }
+        yield return new WaitForSeconds(.5f);
         PhaseChange();
     }
     
     /// Does the death animation and kills Blag.
     IEnumerator Death()
     {
+        //Change animation state and wait for it to finish
         m_Animator.SetTrigger("Death");
         yield return new WaitUntil(() => m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Death"));
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         
+        //Get all body parts
         GameObject bodyUncovered = transform.Find("Blag Body Uncovered").gameObject;
         GameObject rightArmUncovered = transform.Find("Right Arm").Find("Blag_Right_Arm_Uncovered").gameObject;
         GameObject leftArmUncovered = transform.Find("Left Arm").Find("Blag_Left_Arm_Uncovered").gameObject;
 
+        //Get the color component of all body parts
         Color buc = bodyUncovered.GetComponent<SpriteRenderer>().color;
         Color ruc = rightArmUncovered.GetComponent<SpriteRenderer>().color;
         Color luc = leftArmUncovered.GetComponent<SpriteRenderer>().color;
+
+        //Slowly turn them black
         for (float alpha = 1f; alpha >= 0; alpha -= 0.01f)
         {
             ruc.r = alpha;
@@ -334,7 +359,10 @@ public class Blagthoroth : Damageable, Boss
             bodyUncovered.GetComponent<SpriteRenderer>().color = buc;
             yield return new WaitForSeconds(.02f);
         }
+        //Cool effects
         Instantiate(deathParticles, transform.position, transform.rotation);
+
+        //Kill boss
         BossController.instance.BossDie();
         Destroy(gameObject);
     }
@@ -342,12 +370,14 @@ public class Blagthoroth : Damageable, Boss
     /// Coordinates the different attacks that Blag can do.
     public void PhaseChange()
     {
+        //Check to make sure carcinization should happen
         if (CurrentHealth <= MaxHealth / 2 && !m_carcinized && GameManager.instance.getCurrentDifficultyInt() > 0)
         {
             StartCoroutine(Carcinization());
             m_DifficultyModifier *= 1.5f;
             m_LevelModifier *= 1.5f;
         }
+        //Choose random attack based on difficulty
         else
         {
             int r = Random.Range(0, m_MaxAttack);
