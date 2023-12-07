@@ -67,7 +67,7 @@ public class HUDManager : MonoBehaviour
 
     void UpdateScoreText()
     {
-        scoreText.text = "Score: " + GameManager.instance.score.ToString();
+        scoreText.text = "Win Streak: " + GameManager.instance.winstreak.ToString();
     }
 
     void UpdateDifficultyText()
