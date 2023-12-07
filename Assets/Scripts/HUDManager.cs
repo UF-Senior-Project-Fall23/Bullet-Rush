@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SocialPlatforms.Impl;
 
+// Manages the HUD UI while in game.
 public class HUDManager : MonoBehaviour
 {
     public static HUDManager instance;
@@ -16,13 +14,16 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI weaponText;
     public TextMeshProUGUI heatText;
     public FillableBar heatBar;
-    public GameObject tooltip;
+    public GameObject tooltipPrefab;
+    public GameObject tooltipCanvas;
 
     GameObject DeathScreen;
+    List<GameObject> tooltips;
 
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI difficultyText;
 
+    // Set up singleton instance
     private void Awake()
     {
         if (instance == null)
@@ -37,7 +38,7 @@ public class HUDManager : MonoBehaviour
         DeathScreen = transform.Find("DeathScreen").gameObject;
     }
 
-    // Start is called before the first frame update
+    // Set up change listeners and fill in basic values for HUD displays.
     void Start()
     {
         weaponText.text = "Weapon: None";
@@ -52,6 +53,7 @@ public class HUDManager : MonoBehaviour
         GameManager.instance.LevelChanged.AddListener(UpdateLevelText);
     }
 
+    // Called a fixed number of times per second, currently updates the time elapsed.
     void FixedUpdate()
     {
         timeText.text = "Time Elapsed: " + Mathf.Floor(GameManager.gameTime).ToString() + " s";
@@ -77,17 +79,19 @@ public class HUDManager : MonoBehaviour
         levelText.text = "Level: " + GameManager.instance.currentLevel.ToString();
     }
 
-    public void ShowTooltip(string name, string description, Vector3 pos)
+    // Utility to display a tooltip with a title and description somewhere. Used for weapons and perks.
+    public GameObject CreateTooltip(string title, string description, Vector3 pos)
     {
-        tooltip.transform.Find("Title").GetComponent<TextMeshProUGUI>().text = name;
+        GameObject tooltip = Instantiate(tooltipPrefab, tooltipCanvas.transform);
+        tooltip.transform.Find("Title").GetComponent<TextMeshProUGUI>().text = title;
         tooltip.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = description;
         tooltip.transform.position = pos;
-        tooltip.SetActive(true);
+        return tooltip;
     }
 
-    public void HideTooltip()
+    public void HideTooltip(GameObject tooltip)
     {
-        tooltip.SetActive(false);
+        Destroy(tooltip);
     }
 
     public void ShowDeathScreen()

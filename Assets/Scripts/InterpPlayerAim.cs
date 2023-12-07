@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Makes the camera interpolate between the player character and the user's mouse, providing better aiming.
 public class InterpPlayerAim : MonoBehaviour
 {
 

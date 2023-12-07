@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Represents a projectile that bursts into smaller projectiles after exploding. Used for Onyx and Blag'thoroth.
 public class CinderCluster : MonoBehaviour
 {
     public int ShardCount = 8;
@@ -18,6 +16,7 @@ public class CinderCluster : MonoBehaviour
 
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             rb.AddForce(bullet.transform.up * 20f, ForceMode2D.Impulse);
+            Destroy(bullet, 2.0f);
         }
     }
 }

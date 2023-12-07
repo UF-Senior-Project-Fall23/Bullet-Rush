@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Used for triggering code during development.
 public class DebugInputs : MonoBehaviour
 {
     private bool canChangeMusic = true;

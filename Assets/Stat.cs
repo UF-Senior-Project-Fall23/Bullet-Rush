@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-
+// Represents a statistic that can be held by the player.
+// Used for scripting in the editor.
 [CreateAssetMenu(fileName = "New Stat", menuName = "Stat")]
 public class Stat : ScriptableObject
 {

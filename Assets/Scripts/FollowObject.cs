@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// Attach to an object to make it follow the specified object at some offset.
+// Works even in the editor scene view.
 [ExecuteInEditMode]
 public class FollowObject : MonoBehaviour
 {

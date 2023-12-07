@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+// Represents the Tommy Gun weapon. No overrides needed as it works off of the base Weapon class.
 public class tommyGun : Weapon
 {
 

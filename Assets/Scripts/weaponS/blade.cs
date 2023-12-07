@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+// Handles logic for using the Blade weapon.
 public class blade : Weapon {
 
     private Animator anim; //change var name
@@ -15,6 +16,7 @@ public class blade : Weapon {
     }
 
     //TODO: If mouse1 is held down and weapon is swapped cancel animation
+    // Runs the slash animation, which calls Slash() through the animator.
     public override IEnumerator Shoot(){
         isShooting = true;
         anim.Play("Slash");
@@ -24,11 +26,12 @@ public class blade : Weapon {
         isShooting = false;
     }
 
+    // Shoots the slash projectile forward. This is the actual "bullet".
     public void Slash()
     {
         GameObject bullet = Instantiate(bulletPreFab, shootPoint.position, shootPoint.rotation * Quaternion.Euler(0, 0, 180));
         bullet.GetComponent<Bullet>().damage = damage;
-        Destroy(bullet, .35f);
+        Destroy(bullet, .30f);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
         //Fire the slash
@@ -41,32 +44,7 @@ public class blade : Weapon {
         }
     }
 
-    public override void UpdateWeaponPos() {
-        //Gets the mouse position
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        //Calculates the angle the player is looking based on mouse and player position
-        Vector2 lookAngle = mousePos - new Vector2(player.transform.position.x, player.transform.position.y);
-        float mouseAngle = Mathf.Atan2(lookAngle.y, lookAngle.x);
-        transform.position = new Vector3(
-            player.transform.position.x + (radius * Mathf.Cos(mouseAngle)),
-            player.transform.position.y + (radius * Mathf.Sin(mouseAngle)),
-            1
-        );
-
-        transform.rotation = Quaternion.Euler(0, 0, mouseAngle * Mathf.Rad2Deg + 180);
-
-        //TODO: Change rotation values only once instead of every Frame
-        //Checks if the mouse is behind the player
-        if (isFlipped && (mouseAngle < -1 * math.PI / 2 || mouseAngle > math.PI / 2))
-            isFlipped = false;
-        else if (!isFlipped && mouseAngle > -1 * math.PI / 2 && mouseAngle < math.PI / 2)
-            isFlipped = true;
-
-        //Flips the weapon if the mouse is behind the player
-        transform.Rotate(new Vector3(System.Convert.ToInt16(isFlipped) * 180, 0, 0));
-    }
-
+    // Deals melee damage.
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.tag == "Enemy") {
             //other.GetComponent<Enemy>().TakeDamage(damage);

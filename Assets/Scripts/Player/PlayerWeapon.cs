@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
+// Handles picking up and dropping weapons.
 public class PlayerWeapon : MonoBehaviour
 {
     public GameObject currWeapon;
     Weapon m_weaponScript;
 
+    // Enables the picked up weapon and drops the previous one if any.
     public void pickupWeapon(GameObject weapon) 
     {
         if (currWeapon != null)
@@ -21,10 +20,12 @@ public class PlayerWeapon : MonoBehaviour
         HUDManager.instance.weaponText.text = "Weapon: " + weapon.name;
     }
 
+    // Puts the current weapon back in its pedestal.
     public void DropWeapon()
     {
         currWeapon.tag = "Weapon";
         m_weaponScript.player = null;
+        m_weaponScript.currentHeat = 0f;
         m_weaponScript.enabled = false;
         currWeapon.transform.SetPositionAndRotation(m_weaponScript.startingPosition.position, m_weaponScript.startingPosition.rotation);
         currWeapon.GetComponent<Collider2D>().enabled = true;

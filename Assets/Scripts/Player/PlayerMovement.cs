@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Handles the player movement mechanics.
 public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D m_body;
@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    // Detects when the player dashes.
     void Update()
     {
         //In order to not have the player do any other movements if it is currently dashing we need to add this code block
@@ -54,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Dash());
     }
 
+    // Moves the player with basic WASD or joystick input.
     void FixedUpdate()
     {
         m_horizontal = Input.GetAxisRaw("Horizontal");
@@ -73,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-
+    // Causes the player to dash forward, becoming briefly invincible.
     private IEnumerator Dash()
     {
         canDash = false;
@@ -98,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
     }
 
+    // Resets whether the player can dash and their opacity.
     public void ResetMovement()
     {
         canDash = true;
