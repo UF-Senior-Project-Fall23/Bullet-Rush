@@ -77,7 +77,7 @@ public class Weapon : MonoBehaviour
         // Reduce heat over time.
         if (!isShooting)
         {
-            float adjustedCooldownRate = isOverheated ? cooldownRate : cooldownRate * 0.85f;
+            float adjustedCooldownRate = isOverheated ? cooldownRate * 0.8f : cooldownRate * 1.15f;
             currentHeat -= adjustedCooldownRate * Time.deltaTime;
             currentHeat = Mathf.Max(currentHeat, 0.0f);
         }
