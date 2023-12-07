@@ -14,7 +14,7 @@ public class Onyx : Damageable, Boss
     public ParticleSystem fireParticlesR;
     public ParticleSystem fireParticlesL;
     private bool m_Run = false;
-    private bool isJetCharging = false;
+
     private bool reverseRunDirection = false;
     private bool isCoroutineRunning = false;
 
@@ -464,6 +464,8 @@ public class Onyx : Damageable, Boss
         //damage on contact with the player
         // if between -45 and 45 degrees, move to the right
         m_invulnerable = true;
+        bool collided = false;
+
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
 
 
@@ -472,7 +474,7 @@ public class Onyx : Damageable, Boss
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
         Vector3 moveDirection = playerPos.normalized;
 
-        float duration = 2f; // 2 seconds duration
+        float duration = .8f; // .8 seconds duration
 
         if (playerAngle < (Mathf.PI / 4) && playerAngle > (-1 * Mathf.PI / 4))
         {
@@ -496,11 +498,19 @@ public class Onyx : Damageable, Boss
         //depending on difficulty, set bulletSpeed
         float jetSpeed = 12 * difficultyMultiplier;
         float timer = 0f;
-        while (timer < duration)
+        while (timer < duration && !collided)
         {
-            float distanceToMove = jetSpeed * Time.deltaTime;
+            float jetDistance = jetSpeed * Time.deltaTime;
+            jetDistance = jetDistance > .04f ? .04f : jetDistance;
 
-            transform.Translate(moveDirection * distanceToMove, Space.World);
+            // Check for collisions along the movement path
+            if (CheckCollisionAlongPath(moveDirection, jetDistance))
+            {
+                collided = true;
+                jetDistance = 0f; // Set jetDistance to 0 if collision occurs
+            }
+
+            transform.Translate(moveDirection * jetDistance, Space.World);
 
             timer += Time.deltaTime;
             yield return null;
@@ -511,6 +521,27 @@ public class Onyx : Damageable, Boss
         m_Animator.SetTrigger("Run");
         yield return new WaitUntil(() => m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Run"));
 
+    }
+
+    // Dispatches Onyx's attacks.
+    public void PhaseChange()
+    {
+
+    }
+
+    // Function to check for collisions along the movement path
+    private bool CheckCollisionAlongPath(Vector3 moveDirection, float distance)
+    {
+        RaycastHit hit;
+        // Perform a raycast along the movement path
+        if (Physics.Raycast(transform.position, moveDirection, out hit, distance))
+        {
+            // Check if the hit object has a tag indicating a collision (e.g., "Wall")
+            return hit.collider.CompareTag("Wall");
+        }
+
+        // No collision along the path
+        return false;
     }
 
     // Causes Onyx to run around, dealing contact damage.
@@ -530,6 +561,7 @@ public class Onyx : Damageable, Boss
             Vector3 directionToPlayer = PlayerController.instance.transform.position - transform.position;
             Vector3 moveDirection = reverseRunDirection ? -directionToPlayer.normalized : directionToPlayer.normalized;
             float distanceToMove = speed * Time.deltaTime;
+            distanceToMove = distanceToMove > .02f ? .02f : distanceToMove;
 
             transform.Translate(moveDirection * distanceToMove, Space.World);
 
@@ -578,27 +610,6 @@ public class Onyx : Damageable, Boss
     }
 
 
-    // Dispatches Onyx's attacks.
-    public void PhaseChange()
-    {
-        if (!isCoroutineRunning)
-        {
-            isCoroutineRunning = true;
-
-            if (!m_Run)
-            {
-                int randAttack = Random.Range(0, level + 3);
-                Debug.Log("Phase Change: Attacking");
-                StartCoroutine(StartAttackCoroutine(randAttack));
-            }
-            else
-            {
-                Debug.Log("Phase Change: Running");
-                StartCoroutine(StartRunCoroutine());
-            }
-        }
-    }
-
     private IEnumerator StartAttackCoroutine(int randAttack)
     {
         isCoroutineRunning = true;
@@ -615,10 +626,8 @@ public class Onyx : Damageable, Boss
                 yield return StartCoroutine(Machine_Assault());
                 break;
             case 3:
-                isJetCharging = true;
                 jetChargeCoroutine = StartCoroutine(JetCharge());
                 yield return jetChargeCoroutine;
-                isJetCharging = false;
                 break;
             case 4:
                 yield return StartCoroutine(HighExplosive());
@@ -678,26 +687,11 @@ public class Onyx : Damageable, Boss
         {
             float damage = 2f;
             Debug.Log("onyx collision with wall or player");
-            // Stop both coroutines on collision
-            if (isJetCharging)
-            {
-                damage = 3f;
-                Debug.Log("STOP jetCharge");
-                StopCoroutine(jetChargeCoroutine);
-                isCoroutineRunning = false;
-                m_Run = true;
-                m_Animator.SetTrigger("Run");
 
-            }
 
             if (m_Run)
             {
                 reverseRunDirection = !reverseRunDirection;
-                // damage = 10f;
-                // Debug.Log("STOP Run");
-                // StopCoroutine(runCoroutine);
-                // isCoroutineRunning = false;
-                // m_Run = false;
 
             }
 
