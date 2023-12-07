@@ -327,19 +327,13 @@ public class Cordelia : Damageable, Boss
     {
         Debug.Log("DetonatePuppets");
         bool waiting = false;
-        for (int i = 0; i < puppetCount; i++)
-        {
-            if (puppets[i] != null)
-            {
-                waiting = true;
-            }
-        }
         playerPos = PlayerController.instance.gameObject.transform.position;
         for (int i = 0; i < puppets.Count; i++)
         {
             if (puppets[i] != null)
             {
                 StartCoroutine(puppets[i].GetComponent<puppetAttack>().DetonatePuppets());
+                waiting = true;
             }
         }
 
@@ -723,6 +717,7 @@ public class Cordelia : Damageable, Boss
 
     public IEnumerator Death()
     {
+        Invulnerable = true;
         DimLights.instance.TurnOff();
         // kills any remaining puppets once Cordelia dies
         foreach (var puppet in puppets)
