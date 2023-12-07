@@ -110,6 +110,7 @@ public class BossController : MonoBehaviour
             if (GameManager.instance.getCurrentLevel() == 3)
             {
                 portal.GetComponent<Portal>().destination = "Start";
+                portal.GetComponent<Portal>().isVictoryPortal = true;
                 Debug.Log("You won, generating start portal!");
             }
             else

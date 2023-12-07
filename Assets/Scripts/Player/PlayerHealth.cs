@@ -40,6 +40,7 @@ public class PlayerHealth : Damageable
     {
         GetComponent<PlayerController>().weapon.DropWeapon();
         HUDManager.instance.ShowDeathScreen();
+        GameManager.instance.winstreak = 0;
         HUDManager.instance.transform.Find("PlayerHealthFrame")?.gameObject.SetActive(false);
         FindObjectOfType<InterpPlayerAim>().enabled = false;
         gameObject.SetActive(false);
