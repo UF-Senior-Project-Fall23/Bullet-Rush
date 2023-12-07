@@ -15,12 +15,15 @@ public class Onyx : Damageable, Boss
     public ParticleSystem fireParticlesL;
     private bool m_Run = false;
 
+    private bool reverseRunDirection = false;
+    private bool isCoroutineRunning = false;
+
     bool m_invulnerable = false;
 
     //coroutine variables. needed so they can be stopped on collision
     Coroutine jetChargeCoroutine;
     Coroutine runCoroutine;
-    
+
     private float difficultyMultiplier = 1f;
     private int level = 0;
 
@@ -36,28 +39,30 @@ public class Onyx : Damageable, Boss
         m_MaxBulletVelocity = 40f;
         m_Animator = GetComponent<Animator>();
         OnyxRB = GetComponent<Rigidbody2D>();
-        
+
         difficultyMultiplier = GameManager.instance.getDifficultyModifier();
+        Debug.Log("difficulty multiplier " + difficultyMultiplier);
         level = GameManager.instance.getCurrentLevel();
     }
-    
+
     // Displays jet engine fire particles.
     void PlayFireParticles()
     {
         fireParticlesL.Play();
         fireParticlesR.Play();
     }
-    
+
     // Stops jet engine fire particles.
     void StopFireParticles()
     {
         fireParticlesL.Stop();
         fireParticlesR.Stop();
     }
-    
+
     // Aims a pistol blast at the player and shoots them a few times.
     IEnumerator Pistol_Blast()
     {
+        Debug.Log("Pistol Blast");
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         int yOffsetIndicator = 1;
         int xOffsetIndicator = 1;
@@ -138,7 +143,14 @@ public class Onyx : Damageable, Boss
                 indicators.Add(indicator);
                 //next loop, bullet
                 indicate = false;
-                yield return new WaitForSeconds(.06f);
+                if (_ == 0)
+                {
+                    yield return new WaitForSeconds(.4f);
+                }
+                else
+                {
+                    yield return new WaitForSeconds(.06f);
+                }
             }
             else
             {
@@ -166,7 +178,8 @@ public class Onyx : Damageable, Boss
             }
         }
         m_Animator.SetTrigger("Run");
-        PhaseChange();
+
+        ;
     }
 
     // Determines whether a bullet is in a trajectory that will collide with the boss.
@@ -195,10 +208,11 @@ public class Onyx : Damageable, Boss
         Debug.Log("No ouch");
         return false;
     }
-    
+
     // Shoots the player in a wide area using some dual shotguns.
     IEnumerator Dual_Danger()
     {
+        Debug.Log("Dual Danger");
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         int yOffsetIndicator = 1;
         int xOffsetIndicator = 1;
@@ -296,15 +310,15 @@ public class Onyx : Damageable, Boss
             }
         }
         m_Animator.SetTrigger("Run");
-        PhaseChange();
+
     }
 
     // Causes a large radial attack of bullets to strike out from Onyx
     IEnumerator Machine_Assault()
     {
+        Debug.Log("Machine Assault");
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
 
-        Debug.Log("MachineAssault");
         //12 indicators (radial circle)
 
         //after all 12 indicators, fire 12 bullets
@@ -317,7 +331,6 @@ public class Onyx : Damageable, Boss
         {
             int half_indicator_len = 10;
             int theta = ((360 / 24) * i);
-            Debug.Log("theta = " + theta);
             float x_indicator = transform.position.x + Mathf.Sin(Mathf.Deg2Rad * theta) * half_indicator_len;
             float y_indicator = transform.position.y - Mathf.Cos(Mathf.Deg2Rad * theta) * half_indicator_len;
             //create the indicator at a position with a rotation
@@ -333,9 +346,6 @@ public class Onyx : Damageable, Boss
         foreach (var indicator in indicators)
         {
             //Fire a bullet at the player based on its position
-            Debug.Log("Boss Position" + transform.position);
-            Debug.Log("Bullet Position: " + (indicator.transform.position.normalized * .5f));
-            Debug.Log("Bullet Rotation: " + indicator.transform.rotation);
             GameObject bullet = Instantiate(
                 GameManager.instance.getBulletPrefab("Test Bullet"),
                 transform.position - ((transform.position - indicator.transform.position).normalized * 5f),
@@ -352,71 +362,20 @@ public class Onyx : Damageable, Boss
             yield return new WaitForSeconds(.05f / difficultyMultiplier);
         }
         m_Animator.SetTrigger("Run");
-        PhaseChange();
+
     }
 
 
     // Causes Onyx to shoot forward propelled by a jet engine, dealing high contact damage.
-    public IEnumerator JetCharge()
-    {
-        //charge in the direction of player
-        //damage on contact with the player
-        // if between -45 and 45 degrees, move to the right
-        m_invulnerable = true;
-        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
-        Debug.Log("Jet Charge");
 
-        // Get direction towards player
-        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
-        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
-        Vector3 moveDirection = playerPos.normalized;
-
-        float duration = 2f; // 2 seconds duration
-
-        if (playerAngle < (Mathf.PI / 4) && playerAngle > (-1 * Mathf.PI / 4))
-        {
-            m_Animator.SetTrigger("JetRight");
-        }
-        else if (playerAngle > (Mathf.PI / 4) && playerAngle < (3 * Mathf.PI / 4))
-        {
-            m_Animator.SetTrigger("JetUp");
-        }
-        // 135, 225 degrees (on sides) to the left
-        else if (playerAngle > (3 * Mathf.PI / 4) || playerAngle < (-3 * Mathf.PI / 4))
-        {
-            m_Animator.SetTrigger("JetLeft");
-        }
-        else
-        {
-            m_Animator.SetTrigger("JetDown");
-        }
-        //after setting animation, wait for change then start moving
-        yield return new WaitForSeconds(.8f);
-        //depending on difficulty, set bulletSpeed
-        float jetSpeed = 12 * difficultyMultiplier;
-        float timer = 0f;
-        while (timer < duration)
-        {
-            float distanceToMove = jetSpeed * Time.deltaTime;
-
-            transform.Translate(moveDirection * distanceToMove, Space.World);
-
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-
-        m_invulnerable = false;
-        m_Animator.SetTrigger("Run");
-        PhaseChange();
-    }
 
     // Throws several projectiles that burst into smaller projectiles.
     public IEnumerator HighExplosive()
     {
+        m_Animator.SetTrigger("High Explosive");
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
 
-        m_Animator.SetTrigger("High Explosive");
+
         //throw cinder clusters (similar to blag attack)
         GameObject bulletPreFab = GameManager.instance.getBulletPrefab("Cinder Cluster");
 
@@ -457,12 +416,13 @@ public class Onyx : Damageable, Boss
             yield return new WaitForSeconds(.3f);
         }
         m_Animator.SetTrigger("Run");
-        PhaseChange();
+
     }
 
     // Prepares to drop several explosives on the player, indicating where they'll all drop before all exploding simultaneously.
     public IEnumerator Grenade()
     {
+        Debug.Log("Grenade");
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
 
         m_Animator.SetTrigger("High Explosive");
@@ -494,37 +454,120 @@ public class Onyx : Damageable, Boss
         }
         yield return new WaitForSeconds(.25f);
         m_Animator.SetTrigger("Run");
-        PhaseChange();
+
     }
 
-
-    // Causes Onyx to run around, dealing contact damage.
-    public IEnumerator Run()
+    public IEnumerator JetCharge()
     {
+        Debug.Log("Jet Charge");
+        //charge in the direction of player
+        //damage on contact with the player
+        // if between -45 and 45 degrees, move to the right
+        m_invulnerable = true;
+        bool collided = false;
+
         yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
 
-        m_Animator.SetTrigger("Run");
-        float timer = 0f;
-        float duration = 2 / difficultyMultiplier; // duration gets shorter the harder the difficulty
-                                                   // Keep moving towards the player for the specified duration
-        while (timer < duration)
+
+        // Get direction towards player
+        Vector3 playerPos = PlayerController.instance.transform.position - transform.position;
+        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+        Vector3 moveDirection = playerPos.normalized;
+
+        float duration = .8f; // .8 seconds duration
+
+        if (playerAngle < (Mathf.PI / 4) && playerAngle > (-1 * Mathf.PI / 4))
         {
-            Vector3 directionToPlayer = PlayerController.instance.transform.position - transform.position;
-            Vector3 moveDirection = directionToPlayer.normalized;
-            float distanceToMove = speed * Time.deltaTime;
+            m_Animator.SetTrigger("JetRight");
+        }
+        else if (playerAngle > (Mathf.PI / 4) && playerAngle < (3 * Mathf.PI / 4))
+        {
+            m_Animator.SetTrigger("JetUp");
+        }
+        // 135, 225 degrees (on sides) to the left
+        else if (playerAngle > (3 * Mathf.PI / 4) || playerAngle < (-3 * Mathf.PI / 4))
+        {
+            m_Animator.SetTrigger("JetLeft");
+        }
+        else
+        {
+            m_Animator.SetTrigger("JetDown");
+        }
+        //after setting animation, wait for change then start moving
+        yield return new WaitForSeconds(.8f);
+        //depending on difficulty, set bulletSpeed
+        float jetSpeed = 12 * difficultyMultiplier;
+        float timer = 0f;
+        while (timer < duration && !collided)
+        {
+            float jetDistance = jetSpeed * Time.deltaTime;
+            jetDistance = jetDistance > .04f ? .04f : jetDistance;
 
-            transform.Translate(moveDirection * distanceToMove, Space.World);
+            // Check for collisions along the movement path
+            if (CheckCollisionAlongPath(moveDirection, jetDistance))
+            {
+                collided = true;
+                jetDistance = 0f; // Set jetDistance to 0 if collision occurs
+            }
 
-            // if (directionToPlayer.magnitude < 5.0f)
-            // {
-            //     // Break out of the loop and yield
-            //     yield return StartCoroutine(Dual_Danger());
-            // }
+            transform.Translate(moveDirection * jetDistance, Space.World);
 
             timer += Time.deltaTime;
             yield return null;
         }
-        PhaseChange();
+
+
+        m_invulnerable = false;
+        m_Animator.SetTrigger("Run");
+        yield return new WaitUntil(() => m_Animator.GetCurrentAnimatorStateInfo(0).IsName("Run"));
+
+    }
+
+    // Dispatches Onyx's attacks.
+    public void PhaseChange()
+    {
+
+    }
+
+    // Function to check for collisions along the movement path
+    private bool CheckCollisionAlongPath(Vector3 moveDirection, float distance)
+    {
+        RaycastHit hit;
+        // Perform a raycast along the movement path
+        if (Physics.Raycast(transform.position, moveDirection, out hit, distance))
+        {
+            // Check if the hit object has a tag indicating a collision (e.g., "Wall")
+            return hit.collider.CompareTag("Wall");
+        }
+
+        // No collision along the path
+        return false;
+    }
+
+    // Causes Onyx to run around, dealing contact damage.
+    public IEnumerator Run()
+    {
+        Debug.Log("Run");
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+
+        m_Animator.SetTrigger("Run");
+        float timer = 0f;
+
+        float duration = 5 / difficultyMultiplier; // duration gets shorter the harder the difficulty
+                                                   // Keep moving towards the player for the specified duration
+        Debug.Log("Running duration = " + duration);
+        while (timer < duration)
+        {
+            Vector3 directionToPlayer = PlayerController.instance.transform.position - transform.position;
+            Vector3 moveDirection = reverseRunDirection ? -directionToPlayer.normalized : directionToPlayer.normalized;
+            float distanceToMove = speed * Time.deltaTime;
+            distanceToMove = distanceToMove > .02f ? .02f : distanceToMove;
+
+            transform.Translate(moveDirection * distanceToMove, Space.World);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
 
     }
 
@@ -542,44 +585,73 @@ public class Onyx : Damageable, Boss
         Destroy(gameObject);
     }
 
-    // Dispatches Onyx's attacks.
-    public void PhaseChange()
+    IEnumerator DriveAttacks()
     {
-
-        if (!m_Run)
+        while (true)
         {
-            int randAttack = Random.Range(0, level + 2);
-            switch (randAttack)
+            if (!isCoroutineRunning)
             {
-                case 0:
-                    StartCoroutine(Grenade());
-                    break;
-                case 1:
-                    StartCoroutine(Dual_Danger());
-                    break;
-                case 2:
-                    StartCoroutine(Machine_Assault());
-                    break;
-                case 3:
-                    jetChargeCoroutine = StartCoroutine(JetCharge());
-                    break;
-                case 4:
-                    StartCoroutine(HighExplosive());
-                    break;
-                case 5:
-                    StartCoroutine(Pistol_Blast());
-                    break;
-                default:
-                    break;
-            }
+                isCoroutineRunning = true;
 
-            m_Run = true;
+                if (!m_Run)
+                {
+                    int randAttack = Random.Range(0, level + 3);
+                    Debug.Log("Phase Change: Attacking");
+                    StartCoroutine(StartAttackCoroutine(randAttack));
+                }
+                else
+                {
+                    Debug.Log("Phase Change: Running");
+                    StartCoroutine(StartRunCoroutine());
+                }
+            }
+            yield return null;
         }
-        else
+    }
+
+
+    private IEnumerator StartAttackCoroutine(int randAttack)
+    {
+        isCoroutineRunning = true;
+        m_Run = false;
+        switch (randAttack)
         {
-            runCoroutine = StartCoroutine(Run());
-            m_Run = false;
+            case 0:
+                yield return StartCoroutine(Grenade());
+                break;
+            case 1:
+                yield return StartCoroutine(Dual_Danger());
+                break;
+            case 2:
+                yield return StartCoroutine(Machine_Assault());
+                break;
+            case 3:
+                jetChargeCoroutine = StartCoroutine(JetCharge());
+                yield return jetChargeCoroutine;
+                break;
+            case 4:
+                yield return StartCoroutine(HighExplosive());
+                break;
+            case 5:
+                yield return StartCoroutine(Pistol_Blast());
+                break;
+            default:
+                break;
         }
+
+        isCoroutineRunning = false;
+        m_Run = true;
+    }
+
+    private IEnumerator StartRunCoroutine()
+    {
+        reverseRunDirection = false;
+        isCoroutineRunning = true;
+        m_Run = true;
+        runCoroutine = StartCoroutine(Run());
+        yield return runCoroutine;
+        isCoroutineRunning = false;
+        m_Run = false;
     }
 
     // Startup code.
@@ -589,7 +661,7 @@ public class Onyx : Damageable, Boss
         yield return new WaitForSeconds(1f);
         Invulnerable = false;
 
-        PhaseChange();
+        StartCoroutine(DriveAttacks());
     }
 
     // Handlex Onyx dying.
@@ -610,25 +682,17 @@ public class Onyx : Damageable, Boss
     // Handles contact damage, varies based on which mode Onyx is in.
     void OnCollisionEnter2D(Collision2D collision)
     {
+
         if (collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Player")
         {
             float damage = 2f;
             Debug.Log("onyx collision with wall or player");
-            // Stop both coroutines on collision
-            if (jetChargeCoroutine != null)
-            {
-                damage = 4f;
-                StopCoroutine(jetChargeCoroutine);
-                m_Animator.SetTrigger("Run");
-                PhaseChange();
-            }
 
-            if (runCoroutine != null)
+
+            if (m_Run)
             {
-                damage = 3f;
-                StopCoroutine(runCoroutine);
-                m_Animator.SetTrigger("Run");
-                PhaseChange();
+                reverseRunDirection = !reverseRunDirection;
+
             }
 
             if (collision.gameObject.CompareTag("Player"))
