@@ -8,12 +8,16 @@ using Random = UnityEngine.Random;
 // Handles the code for the Cordelia boss.
 public class Cordelia : Damageable, Boss
 {
+    public static Cordelia instance;
+
     public GameObject bulletPreFab;
     public GameObject puppetPreFab;
     public GameObject dimPreFab;
     public GameObject voidPreFab;
-    public GameObject stringPreFab;
+    public GameObject kickPreFab;
+    public GameObject shieldPreFab;
     GameObject dim;
+    GameObject shield;
     int puppetCount = 2;
     public int attackNum = 4;
     private Animator m_Animator;
@@ -32,6 +36,7 @@ public class Cordelia : Damageable, Boss
     bool timeIndicator = true;
     bool spinSet = true;
     bool puppetSpawn = false;
+    bool summoningDone = true;
     GameObject cb;
 
     Vector3 playerPos;
@@ -42,6 +47,7 @@ public class Cordelia : Damageable, Boss
     int rotationSize = 8;
     int puppetRespawnTime = 4;
     int diffAttack = 5;
+    int puppetsAlive = 2;
     private float bulletTime = 0f;
     private float bulletWait = .3f;
     private Vector3 rushDirection = Vector3.up;
@@ -85,17 +91,23 @@ public class Cordelia : Damageable, Boss
     // Initializes Cordelia
     void Start()
     {
+        instance = this;
         m_DifficultyModifier = GameManager.instance.getDifficultyModifier();
         m_LevelModifier = GameManager.instance.getLevelModifier();
-        if(m_LevelModifier > 1 || m_DifficultyModifier > 1)
+        m_Animator = GetComponent<Animator>();
+        
+        if(m_DifficultyModifier == 1.5)
         {
-            diffAttack = 9;
-            puppetCount = 5;
+            diffAttack = 7;
+            puppetCount = 3;
         }
-        Debug.Log(m_DifficultyModifier);
-        Debug.Log(m_LevelModifier);
-        //StartCoroutine(SummonPuppets());
-
+        else if(m_DifficultyModifier == 2)
+        {
+            diffAttack = 8;
+            puppetCount = 4;
+        }
+        puppetCount = puppetCount + (int)(m_LevelModifier * 2) - 2;
+        puppetRespawnTime = 7 - 2 * (int)m_LevelModifier - 2;
         cb = BossController.instance.currentBoss;
         playerPos = PlayerController.instance.gameObject.transform.position;
         dim = Instantiate(dimPreFab, transform);
@@ -136,16 +148,31 @@ public class Cordelia : Damageable, Boss
 
 
     }
-
-    // Sets the dance to Spin, moving Cordelia toward the player and causing her puppets to spin around the player.
+    public int getPuppetCount()
+    {
+        return puppetsAlive;
+    }
+    public void puppetDies()
+    {
+        puppetsAlive--;
+        Debug.Log(puppetsAlive);
+        if(puppetsAlive == 0)
+        {
+            GetComponent<Damageable>().Invulnerable = false;
+            Destroy(shield);
+        }
+    }
+    // Sets the dance to Spin.
     IEnumerator SpinDance()
     {
         Debug.Log("SpinDance");
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        m_Animator.SetTrigger("Rush");
+        yield return new WaitForSeconds(1f);
         float length = 0f;
         float endTime = 3f;
         float moveSpeed = .1f;
         bool rush = false;
-
         while (length < endTime)
         {
             if (length > 2.3f)
@@ -167,97 +194,95 @@ public class Cordelia : Damageable, Boss
             length += Time.deltaTime;
             yield return null;
         }
-
-
         PhaseChange();
     }
 
-    // TODO: Implement
+
     IEnumerator KickDance()
     {
+        GameObject kick;
         Debug.Log("KickDance");
-        yield return null;
-    }
-
-    // TODO: Implement
-    IEnumerator StringDance()
-    {
-        Debug.Log("StringDance");
-        /*Vector3 t = transform.position;
-        t.y = t.y - 3f;
-        Vector3 direction = (playerPos - t).normalized;
-        float angle = (Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
-        GameObject s = Instantiate(stringPreFab, t, Quaternion.Euler(0, 0, angle));
-
         float length = 0f;
-        float endTime = 10f;
-        playerPos = PlayerController.instance.transform.position;
-        //playerPos = PlayerController.instance.gameObject.transform.position;
+        float endTime = 6f;
+        float bulletLength = 0f;
+        float bulletFreq = .5f;
+        bool justOneKick = true;
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        m_Animator.SetTrigger("Spin");
+        yield return new WaitForSeconds(1f);
         while (length < endTime)
         {
-            float moveSpeed = .01f;
-            float stretchingSpeed = 10f;
-            var movementVector = (playerPos - s.transform.position).normalized * moveSpeed;
-            s.transform.Translate(movementVector);
-            s.transform.localScale += new Vector3(stretchingSpeed * Time.deltaTime, 0f, 0f);
+            if(length > 1.5 && justOneKick)
+            {
+                justOneKick = false;
+                yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+                m_Animator.SetTrigger("Kick");
+                kick = Instantiate(kickPreFab, transform.position, Quaternion.identity);
+            } 
+            rushMode = true;
 
+            float speed = .05f * m_LevelModifier;
+
+            transform.Translate(rushDirection * speed);
             length += Time.deltaTime;
+            if (puppets.Count != 0)
+            {
+                for (int i = 0; i < puppetCount; i++)
+                {
+                    if (puppets[i] != null)
+                    {
+                        StartCoroutine(puppets[i].GetComponent<puppetAttack>().Rush());
+                    }
+                }
+            }
+
+            playerPos = PlayerController.instance.transform.position - transform.position;
+            //Get the angle from the position
+            float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+            float s = 2f;
+            var step = s * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 2f);
+
+            int bullets = 3;
+            if (m_LevelModifier == 1.5)
+            {
+                bullets = 4;
+            }
+            if (m_LevelModifier == 2)
+            {
+                bullets = 7;
+            }
+            if (bulletLength <= Time.time && MathF.Floor(globalTime) % 2 == 0)
+            {
+
+                for (int i = 0; i < bullets; i++)
+                {
+                    var r2 = Quaternion.Euler(0, 0, 0);// playerAngle * Mathf.Rad2Deg + 90);
+
+                    GameObject bullet = Instantiate(bulletPreFab, new Vector3(
+                        transform.position.x + (transform.localScale.x / 5f * Mathf.Cos(playerAngle)),
+                        transform.position.y + (transform.localScale.y / 5f * Mathf.Sin(playerAngle)), 1), r2);
+                    //Debug.Log(bullet.transform.position);
+                    bullet.transform.Rotate(0, 0, 290 - (i * 150));
+                    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                    rb.AddForce(bullet.transform.right * .001f, ForceMode2D.Impulse);
+                }
+                bulletLength = Time.time + bulletFreq;
+                yield return null;
+            }
             yield return null;
-        }*/
-        /*int stringsNum = 5;
-        Vector3 t = transform.position;
-        t.y = t.y - 3f;
-
-        Vector3 direction = (playerPos - t).normalized;
-        float angle = (Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90);
-        GameObject s = Instantiate(stringPreFab, transform.position, Quaternion.Euler(0, 0, angle));
-        float length = 0f;
-        float endTime = 10f;
-        playerPos = PlayerController.instance.transform.position;
-        //playerPos = PlayerController.instance.gameObject.transform.position;
-        while (length < endTime)
-        {
-            t = transform.position;
-            t.y = t.y - 3f;
-
-            direction = (playerPos - t).normalized;//s.transform.position;
-
-            // Cast a ray in that direction to detect obstacles (walls)
-            RaycastHit2D hit = Physics2D.Raycast(t, direction*20, Mathf.Infinity);
-            if(hit.collider != null)
-            {
-                Debug.Log(hit.collider.name);
-            }
-            if (hit.collider != null && hit.collider.gameObject.CompareTag("Wall"))
-            {
-                // If the ray hits a wall, stop stretching
-                //isStretching = false;
-                Debug.Log("Wall Hit");
-                // Set the position to the hit point
-                t = hit.point;
-                Debug.Log(hit.distance);
-                s.transform.localScale = new Vector3(hit.distance, s.transform.localScale.y, 0f);
-            }
-            else
-            {
-                float stretchingSpeed = 20f;
-                //float distance = Vector3.Distance(s.transform.position, playerPos);
-                //s.transform.localScale = new Vector3(distance* Time.deltaTime, s.transform.localScale.y, s.transform.localScale.z);
-                s.transform.localScale += new Vector3(stretchingSpeed * Time.deltaTime, 0f, 0f);
-                Debug.DrawRay(t, direction*100f, UnityEngine.Color.red);
-            }
-            length += Time.deltaTime;
-            yield return null;
-        }*/
-        yield return null;
+        }
+        rushMode = false;
+        PhaseChange();
     }
 
     // Summons smaller puppet minions to help Cordelia, with their own AI
     IEnumerator SummonPuppets()
     {
+        
         Debug.Log("SummonPuppets");
-        puppetRespawnTime = 4;
         puppetSpawn = true;
+        puppetsAlive = puppetCount;
         bool alive = false;
         bool doSpawn = false;
         bool clearPuppets = false;
@@ -275,6 +300,10 @@ public class Cordelia : Damageable, Boss
 
         if (doSpawn)
         {
+            Debug.Log("spawningngng");
+            GetComponent<Damageable>().Invulnerable = true;
+            shield = Instantiate(shieldPreFab, transform.position, Quaternion.identity);
+            
             if (clearPuppets) puppets.Clear();
             Vector2 bossPos = new Vector2(transform.position.x, transform.position.y);
             float health = 7f;
@@ -299,25 +328,22 @@ public class Cordelia : Damageable, Boss
     IEnumerator DetonatePuppets()
     {
         Debug.Log("DetonatePuppets");
+        bool waiting = false;
         playerPos = PlayerController.instance.gameObject.transform.position;
         for (int i = 0; i < puppets.Count; i++)
         {
             if (puppets[i] != null)
             {
-
                 StartCoroutine(puppets[i].GetComponent<puppetAttack>().DetonatePuppets());
-
-                float distance = Vector3.Distance(puppets[i].transform.position, playerPos);
-                //Debug.Log(distance);
-                if(distance < 3f)
-                {
-                    
-                    PlayerController.instance.GetComponent<Damageable>()?.takeDamage(4);
-                }
+                waiting = true;
             }
         }
 
-        yield return new WaitForSeconds(1.5f);
+        if (waiting)
+        {
+            yield return new WaitForSeconds(3.0f);
+        }
+        
         PhaseChange();
         
     }
@@ -328,10 +354,17 @@ public class Cordelia : Damageable, Boss
         Debug.Log("Rush");
         float length = 0f;
         float endTime = 6f;
+        float bulletLength = 0f;
+        float bulletFreq = .8f;
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        m_Animator.SetTrigger("Spin");
+        yield return new WaitForSeconds(1f);
         while (length < endTime)
         {
+            
             rushMode = true;
-            float speed = .04f;
+            
+            float speed = .04f * m_LevelModifier;
 
             transform.Translate(rushDirection * speed);
             length += Time.deltaTime;
@@ -344,6 +377,41 @@ public class Cordelia : Damageable, Boss
                         StartCoroutine(puppets[i].GetComponent<puppetAttack>().Rush());
                     }
                 }
+            }
+
+            playerPos = PlayerController.instance.transform.position - transform.position;
+            //Get the angle from the position
+            float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+            float s = 2f;
+            var step = s * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 2f);
+
+            int bullets = 3;
+            if (m_LevelModifier == 1.5)
+            {
+                bullets = 4;
+            }
+            if (m_LevelModifier == 2)
+            {
+                bullets = 7;
+            }
+            if (bulletLength <= Time.time && MathF.Floor(globalTime) % 2 == 0)
+            {
+
+                for (int i = 0; i < bullets; i++)
+                {
+                    var r2 = Quaternion.Euler(0, 0, 0);// playerAngle * Mathf.Rad2Deg + 90);
+
+                    GameObject bullet = Instantiate(bulletPreFab, new Vector3(
+                        transform.position.x + (transform.localScale.x / 5f * Mathf.Cos(playerAngle)),
+                        transform.position.y + (transform.localScale.y / 5f * Mathf.Sin(playerAngle)), 1), r2);
+                    //Debug.Log(bullet.transform.position);
+                    bullet.transform.Rotate(0, 0, 290 - (i * 150));
+                    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                    rb.AddForce(bullet.transform.right * .001f, ForceMode2D.Impulse);
+                }
+                bulletLength = Time.time + bulletFreq;
+                yield return null;
             }
             yield return null;
         }
@@ -435,7 +503,7 @@ public class Cordelia : Damageable, Boss
                     GameObject bullet = Instantiate(bulletPreFab, new Vector3(
                         transform.position.x + (transform.localScale.x / 5f * Mathf.Cos(playerAngle)),
                         transform.position.y + (transform.localScale.y / 5f * Mathf.Sin(playerAngle)), 1), r2);
-                    Debug.Log(bullet.transform.position);
+                    //Debug.Log(bullet.transform.position);
                     bullet.transform.Rotate(0, 0, 290 - (i * 10));
                     Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                     rb.AddForce(bullet.transform.right * .00125f, ForceMode2D.Impulse);
@@ -455,19 +523,54 @@ public class Cordelia : Damageable, Boss
     // Spawns void holes around the map. Standing near them causes the gloves in them to try and attack the player.
     IEnumerator PuppeteersGrasp()
     {
+        summoningDone = false;
         Debug.Log("PuppeteersGrasp");
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        m_Animator.SetTrigger("HandsExit");
         playerPos = PlayerController.instance.transform.position;
         voidList.Sort((v1, v2) => Vector3.Distance(v2, playerPos).CompareTo(Vector3.Distance(v1, playerPos)));
-
-        int voidAmount = 20; // actual is voidAmount/crowding
+        int max = 80;
+        int voidAmount = 28*(int)m_LevelModifier; // actual is voidAmount/crowding
+        if(voidAmount > max)
+        {
+            voidAmount = max;
+        }
+        voidAmount = 80;
         int crowding = 4;
         float rate = 1f;
         int spreadCount = 0;
-        Debug.Log(voidList.Count - 1 - voidAmount);
+        bool nextPhase = false;
+
+        //Get the angle from the position
+        float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+        float s = 2f;
+        var step = s * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 2f);
+
+        for (int i = 0; i < 7; i++)
+        {
+            var r2 = Quaternion.Euler(0, 0, 0);// playerAngle * Mathf.Rad2Deg + 90);
+
+            GameObject bullet = Instantiate(bulletPreFab, new Vector3(
+                transform.position.x + (transform.localScale.x / 5f * Mathf.Cos(playerAngle)),
+                transform.position.y + (transform.localScale.y / 5f * Mathf.Sin(playerAngle)), 1), r2);
+            //Debug.Log(bullet.transform.position);
+            bullet.transform.Rotate(0, 0, 290 - (i * 150));
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.AddForce(bullet.transform.right * .0007f, ForceMode2D.Impulse);
+        }
         for (int i = voidList.Count-1; i > voidList.Count - voidAmount; i-=crowding)
         {
             //Debug.Log(i);
             //Debug.Log(i - voidAmount);
+
+            // keeps summoning while other attacks can happen
+            if(spreadCount > 4 && !nextPhase)
+            {
+                nextPhase = true;
+                PhaseChange();
+            }
+            // finds the furthest and closest points
             int j = (int)Math.Pow(-1, spreadCount);
             if(j < 0)
             {
@@ -482,8 +585,7 @@ public class Cordelia : Damageable, Boss
             spreadCount++;
             yield return new WaitForSeconds(rate);
         }
-
-        PhaseChange();
+        summoningDone = true;
     }
 
     // Reset puppet minion attacks.
@@ -502,46 +604,50 @@ public class Cordelia : Damageable, Boss
         }
     }
 
-    // Determines which attacks to use.
+    IEnumerator PhaseWait()
+    {
+        m_Animator.SetTrigger("Bounce");
+        yield return new WaitForSeconds(.5f);
+    }
     public void PhaseChange()
     {
-
-        
-        int temp = attackNum;
-        // could make it so that only some attacks can't be twice in a row
-        while (temp == attackNum) 
+        if (puppets.Count != 0)
         {
-            attackNum = Random.Range(1, diffAttack);
-        }
-        int puppetsLeft = puppetCount;
-        
-        if (puppetSpawn)
-        {
-            foreach (var puppet in puppets)
+            bool dead = true; ;
+            for (int i = 0; i < puppetCount; i++)
             {
-                if (puppet == null)
+                if (puppets[i] != null)
                 {
-                    puppetsLeft--;
+                    dead = false;
+                }
+
+            }
+            if (dead)
+            {
+                if (GetComponent<Damageable>().Invulnerable)
+                {
+                    GetComponent<Damageable>().Invulnerable = false;
+                    if(shield != null)
+                    {
+                        Destroy(shield);
+                    }
                 }
             }
-            if(puppetsLeft == 0)
-            {
-                puppetRespawnTime--;
-            }
+            
         }
-        else
+        StartCoroutine(PhaseWait());
+        int temp = attackNum;
+        // could make it so that only some attacks can't be twice in a row
+        int diffAttackMod = 0;
+        if (!summoningDone)
         {
-            if (puppetsLeft == 0)
-            {
-                puppetRespawnTime--;
-            }
+            diffAttackMod = 1;
         }
-        
-        if(puppetRespawnTime == 0)
+        while (temp == attackNum) 
         {
-            attackNum = 4;
+
+            attackNum = UnityEngine.Random.Range(1, diffAttack - diffAttackMod);
         }
-        //attackNum = 3;
         setPuppetAttack();
         
         switch (attackNum)
@@ -568,14 +674,10 @@ public class Cordelia : Damageable, Boss
                 //PhaseChange();
                 break;
             case 6:
-                //StartCoroutine(KickDance());
-                PhaseChange();
+                StartCoroutine(KickDance());
+                //PhaseChange();
                 break;
             case 7:
-                //StartCoroutine(StringDance());
-                PhaseChange();
-                break;
-            case 8:
                 StartCoroutine(PuppeteersGrasp());
                 //PhaseChange();
                 break;
@@ -606,6 +708,10 @@ public class Cordelia : Damageable, Boss
         {
             dim.transform.position = transform.position;
         }
+        if (GetComponent<Damageable>().Invulnerable)
+        {
+            shield.transform.position = transform.position;
+        }
         float second = MathF.Floor(globalTime) % interval;
         if (MathF.Floor(globalTime) % 15 == 0 && timeIndicator)
         {
@@ -618,34 +724,11 @@ public class Cordelia : Damageable, Boss
         }
     }
 
-    // Handles Cordelia dying and cleans up summons
-    public override void Die()
+    public IEnumerator Death()
     {
-        // kills any remaining puppets and gloves once Cordelia dies
-        foreach (var puppet in puppets)
-        {
-            if(puppet is not null) 
-            {
-                Destroy(puppet);
-            }
-        }
-
-        foreach (var v in gloves)
-        {
-            if (v is not null)
-            {
-                Destroy(v);
-            }
-        }
-        BossController.instance.BossDie();
-
+        Invulnerable = true;
         DimLights.instance.TurnOff();
-        Destroy(gameObject);
-    }
-
-    public void ForceDeath()
-    {
-        // kills any remaining puppets and gloves once Cordelia dies
+        // kills any remaining puppets once Cordelia dies
         foreach (var puppet in puppets)
         {
             if (puppet is not null)
@@ -661,9 +744,44 @@ public class Cordelia : Damageable, Boss
                 Destroy(v);
             }
         }
-        BossController.instance.BossDie();
 
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        m_Animator.SetTrigger("Death");
+        yield return new WaitForSeconds(3f);
+
+
+        BossController.instance.BossDie();
+        Destroy(gameObject);
+    }
+    
+    public override void Die()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Death());
+    }
+    
+    public void ForceDeath()
+    {
+        StopAllCoroutines();
+        
         DimLights.instance.TurnOff();
+        foreach (var puppet in puppets)
+        {
+            if (puppet is not null)
+            {
+                Destroy(puppet);
+            }
+        }
+
+        foreach (var v in gloves)
+        {
+            if (v is not null)
+            {
+                Destroy(v);
+            }
+        }
+        
+        BossController.instance.BossDie();
         Destroy(gameObject);
     }
 
