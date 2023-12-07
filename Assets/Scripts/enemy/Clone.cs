@@ -41,6 +41,8 @@ public class Clone : Damageable, puppetAttack
 
     void Start()
     {
+        //m_DifficultyModifier = GameManager.instance.getDifficultyModifier();
+        //m_LevelModifier = GameManager.instance.getLevelModifier();
         playerPos = PlayerController.instance.gameObject.transform.position;
         m_Animator = GetComponent<Animator>();
         
@@ -124,6 +126,7 @@ public class Clone : Damageable, puppetAttack
     // Puppets throw a small, slow barrage of knives at the player.
     public IEnumerator BladeFlourish(int followPattern)
     {
+        //if(m)
         playerPos = PlayerController.instance.transform.position - transform.position;
         //Get the angle from the position
         float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
@@ -179,8 +182,29 @@ public class Clone : Damageable, puppetAttack
     // Animation for puppets exploding. Damage is handled on the Cordelia.cs script.
     public IEnumerator DetonatePuppets()
     {
-        //yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+        
+        float length = 0f;
+        float endTime = 2f;
+        while (length < endTime)
+        {
+            playerPos = PlayerController.instance.transform.position - transform.position;
+            //Get the angle from the position
+            float playerAngle = Mathf.Atan2(playerPos.y, playerPos.x);
+            float speed = UnityEngine.Random.Range(1.0f, 3.0f);
+            var step = speed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, step * 3f);
+            length += Time.deltaTime;
+            yield return null;
+        }
+        yield return new WaitWhile(() => m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         m_Animator.SetTrigger("Explode");
+
+        float distance = Vector3.Distance(transform.position, PlayerController.instance.transform.position);
+        Debug.Log(distance);
+        if (distance < 3f)
+        {
+            PlayerController.instance.GetComponent<Damageable>()?.takeDamage(4);
+        }
         yield return new WaitForSeconds(1.5f);
         Die();
         yield return null;
@@ -210,6 +234,7 @@ public class Clone : Damageable, puppetAttack
 
     public override void Die()
     {
+        Cordelia.instance.puppetDies();
         Destroy(gameObject);
     }
 }

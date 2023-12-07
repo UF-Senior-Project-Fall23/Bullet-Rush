@@ -77,7 +77,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayer: 5
   m_SortingOrder: 49
   m_Sprite: {fileID: -522932456, guid: 4a3be83706fdfc942b630e880f277f14, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -144,8 +144,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   a: 7
-  bulletPreFab: {fileID: 4778217174241415684, guid: 750620970cf81404da9ae5a77f01348c, type: 3}
-  dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c, type: 3}
+  bulletPreFab: {fileID: 4778217174241415684, guid: 750620970cf81404da9ae5a77f01348c,
+    type: 3}
+  dimPreFab: {fileID: 5707618648965623620, guid: 5518c7f6aa2602e41891e01f98a5825c,
+    type: 3}
 --- !u!50 &-4167771728942715207
 Rigidbody2D:
   serializedVersion: 4
