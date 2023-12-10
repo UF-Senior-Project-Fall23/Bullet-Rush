@@ -782,6 +782,10 @@ public class Cordelia : Damageable, Boss
         }
         
         BossController.instance.BossDie();
+
+        if(shield != null)
+            Destroy(shield);
+
         Destroy(gameObject);
     }
 

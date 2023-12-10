@@ -38,6 +38,7 @@ public class PlayerHealth : Damageable
     // Handles the player dying, showing the death screen.
     public override void Die()
     {
+        PerkManager.instance.ResetHeldPerks();
         GetComponent<PlayerController>().weapon.DropWeapon();
         HUDManager.instance.ShowDeathScreen();
         GameManager.instance.winstreak = 0;
