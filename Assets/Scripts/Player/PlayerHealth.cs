@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerHealth : Damageable
 {
     public float baseMaxHP;
-    
+
     private SpriteRenderer spriteRenderer;
     private bool invulFlashOn = false;
     private float timeBetweenFlashes = 0.125f;
@@ -18,7 +18,7 @@ public class PlayerHealth : Damageable
         MaxHealth = baseMaxHP;
         CurrentHealth = baseMaxHP;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        
+
         PlayerController.instance.stats.onStatUpdate.AddListener(UpdateMaxHPStat);
         HPChange.AddListener(UpdateHPBar);
         HPChange.AddListener(UpdateHealthStat);
@@ -38,6 +38,7 @@ public class PlayerHealth : Damageable
     // Handles the player dying, showing the death screen.
     public override void Die()
     {
+        PerkManager.instance.ResetHeldPerks();
         GetComponent<PlayerController>().weapon.DropWeapon();
         HUDManager.instance.ShowDeathScreen();
         GameManager.instance.winstreak = 0;
